@@ -83,10 +83,10 @@
                             <div class="p-6">
                                 <h3 class="font-heading font-medium text-brand-900">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h3>
                                 <div class="flex flex-wrap items-center gap-1.5 mt-2">
-                                    <span class="px-2.5 py-1 rounded-full bg-brand-100/70 text-brand-700 text-xs font-medium">
+                                    <span class="px-2.5 py-1 rounded-full bg-brand-700 text-white text-xs font-medium">
                                         {{ $veiculo->ano_fabricacao }}/{{ $veiculo->ano_modelo }} &middot; {{ number_format($veiculo->km, 0, ',', '.') }} km
                                     </span>
-                                    <span class="px-2.5 py-1 rounded-full bg-brand-100/70 text-brand-700 text-xs font-medium capitalize">
+                                    <span class="px-2.5 py-1 rounded-full bg-brand-700 text-white text-xs font-medium capitalize">
                                         {{ $veiculo->combustivel }}
                                     </span>
                                 </div>
@@ -133,7 +133,7 @@
                             </div>
                             <div class="p-5">
                                 <h3 class="font-heading font-medium text-brand-900 text-sm">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h3>
-                                <span class="inline-block mt-2 px-2.5 py-1 rounded-full bg-brand-100/70 text-brand-700 text-xs font-medium">
+                                <span class="inline-block mt-2 px-2.5 py-1 rounded-full bg-brand-700 text-white text-xs font-medium">
                                     {{ $veiculo->ano_fabricacao }}/{{ $veiculo->ano_modelo }} &middot; {{ number_format($veiculo->km, 0, ',', '.') }} km
                                 </span>
                                 <p class="font-heading text-brand-700 font-semibold mt-2 tabular-nums">

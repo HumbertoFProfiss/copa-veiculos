@@ -16,7 +16,7 @@
     </div>
     <div class="p-5">
         <h3 class="font-heading font-medium text-brand-900">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h3>
-        <span class="inline-block mt-2 px-2.5 py-1 rounded-full bg-brand-100/70 text-brand-700 text-xs font-medium">
+        <span class="inline-block mt-2 px-2.5 py-1 rounded-full bg-brand-700 text-white text-xs font-medium">
             {{ $veiculo->ano_fabricacao }}/{{ $veiculo->ano_modelo }} &middot; {{ number_format($veiculo->km, 0, ',', '.') }} km
         </span>
         <p class="mt-3 font-heading text-lg font-semibold text-brand-700 tabular-nums">
