@@ -31,7 +31,7 @@
     </section>
 
     <!-- ===== DESTAQUES DA SEMANA ===== -->
-    <section class="py-16 border-t border-border">
+    <section class="py-16 bg-primary-soft border-t border-border">
         <div class="max-w-7xl mx-auto px-6">
             <h2 class="text-2xl sm:text-3xl font-bold text-text-primary text-center mb-10">Destaques da Semana</h2>
 
@@ -127,7 +127,7 @@
     @endif
 
     <!-- ===== DIFERENCIAIS ===== -->
-    <section class="py-16 border-t border-border">
+    <section class="py-16 bg-primary-soft border-t border-border">
         <div class="max-w-7xl mx-auto px-6">
             <h2 class="text-2xl sm:text-3xl font-bold text-text-primary text-center mb-10">Sobre Nós</h2>
 
@@ -192,7 +192,7 @@
     </section>
 
     <!-- ===== SIMULADOR DE FINANCIAMENTO ===== -->
-    <section id="financiamento" class="py-16 border-t border-border">
+    <section id="financiamento" class="py-16 bg-primary-soft border-t border-border">
         <div class="max-w-2xl mx-auto px-6 text-center">
             <h2 class="text-2xl sm:text-3xl font-bold text-text-primary mb-2">Simulador de Financiamento</h2>
             <p class="text-xs text-text-secondary mb-8">* Valores sujeitos a análise de crédito</p>
@@ -256,7 +256,7 @@
     </section>
 
     <!-- ===== LOCALIZAÇÃO ===== -->
-    <section id="contato" class="py-16 border-t border-border">
+    <section id="contato" class="py-16 bg-primary-soft border-t border-border">
         <div class="max-w-7xl mx-auto px-6">
             <h2 class="text-2xl sm:text-3xl font-bold text-text-primary text-center mb-2">Onde Estamos</h2>
             <p class="text-center text-text-secondary mb-10">{{ $empresa?->endereco ?? 'Endereço a configurar em Configurações' }}</p>
