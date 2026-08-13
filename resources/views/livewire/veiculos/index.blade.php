@@ -48,6 +48,9 @@
             <x-admin.th-sort coluna="modelo" :ordenar-por="$ordenarPor" :ordenar-direcao="$ordenarDirecao">Veículo</x-admin.th-sort>
             <x-admin.th-sort coluna="ano_modelo" :ordenar-por="$ordenarPor" :ordenar-direcao="$ordenarDirecao">Ano</x-admin.th-sort>
             <x-admin.th-sort coluna="km" :ordenar-por="$ordenarPor" :ordenar-direcao="$ordenarDirecao">KM</x-admin.th-sort>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wide">Câmbio</th>
+            <x-admin.th-sort coluna="placa" :ordenar-por="$ordenarPor" :ordenar-direcao="$ordenarDirecao">Placa</x-admin.th-sort>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wide">Chassi</th>
             <x-admin.th-sort coluna="preco_venda" :ordenar-por="$ordenarPor" :ordenar-direcao="$ordenarDirecao">Preço</x-admin.th-sort>
             <th class="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wide">Dias em pátio</th>
             <th class="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wide">Status</th>
@@ -89,6 +92,9 @@
                 </td>
                 <td class="px-4 py-3 tabular-nums text-text-secondary">{{ $veiculo->ano_fabricacao }}/{{ $veiculo->ano_modelo }}</td>
                 <td class="px-4 py-3 tabular-nums text-text-secondary">{{ number_format($veiculo->km, 0, ',', '.') }}</td>
+                <td class="px-4 py-3 text-text-secondary">{{ $veiculo->cambio ?: '—' }}</td>
+                <td class="px-4 py-3 tabular-nums text-text-secondary">{{ $veiculo->placa ?: '—' }}</td>
+                <td class="px-4 py-3 tabular-nums text-text-secondary">{{ $veiculo->numero_chassi ?: '—' }}</td>
                 <td class="px-4 py-3 tabular-nums text-text-primary font-medium">
                     @if ($veiculo->preco_venda)
                         R$ {{ number_format($veiculo->preco_venda, 2, ',', '.') }}
@@ -117,7 +123,7 @@
             </tr>
         @empty
             <tr>
-                <td colspan="10" class="px-4 py-12 text-center text-text-secondary text-sm">
+                <td colspan="13" class="px-4 py-12 text-center text-text-secondary text-sm">
                     Nenhum veículo encontrado.
                 </td>
             </tr>
