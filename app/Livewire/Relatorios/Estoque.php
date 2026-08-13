@@ -15,6 +15,10 @@ class Estoque extends Component
 {
     public function classificarAbc()
     {
+        $empresa = app('tenant');
+        $limiteA = $empresa->abc_limite_a ?: 80;
+        $limiteB = $empresa->abc_limite_b ?: 95;
+
         $veiculos = Veiculo::where('status', 'disponivel')
             ->orderByDesc('preco_venda')
             ->get();
@@ -22,13 +26,13 @@ class Estoque extends Component
         $valorTotal = (float) $veiculos->sum('preco_venda');
         $acumulado = 0.0;
 
-        return $veiculos->map(function (Veiculo $v) use (&$acumulado, $valorTotal) {
+        return $veiculos->map(function (Veiculo $v) use (&$acumulado, $valorTotal, $limiteA, $limiteB) {
             $acumulado += (float) $v->preco_venda;
             $percentualAcumulado = $valorTotal > 0 ? ($acumulado / $valorTotal) * 100 : 0;
 
             $classe = match (true) {
-                $percentualAcumulado <= 80 => 'A',
-                $percentualAcumulado <= 95 => 'B',
+                $percentualAcumulado <= $limiteA => 'A',
+                $percentualAcumulado <= $limiteB => 'B',
                 default => 'C',
             };
 
@@ -51,6 +55,8 @@ class Estoque extends Component
             'classificados' => $classificados,
             'valorImobilizado' => $classificados->sum(fn ($c) => (float) $c['veiculo']->preco_venda),
             'contagemPorClasse' => $classificados->groupBy('classe')->map->count(),
+            'abcLimiteA' => app('tenant')->abc_limite_a ?: 80,
+            'abcLimiteB' => app('tenant')->abc_limite_b ?: 95,
         ])->layout('layouts.admin', ['title' => 'Relatório de Estoque']);
     }
 }

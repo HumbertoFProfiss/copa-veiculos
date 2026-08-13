@@ -61,6 +61,12 @@ class Index extends Component
     #[Validate('required|integer|min:1|max:50')]
     public int $limite_destaques = 6;
 
+    #[Validate('required|integer|min:1|max:99')]
+    public int $abc_limite_a = 80;
+
+    #[Validate('required|integer|min:2|max:100')]
+    public int $abc_limite_b = 95;
+
     public function mount(): void
     {
         $empresa = app('tenant');
@@ -80,11 +86,19 @@ class Index extends Component
         $this->analytics_gtm_id = $empresa->analytics_gtm_id;
         $this->analytics_meta_pixel_id = $empresa->analytics_meta_pixel_id;
         $this->limite_destaques = $empresa->limite_destaques;
+        $this->abc_limite_a = $empresa->abc_limite_a;
+        $this->abc_limite_b = $empresa->abc_limite_b;
     }
 
     public function salvar(): void
     {
         $this->authorize('configuracoes.editar');
+
+        if ($this->abc_limite_a >= $this->abc_limite_b) {
+            $this->addError('abc_limite_a', 'O limite da Classe A precisa ser menor que o da Classe B.');
+
+            return;
+        }
 
         $dados = $this->validate() + $this->validate([
             'dominio_customizado' => [

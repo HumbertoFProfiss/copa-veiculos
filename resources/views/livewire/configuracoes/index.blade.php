@@ -76,6 +76,20 @@
                 <p class="text-xs text-text-secondary mt-1">Quantos veículos marcados com estrela aparecem na home do site.</p>
                 @error('limite_destaques') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
+            <div>
+                <label class="block text-xs font-medium text-text-secondary mb-1">Curva ABC — corte da Classe A (%)</label>
+                <input type="number" min="1" max="99" wire:model="abc_limite_a"
+                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                <p class="text-xs text-text-secondary mt-1">Veículos que somam até esse % do valor em estoque viram Classe A.</p>
+                @error('abc_limite_a') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-text-secondary mb-1">Curva ABC — corte da Classe B (%)</label>
+                <input type="number" min="2" max="100" wire:model="abc_limite_b"
+                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                <p class="text-xs text-text-secondary mt-1">Da Classe A até esse %, os veículos viram Classe B. O resto é Classe C.</p>
+                @error('abc_limite_b') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
+            </div>
             <div class="sm:col-span-2">
                 <label class="block text-xs font-medium text-text-secondary mb-1">Endereço</label>
                 <input type="text" wire:model="endereco" placeholder="Av. Exemplo, 1000 - Bairro"

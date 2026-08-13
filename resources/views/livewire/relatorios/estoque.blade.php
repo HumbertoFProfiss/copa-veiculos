@@ -13,6 +13,25 @@
         <a href="{{ route('admin.relatorios.construtor') }}" class="px-1 pb-2 text-text-secondary hover:text-text-primary">Construtor de relatórios</a>
     </div>
 
+    <div class="bg-primary-soft/50 border border-primary/20 rounded-card p-4 mb-6">
+        <p class="text-xs font-semibold text-primary uppercase tracking-wide mb-2">O que significa a Classe ABC</p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+            <div class="flex items-start gap-2">
+                <x-admin.status-badge variant="success" label="A" class="mt-0.5" />
+                <span class="text-text-secondary">Os veículos mais valiosos — juntos somam até <strong class="text-text-primary">{{ $abcLimiteA }}%</strong> do valor total em estoque. Merecem mais atenção (fotos, anúncio, negociação).</span>
+            </div>
+            <div class="flex items-start gap-2">
+                <x-admin.status-badge variant="warning" label="B" class="mt-0.5" />
+                <span class="text-text-secondary">Importância intermediária — de {{ $abcLimiteA }}% até <strong class="text-text-primary">{{ $abcLimiteB }}%</strong> do valor acumulado.</span>
+            </div>
+            <div class="flex items-start gap-2">
+                <x-admin.status-badge variant="neutral" label="C" class="mt-0.5" />
+                <span class="text-text-secondary">Os {{ 100 - $abcLimiteB }}% finais — menor impacto individual no valor total do estoque.</span>
+            </div>
+        </div>
+        <p class="text-xs text-text-secondary mt-2">Os percentuais de corte são configuráveis em <a href="{{ route('admin.configuracoes.index') }}" class="text-primary hover:underline">Configurações</a>.</p>
+    </div>
+
     <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
         <div class="bg-bg border border-border rounded-card p-4">
             <div class="text-xs text-text-secondary uppercase tracking-wide mb-1">Valor imobilizado</div>

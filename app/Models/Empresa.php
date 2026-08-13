@@ -65,6 +65,8 @@ class Empresa extends Model
         'analytics_gtm_id',
         'analytics_meta_pixel_id',
         'limite_destaques',
+        'abc_limite_a',
+        'abc_limite_b',
     ];
 
     protected function casts(): array
