@@ -100,6 +100,23 @@ class Form extends Component
 
     public string $novoOpcional = '';
 
+    public const CUSTOS_CATEGORIAS_RAPIDAS = [
+        'Funilaria e pintura',
+        'Mecânica e revisão',
+        'Higienização e estética',
+        'Documentação e transferência',
+        'Pátio, guincho e transporte',
+        'Peças e acessórios',
+        'Fotos e anúncio',
+        'Outros',
+    ];
+
+    public string $custoDescricao = '';
+
+    public ?float $custoValor = null;
+
+    public ?int $custoCategoriaId = null;
+
     public function mount(?Veiculo $veiculo = null): void
     {
         if ($veiculo && $veiculo->exists) {
@@ -223,6 +240,48 @@ class Form extends Component
         $this->veiculo->refresh();
     }
 
+    public function usarCategoriaCustoRapida(string $nome): void
+    {
+        $categoria = \App\Models\CategoriaFinanceira::firstOrCreate([
+            'nome' => $nome,
+            'tipo' => 'despesa',
+        ]);
+
+        $this->custoCategoriaId = $categoria->id;
+        $this->custoDescricao = $nome;
+    }
+
+    public function adicionarCusto(): void
+    {
+        if (! $this->veiculo) {
+            return;
+        }
+
+        $this->validate([
+            'custoDescricao' => 'required|string|max:150',
+            'custoValor' => 'required|numeric|min:0.01',
+        ], [], [
+            'custoDescricao' => 'descrição',
+            'custoValor' => 'valor',
+        ]);
+
+        $this->veiculo->custos()->create([
+            'categoria_id' => $this->custoCategoriaId,
+            'descricao' => $this->custoDescricao,
+            'valor' => $this->custoValor,
+            'data' => now(),
+        ]);
+
+        $this->reset(['custoDescricao', 'custoValor', 'custoCategoriaId']);
+        $this->veiculo->refresh();
+    }
+
+    public function removerCusto(int $id): void
+    {
+        \App\Models\CustoVeiculo::where('id', $id)->delete();
+        $this->veiculo?->refresh();
+    }
+
     public function salvar()
     {
         $this->authorize($this->veiculo ? 'veiculos.editar' : 'veiculos.criar');
@@ -248,6 +307,7 @@ class Form extends Component
             'fornecedores' => Fornecedor::where('ativo', true)->orderBy('nome')->get(),
             'filiais' => Filial::where('ativa', true)->orderBy('nome')->get(),
             'opcionaisCatalogo' => \App\Models\OpcionalCatalogo::orderBy('ordem')->get(),
+            'categoriasCusto' => \App\Models\CategoriaFinanceira::where('tipo', 'despesa')->orderBy('nome')->get(),
         ])->layout('layouts.admin', ['title' => $this->veiculo ? 'Editar veículo' : 'Novo veículo']);
     }
 }

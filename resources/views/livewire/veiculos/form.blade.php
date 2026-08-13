@@ -372,5 +372,66 @@
                 @endforeach
             </div>
         </div>
+
+        <div class="bg-bg border border-border rounded-card p-5 mt-6">
+            <h2 class="text-sm font-semibold text-text-primary mb-1">Custos do veículo</h2>
+            <p class="text-xs text-text-secondary mb-4">Clique numa categoria pra preencher rápido, ajuste o valor e adicione.</p>
+
+            <div class="flex flex-wrap gap-2 mb-4">
+                @foreach (\App\Livewire\Veiculos\Form::CUSTOS_CATEGORIAS_RAPIDAS as $categoriaRapida)
+                    <button type="button" wire:click="usarCategoriaCustoRapida('{{ $categoriaRapida }}')"
+                            class="px-3 py-1.5 rounded-control border border-border text-xs font-medium text-text-secondary hover:border-primary hover:text-primary hover:bg-primary-soft transition-colors">
+                        {{ $categoriaRapida }}
+                    </button>
+                @endforeach
+            </div>
+
+            <form wire:submit="adicionarCusto" class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-6">
+                <input type="text" wire:model="custoDescricao" placeholder="Descrição do custo"
+                       class="sm:col-span-2 rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                <select wire:model="custoCategoriaId" class="rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                    <option value="">Sem categoria</option>
+                    @foreach ($categoriasCusto as $categoria)
+                        <option value="{{ $categoria->id }}">{{ $categoria->nome }}</option>
+                    @endforeach
+                </select>
+                <div class="flex gap-2">
+                    <input type="number" step="0.01" min="0" wire:model="custoValor" placeholder="Valor (R$)"
+                           class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                    <button type="submit" class="shrink-0 px-4 py-2 rounded-control bg-surface border border-border text-sm font-medium text-text-primary hover:bg-primary-soft">
+                        Adicionar
+                    </button>
+                </div>
+                @error('custoDescricao') <p class="sm:col-span-4 text-xs text-red-500">{{ $message }}</p> @enderror
+                @error('custoValor') <p class="sm:col-span-4 text-xs text-red-500">{{ $message }}</p> @enderror
+            </form>
+
+            @if ($veiculo->custos->isNotEmpty())
+                <div class="space-y-2">
+                    @foreach ($veiculo->custos as $custo)
+                        <div class="flex items-center justify-between gap-3 px-3 py-2 rounded-control bg-surface border border-border text-sm">
+                            <div class="min-w-0">
+                                <span class="text-text-primary font-medium">{{ $custo->descricao }}</span>
+                                @if ($custo->categoria)
+                                    <span class="text-text-secondary">— {{ $custo->categoria->nome }}</span>
+                                @endif
+                            </div>
+                            <div class="flex items-center gap-3 shrink-0">
+                                <span class="font-semibold text-text-primary tabular-nums">R$ {{ number_format($custo->valor, 2, ',', '.') }}</span>
+                                <button wire:click="removerCusto({{ $custo->id }})" type="button" class="text-text-secondary hover:text-error">
+                                    <x-heroicon-o-x-mark class="w-4 h-4" />
+                                </button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <p class="mt-3 text-sm text-text-secondary">
+                    Total de custos: <strong class="text-text-primary tabular-nums">R$ {{ number_format($veiculo->custos->sum('valor'), 2, ',', '.') }}</strong>
+                    @if ($veiculo->margem() !== null)
+                        — Margem estimada: <strong class="text-text-primary tabular-nums">R$ {{ number_format($veiculo->margem(), 2, ',', '.') }}</strong>
+                    @endif
+                </p>
+            @endif
+        </div>
     @endif
 </div>
