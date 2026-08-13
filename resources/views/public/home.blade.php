@@ -5,7 +5,7 @@
     @endphp
 
     <!-- ===== HERO ===== -->
-    <section id="home" class="relative overflow-hidden bg-gradient-to-b from-primary-soft to-bg">
+    <section id="home" class="relative overflow-hidden bg-primary-soft">
         <div class="absolute inset-0">
             @forelse ($heroFotos as $foto)
                 <div class="absolute inset-0 bg-cover bg-center opacity-10" style="background-image: url('{{ $foto->url() }}')"></div>
