@@ -11,6 +11,32 @@
         @endif
     </div>
 
+    @if (! $veiculo)
+        <div class="bg-bg border border-border rounded-card p-5 mb-6">
+            <h2 class="text-sm font-semibold text-text-primary mb-1">Buscar por placa</h2>
+            <p class="text-xs text-text-secondary mb-4">Preenche automaticamente marca, modelo, ano, cor e valor da Tabela FIPE a partir da placa.</p>
+            <div class="flex flex-col sm:flex-row gap-3 sm:items-end">
+                <div class="flex-1 max-w-xs">
+                    <label class="block text-xs font-medium text-text-secondary mb-1">Placa</label>
+                    <input type="text" wire:model="placaConsulta" maxlength="8" placeholder="AAA0A00"
+                           class="w-full rounded-control border-border text-sm uppercase focus:border-primary focus:ring-primary">
+                </div>
+                <button type="button" wire:click="buscarPorPlaca" wire:loading.attr="disabled" wire:target="buscarPorPlaca"
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-control bg-primary text-white text-sm font-medium hover:bg-primary-light disabled:opacity-60">
+                    <x-heroicon-o-magnifying-glass class="w-4 h-4" />
+                    <span wire:loading.remove wire:target="buscarPorPlaca">Buscar</span>
+                    <span wire:loading wire:target="buscarPorPlaca">Buscando...</span>
+                </button>
+            </div>
+            @if ($consultaPlacaErro)
+                <p class="text-xs text-error mt-3">{{ $consultaPlacaErro }}</p>
+            @endif
+            @if ($consultaPlacaAlerta)
+                <p class="text-xs text-warning mt-3 font-medium">{{ $consultaPlacaAlerta }}</p>
+            @endif
+        </div>
+    @endif
+
     <form wire:submit="salvar" class="space-y-6">
         <div class="bg-bg border border-border rounded-card p-5">
             <h2 class="text-sm font-semibold text-text-primary mb-4">Dados do veículo</h2>

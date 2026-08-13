@@ -5,11 +5,19 @@ namespace App\Livewire\Veiculos;
 use App\Models\Fornecedor;
 use App\Models\Veiculo;
 use App\Models\VeiculoOpcional;
+use App\Services\ConsultaPlaca\ConsultaPlacaException;
+use App\Services\ConsultaPlaca\ConsultaPlacaService;
 use Livewire\Component;
 
 class Form extends Component
 {
     public ?Veiculo $veiculo = null;
+
+    public string $placaConsulta = '';
+
+    public ?string $consultaPlacaErro = null;
+
+    public ?string $consultaPlacaAlerta = null;
 
     public string $marca = '';
 
@@ -131,6 +139,32 @@ class Form extends Component
             'local_patio' => 'nullable|string|max:100',
             'status' => 'required|in:em_preparacao,disponivel,reservado,vendido,entregue,devolvido',
         ];
+    }
+
+    public function buscarPorPlaca(): void
+    {
+        $this->consultaPlacaErro = null;
+        $this->consultaPlacaAlerta = null;
+
+        try {
+            $dados = app(ConsultaPlacaService::class)->consultar($this->placaConsulta);
+        } catch (ConsultaPlacaException $e) {
+            $this->consultaPlacaErro = $e->getMessage();
+
+            return;
+        }
+
+        foreach (['marca', 'modelo', 'versao', 'ano_fabricacao', 'ano_modelo', 'cor', 'combustivel', 'cambio', 'numero_chassi', 'preco_tabela_fipe'] as $campo) {
+            if (filled($dados[$campo] ?? null)) {
+                $this->{$campo} = $dados[$campo];
+            }
+        }
+
+        $this->placa = strtoupper((string) preg_replace('/[^A-Za-z0-9]/', '', $this->placaConsulta));
+
+        if ($dados['restricao']) {
+            $this->consultaPlacaAlerta = 'Atenção: consta restrição para esse veículo ("'.$dados['situacao'].'"). Confira antes de prosseguir.';
+        }
     }
 
     public function adicionarOpcional(): void

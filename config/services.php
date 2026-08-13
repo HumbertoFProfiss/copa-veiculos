@@ -45,4 +45,12 @@ return [
         'modelo' => env('AI_MODELO', 'gpt-4o-mini'),
     ],
 
+    // Consulta de placa (ver App\Services\ConsultaPlaca) - apiplacas.com.br
+    // (endpoint documentado em wdapi2.com.br/consulta/{placa}/{token}).
+    // Token único de plataforma, mesmo padrão do AI_API_KEY acima - sem ele
+    // configurado, a busca por placa mostra erro claro em vez de quebrar a tela.
+    'apiplacas' => [
+        'token' => env('APIPLACAS_TOKEN'),
+    ],
+
 ];
