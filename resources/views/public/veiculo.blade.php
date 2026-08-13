@@ -118,7 +118,9 @@
         @if ($semelhantes->isNotEmpty())
             <div class="mt-20">
                 <p class="mb-3 text-sm font-medium tracking-wide uppercase text-brand-700">Você também pode gostar</p>
-                <h2 class="font-heading text-2xl font-semibold text-brand-900 dark:text-white mb-6">Veículos semelhantes</h2>
+                <h2 class="font-heading text-2xl font-semibold text-brand-900 dark:text-white mb-6">
+                    {{ $mesmaMarca ? 'Outros '.$veiculo->marca : 'Outros veículos em destaque' }}
+                </h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     @foreach ($semelhantes as $semelhante)
                         <x-public.veiculo-card :veiculo="$semelhante" />

@@ -21,6 +21,19 @@ class VeiculoController extends Controller
             ->take(4)
             ->get();
 
-        return view('public.veiculo', compact('veiculo', 'semelhantes'));
+        $mesmaMarca = $semelhantes->isNotEmpty();
+
+        // Sem outro veiculo da mesma marca no estoque: mostra os mais
+        // recentes em geral, em vez de deixar a pagina sem nenhuma sugestao.
+        if (! $mesmaMarca) {
+            $semelhantes = Veiculo::where('status', 'disponivel')
+                ->where('id', '!=', $veiculo->id)
+                ->with('fotos')
+                ->latest()
+                ->take(4)
+                ->get();
+        }
+
+        return view('public.veiculo', compact('veiculo', 'semelhantes', 'mesmaMarca'));
     }
 }
