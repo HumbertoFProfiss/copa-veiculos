@@ -10,6 +10,10 @@ use Illuminate\Http\Response;
  * Sitemap.xml dinamico por tenant (ver prompt §4.6 - SEO). Cada revenda tem
  * seu proprio sitemap, gerado a partir do estoque real (sem cache -
  * volume por loja nao justifica a complexidade de invalidar cache aqui).
+ *
+ * Gerado como string pura (nao Blade) de proposito: um arquivo .blade.php
+ * comecando com "<?xml" e interpretado pelo compilador Blade como abertura
+ * de tag PHP ("<?" + "xml"), quebrando com ParseError.
  */
 class SitemapController extends Controller
 {
@@ -26,7 +30,18 @@ class SitemapController extends Controller
             'priority' => '0.7',
         ]));
 
-        $xml = view('public.sitemap', compact('urls'))->render();
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
+
+        foreach ($urls as $url) {
+            $xml .= '    <url>'."\n";
+            $xml .= '        <loc>'.e($url['loc']).'</loc>'."\n";
+            $xml .= '        <lastmod>'.e($url['lastmod']).'</lastmod>'."\n";
+            $xml .= '        <priority>'.e($url['priority']).'</priority>'."\n";
+            $xml .= '    </url>'."\n";
+        }
+
+        $xml .= '</urlset>';
 
         return response($xml, 200)->header('Content-Type', 'application/xml');
     }
