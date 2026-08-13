@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ContratoPdfController;
 use App\Livewire\Admin\Upgrade;
 use App\Livewire\Anuncios;
+use App\Livewire\Chamadas;
 use App\Livewire\Clientes;
 use App\Livewire\Configuracoes;
 use App\Livewire\Contratos;
@@ -51,6 +52,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
         Route::get('/crm', Crm\Pipeline::class)->name('crm.pipeline');
         Route::get('/leads', Leads\Inbox::class)->name('leads.inbox');
+        Route::get('/chamadas', Chamadas\Index::class)->name('chamadas.index');
 
         Route::get('/configuracoes', Configuracoes\Index::class)->name('configuracoes.index');
 

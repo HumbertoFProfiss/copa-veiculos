@@ -73,6 +73,7 @@
                         @can('leads.ver')
                             <x-admin.sidebar-link route="admin.crm.pipeline" icon="chat-bubble-left-right" label="CRM" />
                             <x-admin.sidebar-link route="admin.leads.inbox" icon="inbox" label="Caixa de Leads" />
+                            <x-admin.sidebar-link route="admin.chamadas.index" icon="phone" label="Chamadas e Propostas" />
                         @endcan
                         @can('vendas.ver')
                             <x-admin.sidebar-link route="admin.vendas.index" icon="currency-dollar" label="Vendas" modulo="vendas" />
