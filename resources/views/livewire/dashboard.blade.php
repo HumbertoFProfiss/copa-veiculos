@@ -108,6 +108,25 @@
         </div>
     </div>
 
+    <div class="bg-bg border border-border rounded-card p-5 shadow-soft mt-4">
+        <h2 class="text-sm font-semibold text-text-primary mb-4">Atividades recentes</h2>
+        @if ($atividades->isNotEmpty())
+            <div class="space-y-1">
+                @foreach ($atividades as $atividade)
+                    <a href="{{ $atividade['url'] }}" class="flex items-center gap-3 px-2 py-2 rounded-control hover:bg-surface transition-colors">
+                        <div class="w-8 h-8 shrink-0 rounded-control flex items-center justify-center {{ $atividade['cor'] }}">
+                            <x-dynamic-component :component="'heroicon-o-'.$atividade['icone']" class="w-4 h-4" />
+                        </div>
+                        <span class="text-sm text-text-primary flex-1 min-w-0 truncate">{{ $atividade['texto'] }}</span>
+                        <span class="text-xs text-text-secondary shrink-0">{{ $atividade['data']->diffForHumans() }}</span>
+                    </a>
+                @endforeach
+            </div>
+        @else
+            <p class="text-sm text-text-secondary py-4">Nenhuma atividade registrada ainda.</p>
+        @endif
+    </div>
+
     <script>
         function graficoVendas(series) {
             return {

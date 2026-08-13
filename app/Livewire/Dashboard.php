@@ -2,10 +2,12 @@
 
 namespace App\Livewire;
 
+use App\Models\Cliente;
 use App\Models\ContaPagar;
 use App\Models\Lead;
 use App\Models\Venda;
 use App\Models\Veiculo;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 /**
@@ -45,6 +47,52 @@ class Dashboard extends Component
         return compact('labels', 'vendasQtd', 'vendasReceita', 'leadsQtd');
     }
 
+    /**
+     * Feed de atividades recentes (últimos 10 eventos), combinando veículo
+     * cadastrado, cliente cadastrado, venda confirmada e lead recebido -
+     * cada modelo já tem created_at, só precisa mesclar e ordenar.
+     */
+    protected function atividadesRecentes(): Collection
+    {
+        $veiculos = Veiculo::latest()->take(8)->get()->map(fn (Veiculo $v) => [
+            'icone' => 'truck',
+            'cor' => 'text-primary bg-primary-soft',
+            'texto' => "Veículo cadastrado: {$v->marca} {$v->modelo}",
+            'data' => $v->created_at,
+            'url' => route('admin.veiculos.editar', $v),
+        ]);
+
+        $clientes = Cliente::latest()->take(8)->get()->map(fn (Cliente $c) => [
+            'icone' => 'user',
+            'cor' => 'text-primary bg-primary-soft',
+            'texto' => "Cliente cadastrado: {$c->nome}",
+            'data' => $c->created_at,
+            'url' => route('admin.clientes.index'),
+        ]);
+
+        $vendas = Venda::where('status', 'confirmada')->with(['veiculo', 'cliente'])->latest()->take(8)->get()
+            ->map(fn (Venda $v) => [
+                'icone' => 'banknotes',
+                'cor' => 'text-success bg-success/10',
+                'texto' => "Venda registrada: {$v->veiculo?->marca} {$v->veiculo?->modelo} para {$v->cliente?->nome}",
+                'data' => $v->created_at,
+                'url' => route('admin.vendas.index'),
+            ]);
+
+        $leads = Lead::where('lead_falso', false)->latest()->take(8)->get()->map(fn (Lead $l) => [
+            'icone' => 'chat-bubble-left-right',
+            'cor' => 'text-warning bg-warning/10',
+            'texto' => "Novo lead: {$l->nome}",
+            'data' => $l->created_at,
+            'url' => route('admin.leads.inbox'),
+        ]);
+
+        return $veiculos->concat($clientes)->concat($vendas)->concat($leads)
+            ->sortByDesc('data')
+            ->take(10)
+            ->values();
+    }
+
     public function render()
     {
         $disponiveis = Veiculo::where('status', 'disponivel')->get();
@@ -80,6 +128,7 @@ class Dashboard extends Component
                 ->whereBetween('vencimento', [now(), now()->addDays(7)])
                 ->sum('valor'),
             'series' => $this->seriesUltimosMeses(),
+            'atividades' => $this->atividadesRecentes(),
         ])->layout('layouts.admin', ['title' => 'Dashboard']);
     }
 }
