@@ -19,8 +19,8 @@ export default {
             },
             colors: {
                 bg: '#FFFFFF',
-                surface: '#F7F9FC',
-                border: '#E4E9F0',
+                surface: '#E2E8F0',
+                border: '#CBD5E1',
                 'text-primary': '#0F172A',
                 'text-secondary': '#64748B',
                 primary: {
