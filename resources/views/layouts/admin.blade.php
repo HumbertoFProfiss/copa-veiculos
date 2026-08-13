@@ -16,8 +16,23 @@
     @livewireStyles
 </head>
 <body class="font-sans antialiased bg-bg text-text-primary">
-    <div x-data="{ colapsada: localStorage.getItem('sidebarColapsada') === 'true' }"
+    <div x-data="{
+                colapsada: localStorage.getItem('sidebarColapsada') === 'true',
+                buscaGlobalAberta: false,
+                abrirBuscaGlobal() {
+                    this.buscaGlobalAberta = true;
+                    $nextTick(() => {
+                        const input = $refs.buscaGlobalInput;
+                        if (! input) return;
+                        input.value = '';
+                        input.dispatchEvent(new Event('input'));
+                        input.focus();
+                    });
+                },
+            }"
          x-init="$watch('colapsada', v => localStorage.setItem('sidebarColapsada', v))"
+         @keydown.window="if ((event.ctrlKey || event.metaKey) && event.key === 'k') { event.preventDefault(); abrirBuscaGlobal(); }"
+         @keydown.window.escape="buscaGlobalAberta = false"
          class="flex min-h-screen">
 
         <!-- Sidebar -->
@@ -121,6 +136,17 @@
                 </div>
 
                 <div class="flex items-center gap-3">
+                    <button type="button" @click="abrirBuscaGlobal()"
+                            class="hidden sm:flex items-center gap-2 px-3 h-9 rounded-control border border-border text-text-secondary hover:bg-surface hover:text-text-primary transition-colors text-sm">
+                        <x-heroicon-o-magnifying-glass class="w-4 h-4" />
+                        <span>Buscar</span>
+                        <kbd class="text-[11px] px-1.5 py-0.5 rounded border border-border">Ctrl K</kbd>
+                    </button>
+                    <button type="button" @click="abrirBuscaGlobal()" aria-label="Buscar"
+                            class="sm:hidden w-9 h-9 flex items-center justify-center rounded-control text-text-secondary hover:bg-surface hover:text-text-primary transition-colors">
+                        <x-heroicon-o-magnifying-glass class="w-5 h-5" />
+                    </button>
+
                     <button type="button" class="relative w-9 h-9 flex items-center justify-center rounded-control text-text-secondary hover:bg-surface hover:text-text-primary transition-colors" aria-label="Notificações">
                         <x-heroicon-o-bell class="w-5 h-5" />
                     </button>
@@ -165,6 +191,14 @@
 
                 {{ $slot }}
             </main>
+        </div>
+        <div x-show="buscaGlobalAberta" x-cloak
+             class="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4 bg-black/40"
+             @click.self="buscaGlobalAberta = false">
+            <div x-show="buscaGlobalAberta" x-transition.opacity.duration.150ms
+                 class="w-full max-w-xl bg-bg border border-border rounded-card shadow-soft-lg overflow-hidden">
+                @livewire('shared.global-search')
+            </div>
         </div>
     </div>
 

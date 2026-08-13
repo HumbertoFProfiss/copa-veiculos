@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+[x-cloak] {
+    display: none !important;
+}
+
 @layer components {
     .input {
         @apply w-full rounded-xl border border-brand-100 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted/60 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500;

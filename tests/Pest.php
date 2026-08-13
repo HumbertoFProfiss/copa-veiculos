@@ -48,3 +48,31 @@ function something()
 {
     // ..
 }
+
+/**
+ * phpunit.xml forca DB_CONNECTION=sqlite/DB_DATABASE=:memory: pra TODAS as
+ * conexoes (config/database.php usa a mesma env('DB_DATABASE') pra sqlite e
+ * mysql). Testes que precisam do banco mysql real de dev (empresa/usuario
+ * seedados, sem recriar tudo via RefreshDatabase) chamam isso no inicio -
+ * le o .env direto do disco e sobrescreve a conexao mysql em runtime.
+ */
+function usarMysqlRealDeDev(): void
+{
+    $env = [];
+    foreach (file(base_path('.env')) as $linha) {
+        if (preg_match('/^(DB_HOST|DB_PORT|DB_DATABASE|DB_USERNAME|DB_PASSWORD)=(.*)$/', trim($linha), $m)) {
+            $env[$m[1]] = trim($m[2], " \t\n\r\0\x0B\"");
+        }
+    }
+
+    config([
+        'database.default' => 'mysql',
+        'database.connections.mysql.host' => $env['DB_HOST'] ?? '127.0.0.1',
+        'database.connections.mysql.port' => $env['DB_PORT'] ?? '3306',
+        'database.connections.mysql.database' => $env['DB_DATABASE'],
+        'database.connections.mysql.username' => $env['DB_USERNAME'],
+        'database.connections.mysql.password' => $env['DB_PASSWORD'] ?? '',
+    ]);
+
+    \Illuminate\Support\Facades\DB::purge('mysql');
+}
