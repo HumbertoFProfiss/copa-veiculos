@@ -12,6 +12,7 @@ use App\Livewire\Fornecedores;
 use App\Livewire\Importacoes;
 use App\Livewire\Leads;
 use App\Livewire\Relatorios;
+use App\Livewire\Usuarios;
 use App\Livewire\Veiculos;
 use App\Livewire\Vendas;
 use Illuminate\Support\Facades\Route;
@@ -64,5 +65,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::get('/relatorios', Relatorios\Estoque::class)->name('relatorios.index');
 
         Route::get('/configuracoes', Configuracoes\Index::class)->name('configuracoes.index');
+
+        Route::get('/usuarios', Usuarios\Index::class)->name('usuarios.index');
     });
 });
