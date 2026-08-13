@@ -82,11 +82,13 @@
                             </div>
                             <div class="p-6">
                                 <h3 class="font-heading font-medium text-brand-900">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h3>
-                                <p class="text-sm text-muted mt-0.5">{{ $veiculo->ano_fabricacao }}/{{ $veiculo->ano_modelo }}</p>
-                                <div class="flex items-center gap-3 mt-2 text-xs text-muted">
-                                    <span>{{ number_format($veiculo->km, 0, ',', '.') }} km</span>
-                                    <span>&middot;</span>
-                                    <span class="capitalize">{{ $veiculo->combustivel }}</span>
+                                <div class="flex flex-wrap items-center gap-1.5 mt-2">
+                                    <span class="px-2.5 py-1 rounded-full bg-brand-100/70 text-brand-700 text-xs font-medium">
+                                        {{ $veiculo->ano_fabricacao }}/{{ $veiculo->ano_modelo }} &middot; {{ number_format($veiculo->km, 0, ',', '.') }} km
+                                    </span>
+                                    <span class="px-2.5 py-1 rounded-full bg-brand-100/70 text-brand-700 text-xs font-medium capitalize">
+                                        {{ $veiculo->combustivel }}
+                                    </span>
                                 </div>
                                 <p class="mt-3 font-heading text-xl font-semibold text-brand-700 tabular-nums">
                                     @if ($veiculo->preco_venda)
@@ -131,7 +133,10 @@
                             </div>
                             <div class="p-5">
                                 <h3 class="font-heading font-medium text-brand-900 text-sm">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h3>
-                                <p class="font-heading text-brand-700 font-semibold mt-1 tabular-nums">
+                                <span class="inline-block mt-2 px-2.5 py-1 rounded-full bg-brand-100/70 text-brand-700 text-xs font-medium">
+                                    {{ $veiculo->ano_fabricacao }}/{{ $veiculo->ano_modelo }} &middot; {{ number_format($veiculo->km, 0, ',', '.') }} km
+                                </span>
+                                <p class="font-heading text-brand-700 font-semibold mt-2 tabular-nums">
                                     @if ($veiculo->preco_venda)
                                         R$ {{ number_format($veiculo->preco_venda, 2, ',', '.') }}
                                     @else
