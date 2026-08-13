@@ -157,6 +157,11 @@ class Veiculo extends Model
         return $this->hasMany(CustoVeiculo::class);
     }
 
+    public function garantiasChamados(): HasMany
+    {
+        return $this->hasMany(GarantiaChamado::class);
+    }
+
     public function statusLabel(): string
     {
         return self::STATUS_LABELS[$this->status] ?? $this->status;
@@ -185,8 +190,22 @@ class Veiculo extends Model
         }
 
         $custos = $this->custos()->sum('valor');
+        $custosGarantia = $this->custosGarantiaConfirmados();
 
-        return (float) $this->preco_venda - (float) $this->preco_compra - (float) $custos;
+        return (float) $this->preco_venda - (float) $this->preco_compra - (float) $custos - $custosGarantia;
+    }
+
+    /**
+     * Soma peça+serviço só dos chamados de garantia com custo já confirmado
+     * (aprovado ou concluído) - "aberto"/"em análise" ainda não é custo
+     * certo, e "recusado" não gera custo nenhum.
+     */
+    public function custosGarantiaConfirmados(): float
+    {
+        return (float) $this->garantiasChamados()
+            ->whereIn('status', ['aprovado', 'concluido'])
+            ->get()
+            ->sum(fn (GarantiaChamado $g) => (float) $g->custo_peca + (float) $g->custo_servico);
     }
 
     /**

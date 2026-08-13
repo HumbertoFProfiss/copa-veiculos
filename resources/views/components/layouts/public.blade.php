@@ -93,11 +93,18 @@
                     <img src="{{ asset('logo-dark.png') }}" alt="{{ $empresa->nome ?? config('app.name') }}" class="h-14 w-auto hidden dark:block">
                 </a>
 
-                <nav class="hidden lg:flex items-center gap-8 text-sm font-medium"
+                <nav class="hidden lg:flex items-center gap-6 text-sm font-medium"
                      :class="scrolled ? 'text-ink dark:text-brand-100' : 'text-white'">
                     <a href="{{ route('home') }}" class="hover:text-brand-500 transition-colors">Início</a>
                     <a href="{{ route('estoque') }}" class="hover:text-brand-500 transition-colors">Estoque</a>
                     <a href="{{ route('cliente.dashboard') }}" class="hover:text-brand-500 transition-colors">Área do Cliente</a>
+                    <a href="{{ route('home') }}#sobre" class="hover:text-brand-500 transition-colors">Sobre Nós</a>
+                    <a href="{{ route('home') }}#financiamento" class="hover:text-brand-500 transition-colors">Financiamento</a>
+                    <a href="{{ route('home') }}#venda-seu-carro" class="hover:text-brand-500 transition-colors">Venda seu Carro</a>
+                    <a href="{{ route('home') }}#contato" class="hover:text-brand-500 transition-colors">Onde Estamos</a>
+                    @if ($empresa?->instagram_url || $empresa?->facebook_url)
+                        <a href="{{ route('home') }}#contato" class="hover:text-brand-500 transition-colors">Redes Sociais</a>
+                    @endif
                 </nav>
 
                 <div class="hidden lg:flex items-center gap-3 shrink-0">

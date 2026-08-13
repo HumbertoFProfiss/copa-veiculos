@@ -14,8 +14,8 @@ it('mostra os atalhos rapidos e nao mostra mais a contagem de veiculos em estoqu
         ->get(route('home'));
 
     $resposta->assertOk()
-        ->assertSee('Sobre nós')
-        ->assertSee('Simular Financiamento')
+        ->assertSee('Sobre Nós')
+        ->assertSee('Financiamento')
         ->assertSee('Venda seu Carro')
         ->assertSee('Onde Estamos')
         ->assertDontSee('veículos em estoque');

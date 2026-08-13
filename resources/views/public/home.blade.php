@@ -8,11 +8,19 @@
     @endphp
 
     <!-- ===== HERO ===== -->
-    <section id="home" class="relative flex min-h-[600px] items-center overflow-hidden bg-brand-900">
-        @if ($heroFotos->isNotEmpty())
-            <img src="{{ $heroFotos->first()->url() }}" alt="Veículo em destaque"
-                 class="absolute inset-0 h-full w-full object-cover object-center">
-        @endif
+    <section id="home" class="relative flex min-h-[600px] items-center overflow-hidden bg-brand-900"
+             @if ($heroFotos->count() > 1)
+                 x-data="{ heroIndex: 0 }"
+                 x-init="setInterval(() => heroIndex = (heroIndex + 1) % {{ $heroFotos->count() }}, 5000)"
+             @endif>
+        @foreach ($heroFotos as $foto)
+            <img src="{{ $foto->url() }}" alt="Veículo em destaque"
+                 class="absolute inset-0 h-full w-full object-cover object-center"
+                 @if ($heroFotos->count() > 1)
+                     x-show="heroIndex === {{ $loop->index }}" x-transition.opacity.duration.1000ms
+                     @if (! $loop->first) x-cloak @endif
+                 @endif>
+        @endforeach
         <div class="absolute inset-0"
              style="background: linear-gradient(115deg, rgba(11,58,93,0.92) 10%, rgba(18,104,163,0.75) 50%, rgba(79,168,232,0.35) 100%)"></div>
 
@@ -51,29 +59,6 @@
                 @endif
                 <p class="text-sm font-medium text-brand-100">Financiamento facilitado</p>
             </div>
-        </div>
-    </section>
-
-    <!-- ===== ATALHOS RÁPIDOS ===== -->
-    <section class="bg-white py-6 dark:bg-duskbg border-b border-brand-100 dark:border-duskborder">
-        <div class="max-w-7xl mx-auto px-6 sm:px-8 flex flex-wrap items-center justify-center gap-3">
-            <a href="#sobre" class="inline-flex items-center gap-2 rounded-full border border-brand-100 dark:border-duskborder px-4 py-2 text-sm font-medium text-ink dark:text-brand-100 hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-300 transition-colors">
-                <x-heroicon-o-information-circle class="w-4 h-4" /> Sobre nós
-            </a>
-            <a href="#financiamento" class="inline-flex items-center gap-2 rounded-full border border-brand-100 dark:border-duskborder px-4 py-2 text-sm font-medium text-ink dark:text-brand-100 hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-300 transition-colors">
-                <x-heroicon-o-calculator class="w-4 h-4" /> Simular Financiamento
-            </a>
-            <a href="#venda-seu-carro" class="inline-flex items-center gap-2 rounded-full border border-brand-100 dark:border-duskborder px-4 py-2 text-sm font-medium text-ink dark:text-brand-100 hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-300 transition-colors">
-                <x-heroicon-o-currency-dollar class="w-4 h-4" /> Venda seu Carro
-            </a>
-            <a href="#contato" class="inline-flex items-center gap-2 rounded-full border border-brand-100 dark:border-duskborder px-4 py-2 text-sm font-medium text-ink dark:text-brand-100 hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-300 transition-colors">
-                <x-heroicon-o-map-pin class="w-4 h-4" /> Onde Estamos
-            </a>
-            @if ($empresa?->instagram_url || $empresa?->facebook_url)
-                <a href="#contato" class="inline-flex items-center gap-2 rounded-full border border-brand-100 dark:border-duskborder px-4 py-2 text-sm font-medium text-ink dark:text-brand-100 hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-300 transition-colors">
-                    <x-heroicon-o-share class="w-4 h-4" /> Redes Sociais
-                </a>
-            @endif
         </div>
     </section>
 

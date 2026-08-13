@@ -71,6 +71,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::middleware('modulo:vendas')->group(function () {
             Route::get('/vendas', Vendas\Index::class)->name('vendas.index');
             Route::get('/vendas/nova', Vendas\Nova::class)->name('vendas.nova');
+            Route::get('/vendas/{venda}', Vendas\Show::class)->name('vendas.show');
         });
 
         Route::middleware('modulo:contratos')->group(function () {

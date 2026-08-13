@@ -23,7 +23,9 @@
 
         @forelse ($vendas as $venda)
             <tr wire:key="venda-{{ $venda->id }}" class="hover:bg-surface">
-                <td class="px-4 py-3 font-medium text-text-primary">{{ $venda->veiculo->marca }} {{ $venda->veiculo->modelo }}</td>
+                <td class="px-4 py-3 font-medium text-text-primary">
+                    <a href="{{ route('admin.vendas.show', $venda) }}" class="hover:text-primary hover:underline">{{ $venda->veiculo->marca }} {{ $venda->veiculo->modelo }}</a>
+                </td>
                 <td class="px-4 py-3 text-text-secondary">{{ $venda->cliente->nome }}</td>
                 <td class="px-4 py-3 text-text-secondary">{{ $venda->vendedor->name }}</td>
                 <td class="px-4 py-3 tabular-nums text-text-primary">R$ {{ number_format($venda->preco_venda - $venda->desconto, 2, ',', '.') }}</td>
@@ -32,9 +34,12 @@
                     <x-admin.status-badge :variant="$venda->status === 'confirmada' ? 'success' : ($venda->status === 'cancelada' ? 'error' : 'neutral')" :label="ucfirst($venda->status)" />
                 </td>
                 <td class="px-4 py-3 text-right">
-                    @can('contratos.criar')
-                        <a href="{{ route('admin.contratos.gerar', $venda) }}" class="text-xs text-primary hover:underline">Gerar contrato</a>
-                    @endcan
+                    <div class="flex items-center justify-end gap-3">
+                        <a href="{{ route('admin.vendas.show', $venda) }}" class="text-xs text-text-secondary hover:text-primary hover:underline">Ver detalhes</a>
+                        @can('contratos.criar')
+                            <a href="{{ route('admin.contratos.gerar', $venda) }}" class="text-xs text-primary hover:underline">Gerar contrato</a>
+                        @endcan
+                    </div>
                 </td>
             </tr>
         @empty

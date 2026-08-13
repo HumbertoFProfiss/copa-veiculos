@@ -338,13 +338,6 @@
             @livewire('veiculos.foto-manager', ['veiculo' => $veiculo], key('fotos-'.$veiculo->id))
         </div>
 
-        @can('anuncios.criar')
-            <div class="bg-bg border border-border rounded-card p-5 mt-6">
-                <h2 class="text-sm font-semibold text-text-primary mb-4">Publicar anúncio</h2>
-                @livewire('veiculos.publicacao-matrix', ['veiculo' => $veiculo], key('publicacao-'.$veiculo->id))
-            </div>
-        @endcan
-
         <div class="bg-bg border border-border rounded-card p-5 mt-6">
             <h2 class="text-sm font-semibold text-text-primary mb-1">Opcionais</h2>
             <p class="text-xs text-text-secondary mb-4">Marque os itens que o veículo possui — aparecem na página do veículo no site.</p>
@@ -441,5 +434,13 @@
                 </p>
             @endif
         </div>
+
+        @can('anuncios.criar')
+            <div class="bg-bg border border-border rounded-card p-5 mt-6">
+                <h2 class="text-sm font-semibold text-text-primary mb-1">Publicar anúncio</h2>
+                <p class="text-xs text-text-secondary mb-4">Deixe fotos, opcionais e custos prontos antes de publicar — o anúncio sai com os dados que estiverem salvos até aqui.</p>
+                @livewire('veiculos.publicacao-matrix', ['veiculo' => $veiculo], key('publicacao-'.$veiculo->id))
+            </div>
+        @endcan
     @endif
 </div>
