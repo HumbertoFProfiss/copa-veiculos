@@ -3,8 +3,11 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2">
                 @if ($veiculo->fotos->isNotEmpty())
-                    <div class="aspect-[4/3] bg-surface rounded-card overflow-hidden mb-3">
+                    <div class="relative aspect-[4/3] bg-surface rounded-card overflow-hidden mb-3">
                         <img src="{{ $veiculo->fotos->first()->url() }}" class="w-full h-full object-cover">
+                        <div class="absolute top-3 right-3">
+                            @livewire('cliente.favorito-botao', ['veiculo' => $veiculo])
+                        </div>
                     </div>
                     @if ($veiculo->fotos->count() > 1)
                         <div class="grid grid-cols-4 gap-3">

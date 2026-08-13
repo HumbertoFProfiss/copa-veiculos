@@ -37,13 +37,21 @@
                 <a href="#contato" class="hover:text-gold transition-colors">Contato</a>
             </nav>
 
-            <div class="hidden lg:flex items-center gap-3 shrink-0">
+            <div class="hidden lg:flex items-center gap-2 shrink-0">
+                <a href="{{ route('cliente.dashboard') }}" title="Área do Cliente"
+                   class="inline-flex items-center gap-2 px-4 py-2 rounded-control border border-white/20 text-white text-sm font-medium hover:border-gold hover:text-gold transition-colors">
+                    <x-heroicon-o-user class="w-4 h-4" /> Área do Cliente
+                </a>
                 @if ($empresa?->whatsappUrl())
                     <a href="{{ $empresa->whatsappUrl() }}" target="_blank" rel="noopener"
                        class="inline-flex items-center gap-2 px-4 py-2 rounded-control bg-gold text-night font-semibold text-sm hover:bg-gold-dark transition-colors">
                         WhatsApp
                     </a>
                 @endif
+                <a href="{{ route('login') }}" title="Administração"
+                   class="w-9 h-9 flex items-center justify-center rounded-control border border-white/20 text-white/60 hover:border-gold hover:text-gold transition-colors">
+                    <x-heroicon-o-lock-closed class="w-4 h-4" />
+                </a>
             </div>
 
             <button @click="menuAberto = !menuAberto" type="button" aria-label="Menu" class="lg:hidden text-white p-2">

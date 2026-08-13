@@ -53,4 +53,9 @@ class Venda extends Model
     {
         return $this->hasMany(CarroTroca::class);
     }
+
+    public function garantiasChamados(): HasMany
+    {
+        return $this->hasMany(GarantiaChamado::class);
+    }
 }

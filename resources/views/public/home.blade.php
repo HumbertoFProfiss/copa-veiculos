@@ -54,6 +54,9 @@
                                     </div>
                                 @endif
                                 <span class="absolute top-3 left-3 px-2.5 py-1 rounded-control bg-gold text-night text-xs font-semibold">Destaque</span>
+                                <div class="absolute top-3 right-3" onclick="event.preventDefault()">
+                                    @livewire('cliente.favorito-botao', ['veiculo' => $veiculo], key('fav-destaque-'.$veiculo->id))
+                                </div>
                             </div>
                             <div class="p-5">
                                 <h3 class="font-semibold text-white">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h3>
@@ -90,7 +93,7 @@
                     @foreach ($ultimasAdicoes as $veiculo)
                         <a href="{{ route('veiculo.show', $veiculo) }}"
                            class="group block bg-night-card border border-night-border rounded-xl overflow-hidden hover:border-gold/50 transition-colors">
-                            <div class="aspect-[4/3] bg-night overflow-hidden">
+                            <div class="relative aspect-[4/3] bg-night overflow-hidden">
                                 @if ($veiculo->fotos->isNotEmpty())
                                     <img src="{{ $veiculo->fotos->first()->url() }}" alt="{{ $veiculo->marca }} {{ $veiculo->modelo }}"
                                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
@@ -99,6 +102,9 @@
                                         <x-heroicon-o-photo class="w-10 h-10" />
                                     </div>
                                 @endif
+                                <div class="absolute top-3 right-3" onclick="event.preventDefault()">
+                                    @livewire('cliente.favorito-botao', ['veiculo' => $veiculo], key('fav-ultima-'.$veiculo->id))
+                                </div>
                             </div>
                             <div class="p-4">
                                 <h3 class="font-semibold text-white text-sm">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h3>

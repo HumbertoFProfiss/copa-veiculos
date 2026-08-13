@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Cliente;
 use App\Models\User;
 
 return [
@@ -42,6 +43,14 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        // Guarda separada pro cliente final (comprador), distinta da equipe
+        // da revenda (guarda "web"/model User) - login/senha próprios, sem
+        // nenhuma permissão do Spatie associada.
+        'cliente' => [
+            'driver' => 'session',
+            'provider' => 'clientes',
+        ],
     ],
 
     /*
@@ -65,6 +74,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', User::class),
+        ],
+
+        'clientes' => [
+            'driver' => 'eloquent',
+            'model' => Cliente::class,
         ],
 
         // 'users' => [

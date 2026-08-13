@@ -21,6 +21,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(prepend: [
             ResolveTenant::class,
         ]);
+
+        // Guarda "cliente" tem login próprio - sem isso, um cliente deslogado
+        // acessando /cliente/* cairia no login da equipe (guarda "web").
+        $middleware->redirectGuestsTo(fn ($request) => $request->routeIs('cliente.*') ? route('cliente.login') : route('login'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
