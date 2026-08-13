@@ -90,6 +90,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
         Route::middleware('modulo:relatorios')->group(function () {
             Route::get('/relatorios', Relatorios\Estoque::class)->name('relatorios.index');
+            Route::get('/relatorios/construtor', Relatorios\Construtor::class)->name('relatorios.construtor');
         });
 
         Route::middleware('modulo:usuarios')->group(function () {

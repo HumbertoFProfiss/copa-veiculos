@@ -76,3 +76,16 @@ function usarMysqlRealDeDev(): void
 
     \Illuminate\Support\Facades\DB::purge('mysql');
 }
+
+/**
+ * Usuario Proprietario (todas as permissoes) da empresa de teste - usado
+ * em varios testes que precisam agir como um admin de verdade via
+ * Livewire::actingAs(). Empresa de teste ja vem com um seedado.
+ */
+function usuarioProprietario(\App\Models\Empresa $empresa): \App\Models\User
+{
+    return \App\Models\User::withoutGlobalScopes()
+        ->where('empresa_id', $empresa->id)
+        ->whereHas('roles', fn ($q) => $q->where('name', 'Proprietário'))
+        ->firstOrFail();
+}

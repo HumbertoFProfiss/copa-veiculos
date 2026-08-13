@@ -13,14 +13,6 @@ uses(Tests\TestCase::class);
 
 beforeEach(fn () => usarMysqlRealDeDev());
 
-function usuarioProprietario(Empresa $empresa): User
-{
-    return User::withoutGlobalScopes()
-        ->where('empresa_id', $empresa->id)
-        ->whereHas('roles', fn ($q) => $q->where('name', 'Proprietário'))
-        ->firstOrFail();
-}
-
 it('toda empresa ja tem uma filial Matriz e todo veiculo/usuario existente esta associado a ela (backfill)', function () {
     $empresa = Empresa::first();
 

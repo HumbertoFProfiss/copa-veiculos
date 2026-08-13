@@ -1,11 +1,16 @@
 <div>
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center justify-between mb-2">
         <h1 class="text-xl font-semibold text-text-primary">Relatório de Estoque</h1>
         <button wire:click="exportar" type="button"
                 class="inline-flex items-center gap-2 px-4 py-2 rounded-control bg-primary text-white text-sm font-medium hover:bg-primary-light">
             <x-heroicon-o-arrow-down-tray class="w-4 h-4" />
             Exportar XLSX
         </button>
+    </div>
+
+    <div class="flex items-center gap-4 mb-6 text-sm border-b border-border">
+        <span class="px-1 pb-2 -mb-px border-b-2 border-primary text-primary font-medium">Estoque (ABC)</span>
+        <a href="{{ route('admin.relatorios.construtor') }}" class="px-1 pb-2 text-text-secondary hover:text-text-primary">Construtor de relatórios</a>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
