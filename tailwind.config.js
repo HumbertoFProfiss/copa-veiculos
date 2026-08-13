@@ -13,6 +13,7 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Inter', ...defaultTheme.fontFamily.sans],
+                display: ['Poppins', ...defaultTheme.fontFamily.sans],
             },
             colors: {
                 bg: '#FFFFFF',
@@ -28,6 +29,21 @@ export default {
                 success: '#059669',
                 warning: '#D97706',
                 error: '#DC2626',
+
+                // Paleta da vitrine publica (home) - preto/dourado, igual ao site legado
+                // (worldcred.com.br). Escopada com nomes proprios pra nao colidir com
+                // os tokens branco/azul usados no painel admin.
+                night: {
+                    DEFAULT: '#0A0A0A',
+                    soft: '#141414',
+                    card: '#1F1F1F',
+                    border: '#2A2A2A',
+                    'border-light': '#353535',
+                },
+                gold: {
+                    DEFAULT: '#E0A526',
+                    dark: '#C67C1E',
+                },
             },
             borderRadius: {
                 card: '10px',

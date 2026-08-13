@@ -20,6 +20,14 @@ class EmpresaSeeder extends Seeder
                 'nome' => 'Empresa A Demo Ltda',
                 'plano' => 'completo_opcionais',
                 'status' => 'ativo',
+                'telefone' => '1140028922',
+                'whatsapp' => '11987654321',
+                'email_contato' => 'contato@empresa-a-demo.test',
+                'endereco' => 'Av. Exemplo, 1000 - Centro',
+                'cidade' => 'São Paulo',
+                'uf' => 'SP',
+                'horario_funcionamento' => 'Seg-Sex: 08h às 18h30 | Sáb: 08h às 13h',
+                'sobre_texto' => 'Empresa de demonstração usada para testar o painel multi-tenant. Substitua estes dados pelos reais em Configurações.',
             ]
         );
 

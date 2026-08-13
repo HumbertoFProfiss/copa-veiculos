@@ -17,6 +17,16 @@ class Empresa extends Model
         'plano',
         'status',
         'trial_termina_em',
+        'telefone',
+        'whatsapp',
+        'email_contato',
+        'endereco',
+        'cidade',
+        'uf',
+        'horario_funcionamento',
+        'instagram_url',
+        'facebook_url',
+        'sobre_texto',
     ];
 
     protected function casts(): array
@@ -39,5 +49,17 @@ class Empresa extends Model
     public function possuiModulo(string $slug): bool
     {
         return $this->modulosAtivos()->where('modulo_slug', $slug)->exists();
+    }
+
+    public function whatsappUrl(): ?string
+    {
+        if (blank($this->whatsapp)) {
+            return null;
+        }
+
+        $numero = preg_replace('/\D/', '', $this->whatsapp);
+        $numero = str_starts_with($numero, '55') ? $numero : '55'.$numero;
+
+        return "https://wa.me/{$numero}";
     }
 }

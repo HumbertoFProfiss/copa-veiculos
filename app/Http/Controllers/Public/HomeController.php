@@ -20,9 +20,13 @@ class HomeController extends Controller
         $ultimasAdicoes = Veiculo::where('status', 'disponivel')
             ->with('fotos')
             ->latest()
-            ->take(8)
+            ->take(3)
             ->get();
 
-        return view('public.home', compact('destaques', 'ultimasAdicoes'));
+        $totalEstoque = Veiculo::where('status', 'disponivel')->count();
+
+        $empresa = app('tenant');
+
+        return view('public.home', compact('destaques', 'ultimasAdicoes', 'totalEstoque', 'empresa'));
     }
 }
