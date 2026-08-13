@@ -65,7 +65,7 @@
                 <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($destaques as $veiculo)
                         <a href="{{ route('veiculo.show', $veiculo) }}"
-                           class="group block rounded-2xl border border-brand-100 bg-white overflow-hidden transition-colors hover:border-brand-500">
+                           class="group block rounded-2xl border border-brand-100 bg-brand-100 overflow-hidden transition-colors hover:border-brand-500">
                             <div class="relative aspect-[4/3] bg-brand-100/50 overflow-hidden">
                                 @if ($veiculo->fotos->isNotEmpty())
                                     <img src="{{ $veiculo->fotos->first()->url() }}" alt="{{ $veiculo->marca }} {{ $veiculo->modelo }}"
@@ -117,8 +117,8 @@
                 <div class="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6">
                     @foreach ($ultimasAdicoes as $veiculo)
                         <a href="{{ route('veiculo.show', $veiculo) }}"
-                           class="group block rounded-2xl border border-brand-100 bg-white overflow-hidden transition-colors hover:border-brand-500">
-                            <div class="relative aspect-[4/3] bg-brand-100/50 overflow-hidden">
+                           class="group block rounded-2xl border border-brand-100 bg-brand-100 overflow-hidden transition-colors hover:border-brand-500">
+                            <div class="relative aspect-[4/3] bg-white/40 overflow-hidden">
                                 @if ($veiculo->fotos->isNotEmpty())
                                     <img src="{{ $veiculo->fotos->first()->url() }}" alt="{{ $veiculo->marca }} {{ $veiculo->modelo }}"
                                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
