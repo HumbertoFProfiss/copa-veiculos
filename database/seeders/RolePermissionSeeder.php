@@ -35,6 +35,7 @@ class RolePermissionSeeder extends Seeder
         'usuarios',
         'configuracoes',
         'relatorios',
+        'integracoes',
     ];
 
     protected array $acoes = ['ver', 'criar', 'editar', 'excluir', 'aprovar'];

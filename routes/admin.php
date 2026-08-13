@@ -11,6 +11,7 @@ use App\Livewire\Dashboard;
 use App\Livewire\Financeiro;
 use App\Livewire\Fornecedores;
 use App\Livewire\Importacoes;
+use App\Livewire\Integracoes;
 use App\Livewire\Leads;
 use App\Livewire\Relatorios;
 use App\Livewire\Usuarios;
@@ -92,6 +93,10 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
         Route::middleware('modulo:usuarios')->group(function () {
             Route::get('/usuarios', Usuarios\Index::class)->name('usuarios.index');
+        });
+
+        Route::middleware('modulo:integracoes')->group(function () {
+            Route::get('/integracoes', Integracoes\Index::class)->name('integracoes.index');
         });
     });
 });

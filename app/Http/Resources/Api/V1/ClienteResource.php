@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Http\Resources\Api\V1;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class ClienteResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'nome' => $this->nome,
+            'cpf' => $this->cpf,
+            'email' => $this->email,
+            'telefone' => $this->telefone,
+            'whatsapp' => $this->whatsapp,
+            'criado_em' => $this->created_at?->toAtomString(),
+        ];
+    }
+}

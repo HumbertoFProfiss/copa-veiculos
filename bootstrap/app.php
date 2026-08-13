@@ -9,6 +9,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
+        api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         then: function (): void {
@@ -20,6 +21,13 @@ return Application::configure(basePath: dirname(__DIR__))
         // Roda antes de tudo (sessão, auth) - papéis/permissões e todo model
         // com BelongsToEmpresa dependem do tenant já estar resolvido.
         $middleware->web(prepend: [
+            ResolveTenant::class,
+        ]);
+
+        // API tambem precisa do tenant resolvido pelo Host (mesmo dominio da
+        // revenda) - o token do Sanctum identifica o usuario, mas o
+        // BelongsToEmpresa depende de app('tenant') estar setado.
+        $middleware->api(prepend: [
             ResolveTenant::class,
         ]);
 

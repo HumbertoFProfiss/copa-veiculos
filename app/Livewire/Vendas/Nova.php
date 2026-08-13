@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Vendas;
 
+use App\Events\VendaConfirmada;
 use App\Models\Cliente;
 use App\Models\User;
 use App\Models\Veiculo;
@@ -74,6 +75,8 @@ class Nova extends Component
                 $venda->empresa_id,
                 $publicacao->id,
             ));
+
+        event(new VendaConfirmada($venda));
 
         session()->flash('sucesso', 'Venda registrada com sucesso.');
 
