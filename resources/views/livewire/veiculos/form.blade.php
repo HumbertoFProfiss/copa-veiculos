@@ -81,7 +81,12 @@
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-text-secondary mb-1">Câmbio</label>
-                    <input type="text" wire:model="cambio" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                    <select wire:model="cambio" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <option value="">—</option>
+                        @foreach (\App\Models\Veiculo::CAMBIO_OPCOES as $opcao)
+                            <option value="{{ $opcao }}">{{ $opcao }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-text-secondary mb-1">Cor</label>
@@ -110,6 +115,9 @@
                           class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary"></textarea>
                 @error('descricao') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
+            @if ($veiculo)
+                @livewire('ia.sugestao-descricao', ['veiculo' => $veiculo], key('sugestao-descricao-'.$veiculo->id))
+            @endif
             <label class="inline-flex items-center gap-2 mt-4 text-sm text-text-secondary">
                 <input type="checkbox" wire:model="destaque" class="rounded-control border-border text-primary focus:ring-primary">
                 Destacar na home do site

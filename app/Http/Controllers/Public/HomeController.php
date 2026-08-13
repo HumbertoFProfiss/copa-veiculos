@@ -25,8 +25,6 @@ class HomeController extends Controller
             ->take(3)
             ->get();
 
-        $totalEstoque = Veiculo::where('status', 'disponivel')->count();
-
-        return view('public.home', compact('destaques', 'ultimasAdicoes', 'totalEstoque', 'empresa'));
+        return view('public.home', compact('destaques', 'ultimasAdicoes', 'empresa'));
     }
 }

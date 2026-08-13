@@ -14,6 +14,8 @@ class Veiculo extends Model
 {
     use BelongsToEmpresa, HasFactory, SoftDeletes;
 
+    public const CAMBIO_OPCOES = ['Manual', 'Automático', 'Automatizado', 'CVT', 'Semi-automático'];
+
     public const STATUS_LABELS = [
         'em_preparacao' => 'Em preparação',
         'disponivel' => 'Disponível',

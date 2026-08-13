@@ -3,6 +3,7 @@
 namespace App\Services\ConsultaPlaca;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 /**
  * Busca dados de um veículo pela placa (API Placas / apiplacas.com.br,
@@ -23,7 +24,7 @@ class ConsultaPlacaService
      * @return array{
      *     marca: ?string, modelo: ?string, versao: ?string,
      *     ano_fabricacao: ?int, ano_modelo: ?int, cor: ?string,
-     *     combustivel: ?string, cambio: ?string, numero_chassi: ?string,
+     *     combustivel: ?string, cambio: ?string, portas: ?int, numero_chassi: ?string,
      *     preco_tabela_fipe: ?float, fipe_referencia: ?string,
      *     situacao: ?string, restricao: bool,
      * }
@@ -78,13 +79,41 @@ class ConsultaPlacaService
             'ano_modelo' => $this->paraInteiro($dados['anoModelo'] ?? $extra['ano_modelo'] ?? null),
             'cor' => $dados['cor'] ?? null,
             'combustivel' => filled($extra['combustivel'] ?? null) ? $extra['combustivel'] : null,
-            'cambio' => filled($extra['caixa_cambio'] ?? null) ? $extra['caixa_cambio'] : null,
+            'cambio' => $this->normalizarCambio($extra['caixa_cambio'] ?? null),
+            'portas' => $this->paraInteiro($extra['numero_de_portas'] ?? $extra['portas'] ?? $dados['portas'] ?? null),
             'numero_chassi' => $dados['chassi'] ?? null,
             'preco_tabela_fipe' => $this->paraValorFipe($melhorFipe['texto_valor'] ?? null),
             'fipe_referencia' => $melhorFipe['mes_referencia'] ?? null,
             'situacao' => $situacao,
             'restricao' => filled($situacao) && ! str_contains(mb_strtolower($situacao), 'sem restri'),
         ];
+    }
+
+    /**
+     * A API devolve o câmbio como texto livre (varia de veículo pra
+     * veículo: "Manual", "Automática", "AUTOMATICO CVT"...) - aqui mapeia
+     * pro conjunto fixo de opções do formulário (ver Veiculo::CAMBIO_OPCOES).
+     * Sem correspondência clara, volta null (o usuário escolhe manualmente).
+     */
+    private function normalizarCambio(?string $bruto): ?string
+    {
+        if (blank($bruto)) {
+            return null;
+        }
+
+        // Str::ascii tira os acentos ("Automática" -> "Automatica") antes de
+        // comparar - sem isso, "automat" não batia com "automática" porque
+        // str_contains é sensível a byte, não a caractere acentuado.
+        $texto = Str::lower(Str::ascii($bruto));
+
+        return match (true) {
+            str_contains($texto, 'cvt') => 'CVT',
+            str_contains($texto, 'automatizad') => 'Automatizado',
+            str_contains($texto, 'semi') => 'Semi-automático',
+            str_contains($texto, 'automat') => 'Automático',
+            str_contains($texto, 'manual') => 'Manual',
+            default => null,
+        };
     }
 
     private function paraInteiro(mixed $valor): ?int

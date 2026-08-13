@@ -80,6 +80,45 @@ it('marca restricao quando a situacao nao e "sem restricao"', function () {
         ->and($dados['situacao'])->toBe('Roubo/Furto');
 });
 
+dataset('cambios_brutos', [
+    'texto simples' => ['Manual', 'Manual'],
+    'sigla no meio do texto' => ['AUTOMATICA CVT', 'CVT'],
+    'automatizada' => ['Automatizada', 'Automatizado'],
+    'semi-automatico com acento e hifen' => ['Semi-Automático', 'Semi-automático'],
+    'automatica com acento (formato mais comum vindo da api real)' => ['Automática', 'Automático'],
+    'sem correspondencia conhecida' => ['Sequencial', null],
+]);
+
+it('normaliza o cambio bruto da api pras opcoes padronizadas do formulario', function (string $bruto, ?string $esperado) {
+    config(['services.apiplacas.token' => 'token-de-teste']);
+
+    Http::fake([
+        'wdapi2.com.br/consulta/*' => Http::response([
+            'marca' => 'VW', 'modelo' => 'GOL',
+            'extra' => ['caixa_cambio' => $bruto],
+        ], 200),
+    ]);
+
+    $dados = (new ConsultaPlacaService)->consultar('ABC1234');
+
+    expect($dados['cambio'])->toBe($esperado);
+})->with('cambios_brutos');
+
+it('preenche o numero de portas quando a api retorna esse dado', function () {
+    config(['services.apiplacas.token' => 'token-de-teste']);
+
+    Http::fake([
+        'wdapi2.com.br/consulta/*' => Http::response([
+            'marca' => 'VW', 'modelo' => 'GOL',
+            'extra' => ['numero_de_portas' => '4'],
+        ], 200),
+    ]);
+
+    $dados = (new ConsultaPlacaService)->consultar('ABC1234');
+
+    expect($dados['portas'])->toBe(4);
+});
+
 it('traduz codigos de erro da api pra mensagens claras', function () {
     config(['services.apiplacas.token' => 'token-de-teste']);
 

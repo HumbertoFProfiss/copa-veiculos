@@ -46,12 +46,34 @@
             </div>
 
             <div class="mt-12 flex flex-col gap-6 border-t border-white/20 pt-8 sm:flex-row sm:gap-12">
-                <p class="text-sm font-medium text-brand-100">{{ $totalEstoque }} veículos em estoque</p>
                 @if ($empresa?->horario_funcionamento)
                     <p class="text-sm font-medium text-brand-100">{{ $empresa->horario_funcionamento }}</p>
                 @endif
                 <p class="text-sm font-medium text-brand-100">Financiamento facilitado</p>
             </div>
+        </div>
+    </section>
+
+    <!-- ===== ATALHOS RÁPIDOS ===== -->
+    <section class="bg-white py-6 dark:bg-duskbg border-b border-brand-100 dark:border-duskborder">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 flex flex-wrap items-center justify-center gap-3">
+            <a href="#sobre" class="inline-flex items-center gap-2 rounded-full border border-brand-100 dark:border-duskborder px-4 py-2 text-sm font-medium text-ink dark:text-brand-100 hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-300 transition-colors">
+                <x-heroicon-o-information-circle class="w-4 h-4" /> Sobre nós
+            </a>
+            <a href="#financiamento" class="inline-flex items-center gap-2 rounded-full border border-brand-100 dark:border-duskborder px-4 py-2 text-sm font-medium text-ink dark:text-brand-100 hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-300 transition-colors">
+                <x-heroicon-o-calculator class="w-4 h-4" /> Simular Financiamento
+            </a>
+            <a href="#venda-seu-carro" class="inline-flex items-center gap-2 rounded-full border border-brand-100 dark:border-duskborder px-4 py-2 text-sm font-medium text-ink dark:text-brand-100 hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-300 transition-colors">
+                <x-heroicon-o-currency-dollar class="w-4 h-4" /> Venda seu Carro
+            </a>
+            <a href="#contato" class="inline-flex items-center gap-2 rounded-full border border-brand-100 dark:border-duskborder px-4 py-2 text-sm font-medium text-ink dark:text-brand-100 hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-300 transition-colors">
+                <x-heroicon-o-map-pin class="w-4 h-4" /> Onde Estamos
+            </a>
+            @if ($empresa?->instagram_url || $empresa?->facebook_url)
+                <a href="#contato" class="inline-flex items-center gap-2 rounded-full border border-brand-100 dark:border-duskborder px-4 py-2 text-sm font-medium text-ink dark:text-brand-100 hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-300 transition-colors">
+                    <x-heroicon-o-share class="w-4 h-4" /> Redes Sociais
+                </a>
+            @endif
         </div>
     </section>
 
@@ -151,7 +173,7 @@
                 <div class="text-center mt-12">
                     <a href="{{ route('estoque') }}"
                        class="inline-block rounded-full bg-brand-700 px-7 py-3.5 text-sm font-semibold text-white shadow-brand transition-transform hover:scale-[1.03]">
-                        Ver Todo o Estoque ({{ $totalEstoque }})
+                        Ver Todo o Estoque
                     </a>
                 </div>
             </div>
@@ -205,7 +227,7 @@
     </section>
 
     <!-- ===== SOBRE ===== -->
-    <section class="bg-brand-100/50 py-24 dark:bg-duskcard/40">
+    <section id="sobre" class="bg-brand-100/50 py-24 dark:bg-duskcard/40">
         <div class="max-w-7xl mx-auto px-6 sm:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div>
                 <p class="mb-3 text-base font-medium tracking-wide uppercase text-brand-700">Quem somos</p>
@@ -336,6 +358,18 @@
                             @if ($empresa?->email_contato)<a href="mailto:{{ $empresa->email_contato }}" class="hover:text-brand-700">{{ $empresa->email_contato }}</a>@else A configurar @endif
                         </p></div>
                     </div>
+                    @if ($empresa?->instagram_url || $empresa?->facebook_url)
+                        <div class="flex items-start gap-4">
+                            <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)"><x-heroicon-o-share class="w-5 h-5" /></span>
+                            <div>
+                                <strong class="text-brand-900 dark:text-white block text-sm">Redes sociais</strong>
+                                <p class="text-muted dark:text-duskmuted text-sm space-x-3">
+                                    @if ($empresa?->instagram_url)<a href="{{ $empresa->instagram_url }}" target="_blank" rel="noopener" class="hover:text-brand-700">Instagram</a>@endif
+                                    @if ($empresa?->facebook_url)<a href="{{ $empresa->facebook_url }}" target="_blank" rel="noopener" class="hover:text-brand-700">Facebook</a>@endif
+                                </p>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

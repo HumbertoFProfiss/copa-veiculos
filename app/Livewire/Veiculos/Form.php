@@ -8,6 +8,7 @@ use App\Models\Veiculo;
 use App\Models\VeiculoOpcional;
 use App\Services\ConsultaPlaca\ConsultaPlacaException;
 use App\Services\ConsultaPlaca\ConsultaPlacaService;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Form extends Component
@@ -146,7 +147,7 @@ class Form extends Component
             'ano_modelo' => 'nullable|integer|min:1950|max:'.(date('Y') + 1),
             'km' => 'required|integer|min:0',
             'combustivel' => 'nullable|string|max:50',
-            'cambio' => 'nullable|string|max:50',
+            'cambio' => ['nullable', 'string', \Illuminate\Validation\Rule::in(\App\Models\Veiculo::CAMBIO_OPCOES)],
             'cor' => 'nullable|string|max:50',
             'portas' => 'nullable|integer|min:2|max:5',
             'motor' => 'nullable|string|max:50',
@@ -174,6 +175,12 @@ class Form extends Component
         ];
     }
 
+    #[On('descricao-sugerida')]
+    public function usarDescricaoSugerida(string $descricao): void
+    {
+        $this->descricao = $descricao;
+    }
+
     public function buscarPorPlaca(): void
     {
         $this->consultaPlacaErro = null;
@@ -187,7 +194,7 @@ class Form extends Component
             return;
         }
 
-        foreach (['marca', 'modelo', 'versao', 'ano_fabricacao', 'ano_modelo', 'cor', 'combustivel', 'cambio', 'numero_chassi', 'preco_tabela_fipe'] as $campo) {
+        foreach (['marca', 'modelo', 'versao', 'ano_fabricacao', 'ano_modelo', 'cor', 'combustivel', 'cambio', 'portas', 'numero_chassi', 'preco_tabela_fipe'] as $campo) {
             if (filled($dados[$campo] ?? null)) {
                 $this->{$campo} = $dados[$campo];
             }
