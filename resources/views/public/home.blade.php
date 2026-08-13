@@ -5,13 +5,12 @@
     @endphp
 
     <!-- ===== HERO ===== -->
-    <section id="home" class="relative overflow-hidden bg-surface">
+    <section id="home" class="relative overflow-hidden bg-gradient-to-b from-primary-soft to-bg">
         <div class="absolute inset-0">
             @forelse ($heroFotos as $foto)
-                <div class="absolute inset-0 bg-cover bg-center opacity-15" style="background-image: url('{{ $foto->url() }}')"></div>
+                <div class="absolute inset-0 bg-cover bg-center opacity-10" style="background-image: url('{{ $foto->url() }}')"></div>
             @empty
             @endforelse
-            <div class="absolute inset-0 bg-gradient-to-b from-bg/40 via-bg/80 to-bg"></div>
         </div>
 
         <div class="relative max-w-7xl mx-auto px-6 py-24 text-center">
@@ -82,7 +81,7 @@
 
     <!-- ===== ÚLTIMAS ADIÇÕES ===== -->
     @if ($ultimasAdicoes->isNotEmpty())
-        <section class="py-16 bg-surface border-t border-border">
+        <section class="py-16 bg-primary-soft border-t border-border">
             <div class="max-w-7xl mx-auto px-6">
                 <h2 class="text-2xl sm:text-3xl font-bold text-text-primary text-center mb-10">Últimas Adições</h2>
 
@@ -173,7 +172,7 @@
     </section>
 
     <!-- ===== SOBRE ===== -->
-    <section class="py-16 bg-surface border-t border-border">
+    <section class="py-16 bg-primary-soft border-t border-border">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div>
                 <h2 class="text-2xl sm:text-3xl font-bold text-text-primary mb-5">Sobre {{ $empresa->nome ?? config('app.name') }}</h2>
@@ -247,7 +246,7 @@
     </section>
 
     <!-- ===== VENDA SEU CARRO ===== -->
-    <section id="venda-seu-carro" class="py-16 bg-surface border-t border-border">
+    <section id="venda-seu-carro" class="py-16 bg-primary-soft border-t border-border">
         <div class="max-w-7xl mx-auto px-6">
             <h2 class="text-2xl sm:text-3xl font-bold text-text-primary text-center mb-2">Venda seu Carro</h2>
             <p class="text-center text-text-secondary mb-10 max-w-xl mx-auto">Avaliamos seu veículo de forma rápida e transparente. Preencha os dados e entraremos em contato.</p>
