@@ -30,9 +30,25 @@ class InteresseForm extends Component
     {
         return [
             'nome' => 'required|string|max:150',
-            'telefone' => 'required|string|max:20',
+            'telefone' => ['required', 'string', 'max:20', 'regex:/^\D*(\d\D*){10,11}$/'],
             'email' => 'nullable|email|max:150',
         ];
+    }
+
+    protected function messages(): array
+    {
+        return [
+            'telefone.regex' => 'Informe um WhatsApp válido, com DDD (ex: (14) 99999-9999).',
+        ];
+    }
+
+    public function whatsappContinuarUrl(): ?string
+    {
+        $mensagem = "Olá! Acabei de me interessar pelo {$this->veiculo->marca} {$this->veiculo->modelo}"
+            .($this->veiculo->ano_modelo ? " {$this->veiculo->ano_modelo}" : '')
+            .' que vi no site. Podemos conversar?';
+
+        return $this->veiculo->empresa?->whatsappUrl($mensagem);
     }
 
     public function enviar(): void

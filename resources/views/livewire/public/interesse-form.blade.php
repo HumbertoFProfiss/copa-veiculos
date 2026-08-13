@@ -4,6 +4,13 @@
             <x-heroicon-o-check-circle class="w-5 h-5 shrink-0" />
             <span>Recebemos seu interesse! Um vendedor vai entrar em contato em breve.</span>
         </div>
+        @if ($this->whatsappContinuarUrl())
+            <a href="{{ $this->whatsappContinuarUrl() }}" target="_blank" rel="noopener"
+               class="mt-3 flex items-center justify-center gap-2 rounded-full bg-brand-700 px-6 py-3 text-sm font-semibold text-white shadow-brand transition-transform hover:scale-[1.02]">
+                <x-heroicon-o-chat-bubble-left-right class="w-4 h-4" />
+                Continuar agora no WhatsApp
+            </a>
+        @endif
     @else
         <h3 class="font-heading text-sm font-semibold text-brand-900 dark:text-white mb-3">Tenho interesse</h3>
         <form wire:submit="enviar" class="space-y-3">
@@ -12,7 +19,7 @@
                 @error('nome') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
-                <input type="text" wire:model="telefone" placeholder="Telefone / WhatsApp" class="input">
+                <input type="text" wire:model="telefone" placeholder="Seu WhatsApp, com DDD (obrigatório)" class="input">
                 @error('telefone') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
             </div>
             <div>

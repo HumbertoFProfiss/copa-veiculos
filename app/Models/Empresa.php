@@ -99,7 +99,7 @@ class Empresa extends Model
         return in_array($modulo, $incluidosNoPlano, true) || $this->possuiModulo($modulo);
     }
 
-    public function whatsappUrl(): ?string
+    public function whatsappUrl(?string $mensagem = null): ?string
     {
         if (blank($this->whatsapp)) {
             return null;
@@ -108,6 +108,12 @@ class Empresa extends Model
         $numero = preg_replace('/\D/', '', $this->whatsapp);
         $numero = str_starts_with($numero, '55') ? $numero : '55'.$numero;
 
-        return "https://wa.me/{$numero}";
+        $url = "https://wa.me/{$numero}";
+
+        if (filled($mensagem)) {
+            $url .= '?text='.rawurlencode($mensagem);
+        }
+
+        return $url;
     }
 }
