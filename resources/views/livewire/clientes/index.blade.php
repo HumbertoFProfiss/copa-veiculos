@@ -56,7 +56,7 @@
 
     @if ($mostrarForm)
         <div class="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-20" wire:click.self="$set('mostrarForm', false)">
-            <div class="bg-bg rounded-card border border-border w-full max-w-lg p-6">
+            <div class="bg-bg rounded-card border border-border w-full max-w-xl p-6">
                 <h2 class="text-lg font-semibold text-text-primary mb-4">{{ $editandoId ? 'Editar cliente' : 'Novo cliente' }}</h2>
                 <form wire:submit="salvar" class="space-y-3">
                     <div>
@@ -85,6 +85,43 @@
                             <input type="text" wire:model="whatsapp" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
                         </div>
                     </div>
+
+                    <div class="pt-2 border-t border-border">
+                        <h3 class="text-xs font-semibold text-text-secondary uppercase tracking-wide mt-3 mb-2">Endereço</h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-text-secondary mb-1">CEP</label>
+                                <div class="flex gap-2">
+                                    <input type="text" wire:model="cep" placeholder="00000-000" maxlength="9"
+                                           class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                                    <button type="button" wire:click="buscarCep" wire:loading.attr="disabled" wire:target="buscarCep"
+                                            class="shrink-0 px-3 py-2 rounded-control bg-surface border border-border text-sm font-medium text-text-primary hover:bg-primary-soft disabled:opacity-60">
+                                        <span wire:loading.remove wire:target="buscarCep">Buscar</span>
+                                        <span wire:loading wire:target="buscarCep">...</span>
+                                    </button>
+                                </div>
+                                @if ($consultaCepErro)
+                                    <p class="text-xs text-error mt-1">{{ $consultaCepErro }}</p>
+                                @endif
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-text-secondary mb-1">UF</label>
+                                <input type="text" wire:model="uf" maxlength="2" class="w-full rounded-control border-border text-sm uppercase focus:border-primary focus:ring-primary">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mt-3">
+                            <div>
+                                <label class="block text-xs font-medium text-text-secondary mb-1">Endereço</label>
+                                <input type="text" wire:model="endereco" placeholder="Rua, número, bairro"
+                                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-text-secondary mb-1">Cidade</label>
+                                <input type="text" wire:model="cidade" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="flex items-center gap-3 pt-2">
                         <button type="submit" class="px-4 py-2 rounded-control bg-primary text-white text-sm font-medium hover:bg-primary-light">Salvar</button>
                         <button type="button" wire:click="$set('mostrarForm', false)" class="px-4 py-2 rounded-control border border-border text-sm text-text-secondary hover:bg-surface">Cancelar</button>
