@@ -48,6 +48,9 @@ class Empresa extends Model
         'instagram_url',
         'facebook_url',
         'sobre_texto',
+        'analytics_ga4_id',
+        'analytics_gtm_id',
+        'analytics_meta_pixel_id',
     ];
 
     protected function casts(): array

@@ -47,6 +47,15 @@ class Index extends Component
 
     public ?string $dominio_customizado = '';
 
+    #[Validate('nullable|string|max:30')]
+    public ?string $analytics_ga4_id = '';
+
+    #[Validate('nullable|string|max:30')]
+    public ?string $analytics_gtm_id = '';
+
+    #[Validate('nullable|string|max:30')]
+    public ?string $analytics_meta_pixel_id = '';
+
     public function mount(): void
     {
         $empresa = app('tenant');
@@ -62,6 +71,9 @@ class Index extends Component
         $this->instagram_url = $empresa->instagram_url;
         $this->facebook_url = $empresa->facebook_url;
         $this->sobre_texto = $empresa->sobre_texto;
+        $this->analytics_ga4_id = $empresa->analytics_ga4_id;
+        $this->analytics_gtm_id = $empresa->analytics_gtm_id;
+        $this->analytics_meta_pixel_id = $empresa->analytics_meta_pixel_id;
     }
 
     public function salvar(): void

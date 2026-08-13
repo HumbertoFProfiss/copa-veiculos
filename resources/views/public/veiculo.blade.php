@@ -1,4 +1,40 @@
-<x-layouts.public :title="$veiculo->marca.' '.$veiculo->modelo.' - '.config('app.name')">
+<x-layouts.public
+    :title="$veiculo->marca.' '.$veiculo->modelo.' '.$veiculo->ano_modelo.' - '.config('app.name')"
+    :description="($veiculo->marca.' '.$veiculo->modelo.' '.$veiculo->ano_fabricacao.'/'.$veiculo->ano_modelo.', '.number_format($veiculo->km, 0, ',', '.').' km. '.($veiculo->preco_venda ? 'R$ '.number_format($veiculo->preco_venda, 2, ',', '.') : 'Consulte o preço').'.')"
+    :og-type="'product'"
+    :og-image="$veiculo->fotos->first()?->url()">
+
+    @php
+        $primeiraFoto = $veiculo->fotos->first();
+    @endphp
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'Vehicle',
+            'name' => "{$veiculo->marca} {$veiculo->modelo} {$veiculo->versao}",
+            'brand' => $veiculo->marca,
+            'model' => $veiculo->modelo,
+            'vehicleModelDate' => (string) $veiculo->ano_modelo,
+            'productionDate' => (string) $veiculo->ano_fabricacao,
+            'mileageFromOdometer' => [
+                '@type' => 'QuantitativeValue',
+                'value' => $veiculo->km,
+                'unitCode' => 'KMT',
+            ],
+            'vehicleTransmission' => $veiculo->cambio,
+            'fuelType' => $veiculo->combustivel,
+            'color' => $veiculo->cor,
+            'image' => $primeiraFoto?->url(),
+            'offers' => $veiculo->preco_venda ? [
+                '@type' => 'Offer',
+                'priceCurrency' => 'BRL',
+                'price' => (float) $veiculo->preco_venda,
+                'availability' => 'https://schema.org/InStock',
+                'url' => route('veiculo.show', $veiculo),
+            ] : null,
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
+    </script>
+
     <div class="max-w-7xl mx-auto px-6 sm:px-8 py-16">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
             <div class="lg:col-span-2">

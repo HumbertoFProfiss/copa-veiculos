@@ -106,6 +106,29 @@
                 @error('sobre_texto') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
 
+            <div class="sm:col-span-2 pt-2 border-t border-border">
+                <h3 class="text-sm font-semibold text-text-primary mb-1 mt-3">Analytics (opcional)</h3>
+                <p class="text-xs text-text-secondary mb-3">Cole os IDs das suas contas — você cria as contas direto no Google/Meta, a gente só injeta o código no site.</p>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-text-secondary mb-1">Google Analytics 4 (Measurement ID)</label>
+                <input type="text" wire:model="analytics_ga4_id" placeholder="G-XXXXXXXXXX"
+                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                @error('analytics_ga4_id') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-text-secondary mb-1">Google Tag Manager (Container ID)</label>
+                <input type="text" wire:model="analytics_gtm_id" placeholder="GTM-XXXXXXX"
+                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                @error('analytics_gtm_id') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-text-secondary mb-1">Meta Pixel (ID)</label>
+                <input type="text" wire:model="analytics_meta_pixel_id" placeholder="123456789012345"
+                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                @error('analytics_meta_pixel_id') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
+            </div>
+
             <div class="sm:col-span-2">
                 <button type="submit" wire:loading.attr="disabled"
                         class="inline-flex items-center gap-2 px-5 py-2.5 rounded-control bg-primary text-white text-sm font-medium hover:bg-primary-light disabled:opacity-60">

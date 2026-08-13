@@ -1,3 +1,4 @@
+@php $empresa = app()->bound('tenant') ? app('tenant') : null; @endphp
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -9,6 +10,17 @@
     @isset($description)
         <meta name="description" content="{{ $description }}">
     @endisset
+    <link rel="canonical" href="{{ url()->current() }}">
+    <link rel="sitemap" type="application/xml" href="{{ route('sitemap') }}">
+
+    {{-- Open Graph / redes sociais --}}
+    <meta property="og:type" content="{{ $ogType ?? 'website' }}">
+    <meta property="og:title" content="{{ $title ?? config('app.name') }}">
+    <meta property="og:description" content="{{ $description ?? ($empresa->sobre_texto ?? config('app.name')) }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:site_name" content="{{ $empresa->nome ?? config('app.name') }}">
+    <meta property="og:image" content="{{ $ogImage ?? asset('logo.png') }}">
+    <meta name="twitter:card" content="summary_large_image">
 
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
 
@@ -17,9 +29,39 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+
+    @if ($empresa?->analytics_ga4_id)
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $empresa->analytics_ga4_id }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '{{ $empresa->analytics_ga4_id }}');
+        </script>
+    @endif
+    @if ($empresa?->analytics_gtm_id)
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','{{ $empresa->analytics_gtm_id }}');</script>
+    @endif
+    @if ($empresa?->analytics_meta_pixel_id)
+        <script>
+            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+            n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+            document,'script','https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '{{ $empresa->analytics_meta_pixel_id }}');
+            fbq('track', 'PageView');
+        </script>
+    @endif
 </head>
 <body class="font-poppins antialiased bg-white text-ink">
-    @php $empresa = app()->bound('tenant') ? app('tenant') : null; @endphp
+    @if ($empresa?->analytics_gtm_id)
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $empresa->analytics_gtm_id }}"
+            height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    @endif
 
     @php $heroTransparente = $heroTransparente ?? false; @endphp
 
