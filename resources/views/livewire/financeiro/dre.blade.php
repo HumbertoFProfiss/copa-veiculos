@@ -1,4 +1,6 @@
 <div class="max-w-2xl">
+    <x-financeiro.tabs ativo="dre" />
+
     <div class="flex items-center justify-between mb-6">
         <h1 class="text-xl font-semibold text-text-primary">DRE - Demonstrativo de Resultado</h1>
         <input type="month" wire:model.live="mes" class="rounded-control border-border text-sm focus:border-primary focus:ring-primary">

@@ -1,4 +1,6 @@
 <div>
+    <x-financeiro.tabs ativo="receber" />
+
     <div class="mb-6">
         <h1 class="text-xl font-semibold text-text-primary">Contas a Receber</h1>
         <p class="text-sm text-text-secondary mt-1">Total pendente: <span class="tabular-nums font-medium text-success">R$ {{ number_format($totalPendente, 2, ',', '.') }}</span></p>

@@ -1,4 +1,6 @@
 <div class="max-w-3xl">
+    <x-financeiro.tabs ativo="conciliacao" />
+
     <h1 class="text-xl font-semibold text-text-primary mb-6">Conciliação Bancária</h1>
 
     <div class="bg-bg border border-border rounded-card p-6 mb-6">

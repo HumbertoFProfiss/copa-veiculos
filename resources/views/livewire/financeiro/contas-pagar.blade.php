@@ -1,4 +1,6 @@
 <div>
+    <x-financeiro.tabs ativo="index" />
+
     <div class="flex items-center justify-between mb-6">
         <div>
             <h1 class="text-xl font-semibold text-text-primary">Contas a Pagar</h1>
@@ -23,7 +25,7 @@
         @forelse ($contas as $conta)
             <tr wire:key="cp-{{ $conta->id }}" class="hover:bg-surface">
                 <td class="px-4 py-3 font-medium text-text-primary">{{ $conta->descricao }}</td>
-                <td class="px-4 py-3 text-text-secondary">{{ $conta->categoria?->nome ?? '—' }}</td>
+                <td class="px-4 py-3 text-text-secondary">{{ $conta->categoria?->nomeCompleto() ?? '—' }}</td>
                 <td class="px-4 py-3 tabular-nums text-text-primary">R$ {{ number_format($conta->valor, 2, ',', '.') }}</td>
                 <td class="px-4 py-3 text-text-secondary">{{ $conta->vencimento->format('d/m/Y') }}</td>
                 <td class="px-4 py-3">
@@ -69,7 +71,7 @@
                         <select wire:model="categoria_id" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
                             <option value="">—</option>
                             @foreach ($categorias as $categoria)
-                                <option value="{{ $categoria->id }}">{{ $categoria->nome }}</option>
+                                <option value="{{ $categoria->id }}">{{ $categoria->nomeCompleto() }}</option>
                             @endforeach
                         </select>
                     </div>
