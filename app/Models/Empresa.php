@@ -30,6 +30,19 @@ class Empresa extends Model
         ],
     ];
 
+    /**
+     * Preco mensal de cada plano (ver prompt §5 - "Completo R$300/mes,
+     * Completo+Opcionais R$550/mes", competindo com o Boom Sistemas).
+     * "somente_site" nao teve valor definido no prompt - R$97 e um
+     * placeholder razoavel pro produto reduzido, ajustavel aqui se o
+     * valor real de mercado definido pelo usuario for outro.
+     */
+    public const PRECOS_PLANOS = [
+        'somente_site' => 97.00,
+        'completo' => 300.00,
+        'completo_opcionais' => 550.00,
+    ];
+
     protected $fillable = [
         'nome',
         'cnpj',

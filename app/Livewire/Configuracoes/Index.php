@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Configuracoes;
 
+use App\Models\Empresa;
+use App\Models\Fatura;
 use App\Services\Ia\AiProviderFactory;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Validate;
@@ -101,6 +103,8 @@ class Index extends Component
             'iaConfigurada' => $ia->disponivel(),
             'iaProvider' => config('services.ia.provider'),
             'iaModelo' => config('services.ia.modelo'),
+            'precoPlanoAtual' => Empresa::PRECOS_PLANOS[app('tenant')->plano] ?? null,
+            'faturas' => Fatura::orderByDesc('referencia')->limit(12)->get(),
         ])->layout('layouts.admin', ['title' => 'Configurações']);
     }
 }

@@ -185,6 +185,58 @@
         <x-admin.integracao-card
             icon="credit-card"
             titulo="Cobrança recorrente do plano"
-            requisito="conta em um processador de pagamento (ex: Stripe, Asaas) pra cobrar as revendas automaticamente." />
+            :configurada="true"
+            detalhe="Fatura mensal gerada automaticamente (dia 1º) e baixa manual funcionam de verdade — só falta conectar um gateway (Stripe/Asaas) pra cobrar cartão/boleto sozinho." />
+    </div>
+
+    <h2 class="text-sm font-semibold text-text-primary mb-1 mt-8">Assinatura</h2>
+    <p class="text-xs text-text-secondary mb-4">Plano contratado e histórico de faturas dessa revenda.</p>
+
+    <div class="bg-bg border border-border rounded-card p-5 shadow-soft mb-6">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+            <div>
+                <div class="text-xs text-text-secondary mb-1">Plano atual</div>
+                <x-admin.status-badge variant="info" :label="ucfirst(str_replace('_', ' ', $empresa->plano))" />
+            </div>
+            <div>
+                <div class="text-xs text-text-secondary mb-1">Valor mensal</div>
+                <div class="text-sm font-medium text-text-primary tabular-nums">
+                    {{ $precoPlanoAtual !== null ? 'R$ '.number_format($precoPlanoAtual, 2, ',', '.') : '—' }}
+                </div>
+            </div>
+            @php $proximaPendente = $faturas->firstWhere('status', 'pendente') ?? $faturas->firstWhere('status', 'atrasada'); @endphp
+            <div>
+                <div class="text-xs text-text-secondary mb-1">Próximo vencimento</div>
+                <div class="text-sm font-medium text-text-primary">
+                    {{ $proximaPendente ? $proximaPendente->vencimento->format('d/m/Y') : '—' }}
+                </div>
+            </div>
+        </div>
+
+        @if ($faturas->isEmpty())
+            <p class="text-sm text-text-secondary">Nenhuma fatura gerada ainda.</p>
+        @else
+            <x-admin.data-table>
+                <x-slot:head>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wide">Referência</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wide">Vencimento</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wide">Valor</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wide">Status</th>
+                </x-slot:head>
+
+                @foreach ($faturas as $fatura)
+                    <tr class="hover:bg-surface">
+                        <td class="px-4 py-3 text-text-primary">{{ $fatura->referencia->translatedFormat('M/Y') }}</td>
+                        <td class="px-4 py-3 text-text-secondary">{{ $fatura->vencimento->format('d/m/Y') }}</td>
+                        <td class="px-4 py-3 text-text-secondary tabular-nums">R$ {{ number_format((float) $fatura->valor, 2, ',', '.') }}</td>
+                        <td class="px-4 py-3">
+                            <x-admin.status-badge
+                                :variant="match($fatura->status) { 'paga' => 'success', 'atrasada' => 'error', 'cancelada' => 'neutral', default => 'warning' }"
+                                :label="$fatura->statusLabel()" />
+                        </td>
+                    </tr>
+                @endforeach
+            </x-admin.data-table>
+        @endif
     </div>
 </div>
