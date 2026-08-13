@@ -60,6 +60,13 @@
                     </div>
                 @endif
 
+                @if ($veiculo->descricao)
+                    <div class="mt-10">
+                        <h2 class="font-heading text-lg font-medium text-brand-900 dark:text-white mb-4">Descrição</h2>
+                        <p class="text-sm text-muted dark:text-duskmuted leading-relaxed whitespace-pre-line">{{ $veiculo->descricao }}</p>
+                    </div>
+                @endif
+
                 <div class="mt-10">
                     <h2 class="font-heading text-lg font-medium text-brand-900 dark:text-white mb-4">Ficha técnica</h2>
                     <dl class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
@@ -75,9 +82,12 @@
                 @if ($veiculo->opcionais->isNotEmpty())
                     <div class="mt-10">
                         <h2 class="font-heading text-lg font-medium text-brand-900 dark:text-white mb-4">Opcionais</h2>
-                        <div class="flex flex-wrap gap-2">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-3">
                             @foreach ($veiculo->opcionais as $opcional)
-                                <span class="px-3 py-1.5 rounded-full bg-brand-100/50 dark:bg-duskcard/40 border border-brand-100 dark:border-duskborder text-sm text-brand-900 dark:text-white">{{ $opcional->nome }}</span>
+                                <div class="flex items-center gap-2 text-sm text-ink dark:text-brand-100">
+                                    <x-heroicon-o-check-circle class="w-4 h-4 text-brand-500 shrink-0" />
+                                    {{ $opcional->nome }}
+                                </div>
                             @endforeach
                         </div>
                     </div>

@@ -104,6 +104,12 @@
                     </select>
                 </div>
             </div>
+            <div class="mt-4">
+                <label class="block text-xs font-medium text-text-secondary mb-1">Descrição</label>
+                <textarea wire:model="descricao" rows="5" placeholder="Texto livre exibido na página do veículo no site (opcionais, histórico, revisões feitas, diferenciais...)"
+                          class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary"></textarea>
+                @error('descricao') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
+            </div>
             <label class="inline-flex items-center gap-2 mt-4 text-sm text-text-secondary">
                 <input type="checkbox" wire:model="destaque" class="rounded-control border-border text-primary focus:ring-primary">
                 Destacar na home do site
@@ -303,16 +309,31 @@
         @endcan
 
         <div class="bg-bg border border-border rounded-card p-5 mt-6">
-            <h2 class="text-sm font-semibold text-text-primary mb-4">Opcionais</h2>
+            <h2 class="text-sm font-semibold text-text-primary mb-1">Opcionais</h2>
+            <p class="text-xs text-text-secondary mb-4">Marque os itens que o veículo possui — aparecem na página do veículo no site.</p>
+
+            @php $catalogoIds = $veiculo->opcionais->pluck('opcional_catalogo_id')->filter()->all(); @endphp
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 mb-6">
+                @foreach ($opcionaisCatalogo as $item)
+                    <label class="inline-flex items-center gap-2 text-sm text-text-secondary">
+                        <input type="checkbox" wire:click="alternarOpcionalCatalogo({{ $item->id }})"
+                               @checked(in_array($item->id, $catalogoIds))
+                               class="rounded-control border-border text-primary focus:ring-primary">
+                        {{ $item->nome }}
+                    </label>
+                @endforeach
+            </div>
+
+            <h3 class="text-xs font-semibold text-text-secondary uppercase tracking-wide mb-2">Outros (personalizado)</h3>
             <form wire:submit="adicionarOpcional" class="flex gap-2 mb-4">
-                <input type="text" wire:model="novoOpcional" placeholder="Ex: Ar condicionado"
+                <input type="text" wire:model="novoOpcional" placeholder="Ex: Blindagem"
                        class="flex-1 rounded-control border-border text-sm focus:border-primary focus:ring-primary">
                 <button type="submit" class="px-4 py-2 rounded-control bg-surface border border-border text-sm font-medium text-text-primary hover:bg-primary-soft">
                     Adicionar
                 </button>
             </form>
             <div class="flex flex-wrap gap-2">
-                @foreach ($veiculo->opcionais as $opcional)
+                @foreach ($veiculo->opcionais->whereNull('opcional_catalogo_id') as $opcional)
                     <span class="inline-flex items-center gap-1 px-3 py-1 rounded-control bg-surface border border-border text-sm text-text-primary">
                         {{ $opcional->nome }}
                         <button wire:click="removerOpcional({{ $opcional->id }})" type="button" class="text-text-secondary hover:text-error">

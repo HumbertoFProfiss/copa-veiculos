@@ -29,6 +29,7 @@ class Veiculo extends Model
         'filial_id',
         'marca',
         'modelo',
+        'descricao',
         'versao',
         'slug',
         'ano_fabricacao',

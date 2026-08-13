@@ -12,10 +12,15 @@ class VeiculoOpcional extends Model
 
     protected $table = 'veiculos_opcionais';
 
-    protected $fillable = ['veiculo_id', 'nome'];
+    protected $fillable = ['veiculo_id', 'opcional_catalogo_id', 'nome'];
 
     public function veiculo(): BelongsTo
     {
         return $this->belongsTo(Veiculo::class);
+    }
+
+    public function catalogo(): BelongsTo
+    {
+        return $this->belongsTo(OpcionalCatalogo::class, 'opcional_catalogo_id');
     }
 }

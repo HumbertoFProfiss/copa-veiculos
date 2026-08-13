@@ -26,6 +26,8 @@ class Form extends Component
 
     public ?string $versao = '';
 
+    public ?string $descricao = '';
+
     public ?int $ano_fabricacao = null;
 
     public ?int $ano_modelo = null;
@@ -99,7 +101,7 @@ class Form extends Component
         if ($veiculo && $veiculo->exists) {
             $this->veiculo = $veiculo;
             $this->fill($veiculo->only([
-                'marca', 'modelo', 'versao', 'ano_fabricacao', 'ano_modelo', 'km', 'combustivel',
+                'marca', 'modelo', 'descricao', 'versao', 'ano_fabricacao', 'ano_modelo', 'km', 'combustivel',
                 'cambio', 'cor', 'portas', 'motor', 'placa', 'numero_chassi', 'renavam', 'numero_estoque',
                 'tipo_propriedade', 'fornecedor_id', 'filial_id', 'consignado_nome', 'consignado_telefone',
                 'preco_compra', 'preco_tabela_fipe', 'preco_anuncio', 'preco_venda', 'preco_minimo',
@@ -116,6 +118,7 @@ class Form extends Component
         return [
             'marca' => 'required|string|max:100',
             'modelo' => 'required|string|max:100',
+            'descricao' => 'nullable|string|max:5000',
             'versao' => 'nullable|string|max:100',
             'ano_fabricacao' => 'nullable|integer|min:1950|max:'.(date('Y') + 1),
             'ano_modelo' => 'nullable|integer|min:1950|max:'.(date('Y') + 1),
@@ -192,6 +195,27 @@ class Form extends Component
         $this->veiculo?->refresh();
     }
 
+    public function alternarOpcionalCatalogo(int $catalogoId): void
+    {
+        if (! $this->veiculo) {
+            return;
+        }
+
+        $existente = $this->veiculo->opcionais()->where('opcional_catalogo_id', $catalogoId)->first();
+
+        if ($existente) {
+            $existente->delete();
+        } else {
+            $catalogo = \App\Models\OpcionalCatalogo::findOrFail($catalogoId);
+            $this->veiculo->opcionais()->create([
+                'opcional_catalogo_id' => $catalogo->id,
+                'nome' => $catalogo->nome,
+            ]);
+        }
+
+        $this->veiculo->refresh();
+    }
+
     public function salvar()
     {
         $this->authorize($this->veiculo ? 'veiculos.editar' : 'veiculos.criar');
@@ -216,6 +240,7 @@ class Form extends Component
         return view('livewire.veiculos.form', [
             'fornecedores' => Fornecedor::where('ativo', true)->orderBy('nome')->get(),
             'filiais' => Filial::where('ativa', true)->orderBy('nome')->get(),
+            'opcionaisCatalogo' => \App\Models\OpcionalCatalogo::orderBy('ordem')->get(),
         ])->layout('layouts.admin', ['title' => $this->veiculo ? 'Editar veículo' : 'Novo veículo']);
     }
 }
