@@ -5,7 +5,7 @@
     @endphp
 
     <!-- ===== HERO ===== -->
-    <section id="home" class="relative overflow-hidden bg-blue-100">
+    <section id="home" class="relative overflow-hidden bg-[#A7C7E7]">
         <div class="absolute inset-0">
             @forelse ($heroFotos as $foto)
                 <div class="absolute inset-0 bg-cover bg-center opacity-10" style="background-image: url('{{ $foto->url() }}')"></div>
@@ -31,7 +31,7 @@
     </section>
 
     <!-- ===== DESTAQUES DA SEMANA ===== -->
-    <section class="py-16 bg-blue-100 border-t border-border">
+    <section class="py-16 bg-[#A7C7E7] border-t border-border">
         <div class="max-w-7xl mx-auto px-6">
             <h2 class="text-2xl sm:text-3xl font-bold text-text-primary text-center mb-10">Destaques da Semana</h2>
 
@@ -81,7 +81,7 @@
 
     <!-- ===== ÚLTIMAS ADIÇÕES ===== -->
     @if ($ultimasAdicoes->isNotEmpty())
-        <section class="py-16 bg-blue-100 border-t border-border">
+        <section class="py-16 bg-[#A7C7E7] border-t border-border">
             <div class="max-w-7xl mx-auto px-6">
                 <h2 class="text-2xl sm:text-3xl font-bold text-text-primary text-center mb-10">Últimas Adições</h2>
 
@@ -127,7 +127,7 @@
     @endif
 
     <!-- ===== DIFERENCIAIS ===== -->
-    <section class="py-16 bg-blue-100 border-t border-border">
+    <section class="py-16 bg-[#A7C7E7] border-t border-border">
         <div class="max-w-7xl mx-auto px-6">
             <h2 class="text-2xl sm:text-3xl font-bold text-text-primary text-center mb-10">Sobre Nós</h2>
 
@@ -172,7 +172,7 @@
     </section>
 
     <!-- ===== SOBRE ===== -->
-    <section class="py-16 bg-blue-100 border-t border-border">
+    <section class="py-16 bg-[#A7C7E7] border-t border-border">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div>
                 <h2 class="text-2xl sm:text-3xl font-bold text-text-primary mb-5">Sobre {{ $empresa->nome ?? config('app.name') }}</h2>
@@ -192,7 +192,7 @@
     </section>
 
     <!-- ===== SIMULADOR DE FINANCIAMENTO ===== -->
-    <section id="financiamento" class="py-16 bg-blue-100 border-t border-border">
+    <section id="financiamento" class="py-16 bg-[#A7C7E7] border-t border-border">
         <div class="max-w-2xl mx-auto px-6 text-center">
             <h2 class="text-2xl sm:text-3xl font-bold text-text-primary mb-2">Simulador de Financiamento</h2>
             <p class="text-xs text-text-secondary mb-8">* Valores sujeitos a análise de crédito</p>
@@ -246,7 +246,7 @@
     </section>
 
     <!-- ===== VENDA SEU CARRO ===== -->
-    <section id="venda-seu-carro" class="py-16 bg-blue-100 border-t border-border">
+    <section id="venda-seu-carro" class="py-16 bg-[#A7C7E7] border-t border-border">
         <div class="max-w-7xl mx-auto px-6">
             <h2 class="text-2xl sm:text-3xl font-bold text-text-primary text-center mb-2">Venda seu Carro</h2>
             <p class="text-center text-text-secondary mb-10 max-w-xl mx-auto">Avaliamos seu veículo de forma rápida e transparente. Preencha os dados e entraremos em contato.</p>
@@ -256,7 +256,7 @@
     </section>
 
     <!-- ===== LOCALIZAÇÃO ===== -->
-    <section id="contato" class="py-16 bg-blue-100 border-t border-border">
+    <section id="contato" class="py-16 bg-[#A7C7E7] border-t border-border">
         <div class="max-w-7xl mx-auto px-6">
             <h2 class="text-2xl sm:text-3xl font-bold text-text-primary text-center mb-2">Onde Estamos</h2>
             <p class="text-center text-text-secondary mb-10">{{ $empresa?->endereco ?? 'Endereço a configurar em Configurações' }}</p>
