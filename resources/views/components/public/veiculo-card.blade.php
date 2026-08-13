@@ -1,11 +1,12 @@
 @props(['veiculo'])
 
-<a href="{{ route('veiculo.show', $veiculo) }}" class="block bg-bg border border-border rounded-card overflow-hidden hover:border-primary transition-colors">
-    <div class="relative aspect-[4/3] bg-surface">
+<a href="{{ route('veiculo.show', $veiculo) }}" class="group block rounded-2xl border border-brand-100 bg-white overflow-hidden transition-colors hover:border-brand-500">
+    <div class="relative aspect-[4/3] bg-brand-100/50 overflow-hidden">
         @if ($veiculo->fotos->isNotEmpty())
-            <img src="{{ $veiculo->fotos->first()->url() }}" alt="{{ $veiculo->marca }} {{ $veiculo->modelo }}" class="w-full h-full object-cover">
+            <img src="{{ $veiculo->fotos->first()->url() }}" alt="{{ $veiculo->marca }} {{ $veiculo->modelo }}"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
         @else
-            <div class="w-full h-full flex items-center justify-center text-text-secondary">
+            <div class="w-full h-full flex items-center justify-center text-muted">
                 <x-heroicon-o-photo class="w-10 h-10" />
             </div>
         @endif
@@ -13,10 +14,10 @@
             @livewire('cliente.favorito-botao', ['veiculo' => $veiculo], key('fav-card-'.$veiculo->id))
         </div>
     </div>
-    <div class="p-4">
-        <h3 class="font-semibold text-text-primary">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h3>
-        <p class="text-sm text-text-secondary">{{ $veiculo->ano_fabricacao }}/{{ $veiculo->ano_modelo }} &middot; {{ number_format($veiculo->km, 0, ',', '.') }} km</p>
-        <p class="mt-2 text-lg font-semibold text-primary tabular-nums">
+    <div class="p-5">
+        <h3 class="font-heading font-medium text-brand-900">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h3>
+        <p class="text-sm text-muted mt-0.5">{{ $veiculo->ano_fabricacao }}/{{ $veiculo->ano_modelo }} &middot; {{ number_format($veiculo->km, 0, ',', '.') }} km</p>
+        <p class="mt-3 font-heading text-lg font-semibold text-brand-700 tabular-nums">
             @if ($veiculo->preco_venda)
                 R$ {{ number_format($veiculo->preco_venda, 2, ',', '.') }}
             @else
