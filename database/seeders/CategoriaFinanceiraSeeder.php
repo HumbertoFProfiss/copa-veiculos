@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\CategoriaFinanceira;
+use App\Models\Empresa;
 use Illuminate\Database\Seeder;
 
 /**
@@ -10,10 +11,23 @@ use Illuminate\Database\Seeder;
  * Categorias financeiras vazia. Usa firstOrCreate por nome+tipo, então
  * reaproveita categorias já criadas ad-hoc (atalho de custos do veículo,
  * repasse de consignação) em vez de duplicar.
+ *
+ * CategoriaFinanceira é tenant-scoped (BelongsToEmpresa) e preenche
+ * empresa_id sozinho a partir de app('tenant') - mas rodando via
+ * `artisan db:seed` não existe request/middleware pra vincular o tenant,
+ * então precisamos fazer isso manualmente, empresa por empresa.
  */
 class CategoriaFinanceiraSeeder extends Seeder
 {
     public function run(): void
+    {
+        Empresa::each(function (Empresa $empresa) {
+            app()->instance('tenant', $empresa);
+            $this->seedParaEmpresa();
+        });
+    }
+
+    protected function seedParaEmpresa(): void
     {
         $custosVeiculo = CategoriaFinanceira::firstOrCreate(['nome' => 'Custos de veículo', 'tipo' => 'despesa']);
         foreach ([
