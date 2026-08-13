@@ -59,6 +59,7 @@ class Nova extends Component
 
         $dados = $this->validate();
         $dados['status'] = 'confirmada';
+        $dados['filial_id'] = Veiculo::find($dados['veiculo_id'])?->filial_id;
 
         $venda = Venda::create($dados);
 

@@ -23,6 +23,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'empresa_id',
+        'filial_id',
         'name',
         'email',
         'password',
@@ -64,5 +65,10 @@ class User extends Authenticatable
     public function possui2faAtivo(): bool
     {
         return filled($this->two_factor_secret) && filled($this->two_factor_confirmed_at);
+    }
+
+    public function filial(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Filial::class);
     }
 }

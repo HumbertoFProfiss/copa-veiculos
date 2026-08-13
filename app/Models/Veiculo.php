@@ -26,6 +26,7 @@ class Veiculo extends Model
     protected $fillable = [
         'empresa_id',
         'fornecedor_id',
+        'filial_id',
         'marca',
         'modelo',
         'versao',
@@ -113,6 +114,11 @@ class Veiculo extends Model
     public function fornecedor(): BelongsTo
     {
         return $this->belongsTo(Fornecedor::class);
+    }
+
+    public function filial(): BelongsTo
+    {
+        return $this->belongsTo(Filial::class);
     }
 
     public function fotos(): HasMany

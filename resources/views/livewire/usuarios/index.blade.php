@@ -100,6 +100,17 @@
                         </select>
                         @error('papel') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                     </div>
+                    @if ($filiais->count() > 1)
+                        <div>
+                            <label class="block text-xs font-medium text-text-secondary mb-1">Filial</label>
+                            <select wire:model="filial_id" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                                <option value="">—</option>
+                                @foreach ($filiais as $filial)
+                                    <option value="{{ $filial->id }}">{{ $filial->nome }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">
                             {{ $editandoId ? 'Nova senha (deixe em branco pra manter)' : 'Senha *' }}

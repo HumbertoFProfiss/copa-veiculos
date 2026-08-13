@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Veiculos;
 
+use App\Models\Filial;
 use App\Models\Fornecedor;
 use App\Models\Veiculo;
 use App\Models\VeiculoOpcional;
@@ -53,6 +54,8 @@ class Form extends Component
 
     public ?int $fornecedor_id = null;
 
+    public ?int $filial_id = null;
+
     public ?string $consignado_nome = '';
 
     public ?string $consignado_telefone = '';
@@ -98,11 +101,13 @@ class Form extends Component
             $this->fill($veiculo->only([
                 'marca', 'modelo', 'versao', 'ano_fabricacao', 'ano_modelo', 'km', 'combustivel',
                 'cambio', 'cor', 'portas', 'motor', 'placa', 'numero_chassi', 'renavam', 'numero_estoque',
-                'tipo_propriedade', 'fornecedor_id', 'consignado_nome', 'consignado_telefone',
+                'tipo_propriedade', 'fornecedor_id', 'filial_id', 'consignado_nome', 'consignado_telefone',
                 'preco_compra', 'preco_tabela_fipe', 'preco_anuncio', 'preco_venda', 'preco_minimo',
                 'situacao_documental', 'chave_reserva', 'manual', 'estado_conservacao', 'gravame',
                 'debitos', 'ipva_pago', 'licenciado', 'local_patio', 'status', 'destaque',
             ]));
+        } else {
+            $this->filial_id = auth()->user()->filial_id;
         }
     }
 
@@ -126,6 +131,7 @@ class Form extends Component
             'numero_estoque' => 'nullable|string|max:50',
             'tipo_propriedade' => 'required|in:proprio,consignado,terceiro',
             'fornecedor_id' => 'nullable|exists:fornecedores,id',
+            'filial_id' => 'nullable|exists:filiais,id',
             'consignado_nome' => 'nullable|string|max:150',
             'consignado_telefone' => 'nullable|string|max:20',
             'preco_compra' => 'nullable|numeric|min:0',
@@ -209,6 +215,7 @@ class Form extends Component
     {
         return view('livewire.veiculos.form', [
             'fornecedores' => Fornecedor::where('ativo', true)->orderBy('nome')->get(),
+            'filiais' => Filial::where('ativa', true)->orderBy('nome')->get(),
         ])->layout('layouts.admin', ['title' => $this->veiculo ? 'Editar veículo' : 'Novo veículo']);
     }
 }

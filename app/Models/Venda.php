@@ -13,7 +13,7 @@ class Venda extends Model
     use BelongsToEmpresa, HasFactory;
 
     protected $fillable = [
-        'empresa_id', 'veiculo_id', 'cliente_id', 'vendedor_id', 'forma_pagamento',
+        'empresa_id', 'filial_id', 'veiculo_id', 'cliente_id', 'vendedor_id', 'forma_pagamento',
         'preco_venda', 'desconto', 'comissao_vendedor', 'status', 'data_venda',
         'data_entrega', 'prazo_garantia_dias', 'numero_contrato',
     ];
@@ -42,6 +42,11 @@ class Venda extends Model
     public function vendedor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'vendedor_id');
+    }
+
+    public function filial(): BelongsTo
+    {
+        return $this->belongsTo(Filial::class);
     }
 
     public function parcelas(): HasMany

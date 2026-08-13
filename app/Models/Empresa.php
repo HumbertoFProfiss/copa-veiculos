@@ -21,12 +21,12 @@ class Empresa extends Model
         'completo' => [
             'dashboard', 'veiculos', 'clientes', 'fornecedores', 'importacoes',
             'crm', 'leads', 'vendas', 'contratos', 'financeiro', 'anuncios',
-            'relatorios', 'usuarios', 'configuracoes', 'integracoes',
+            'relatorios', 'usuarios', 'configuracoes', 'integracoes', 'filiais',
         ],
         'completo_opcionais' => [
             'dashboard', 'veiculos', 'clientes', 'fornecedores', 'importacoes',
             'crm', 'leads', 'vendas', 'contratos', 'financeiro', 'anuncios',
-            'relatorios', 'usuarios', 'configuracoes', 'integracoes',
+            'relatorios', 'usuarios', 'configuracoes', 'integracoes', 'filiais',
         ],
     ];
 

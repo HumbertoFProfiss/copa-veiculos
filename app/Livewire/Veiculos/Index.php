@@ -3,6 +3,7 @@
 namespace App\Livewire\Veiculos;
 
 use App\Livewire\Concerns\WithDataTable;
+use App\Models\Filial;
 use App\Models\Veiculo;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\Url;
@@ -14,6 +15,9 @@ class Index extends Component
 
     #[Url(as: 'status')]
     public string $filtroStatus = '';
+
+    #[Url(as: 'filial')]
+    public string $filtroFilial = '';
 
     public function excluir(int $id): void
     {
@@ -38,7 +42,8 @@ class Index extends Component
                         ->orWhere('numero_estoque', 'like', $termo);
                 });
             })
-            ->when($this->filtroStatus, fn (Builder $q) => $q->where('status', $this->filtroStatus));
+            ->when($this->filtroStatus, fn (Builder $q) => $q->where('status', $this->filtroStatus))
+            ->when($this->filtroFilial, fn (Builder $q) => $q->where('filial_id', $this->filtroFilial));
     }
 
     public function render()
@@ -51,6 +56,7 @@ class Index extends Component
         return view('livewire.veiculos.index', [
             'veiculos' => $veiculos,
             'statusOptions' => Veiculo::STATUS_LABELS,
+            'filiais' => Filial::where('ativa', true)->orderBy('nome')->get(),
         ])->layout('layouts.admin', ['title' => 'Estoque']);
     }
 }

@@ -125,6 +125,17 @@
                     <label class="block text-xs font-medium text-text-secondary mb-1">Local no pátio</label>
                     <input type="text" wire:model="local_patio" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
                 </div>
+                @if ($filiais->count() > 1)
+                    <div>
+                        <label class="block text-xs font-medium text-text-secondary mb-1">Filial</label>
+                        <select wire:model="filial_id" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                            <option value="">—</option>
+                            @foreach ($filiais as $filial)
+                                <option value="{{ $filial->id }}">{{ $filial->nome }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
                 <div>
                     <label class="block text-xs font-medium text-text-secondary mb-1">Propriedade</label>
                     <select wire:model.live="tipo_propriedade" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">

@@ -98,7 +98,7 @@
                     </div>
                 @endif
 
-                @if (Auth::user()->can('usuarios.ver') || Auth::user()->can('configuracoes.ver') || Auth::user()->can('integracoes.ver'))
+                @if (Auth::user()->can('usuarios.ver') || Auth::user()->can('configuracoes.ver') || Auth::user()->can('integracoes.ver') || Auth::user()->can('filiais.ver'))
                     <div class="space-y-1 pt-3 border-t border-border">
                         <div x-show="!colapsada" x-transition.opacity class="px-3 text-[11px] font-semibold text-text-secondary/70 uppercase tracking-wider mb-1">Sistema</div>
                         @can('usuarios.ver')
@@ -109,6 +109,9 @@
                         @endcan
                         @can('integracoes.ver')
                             <x-admin.sidebar-link route="admin.integracoes.index" icon="code-bracket" label="Integrações" modulo="integracoes" />
+                        @endcan
+                        @can('filiais.ver')
+                            <x-admin.sidebar-link route="admin.filiais.index" icon="building-office-2" label="Filiais" modulo="filiais" />
                         @endcan
                     </div>
                 @endif

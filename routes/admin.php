@@ -8,6 +8,7 @@ use App\Livewire\Configuracoes;
 use App\Livewire\Contratos;
 use App\Livewire\Crm;
 use App\Livewire\Dashboard;
+use App\Livewire\Filiais;
 use App\Livewire\Financeiro;
 use App\Livewire\Fornecedores;
 use App\Livewire\Importacoes;
@@ -97,6 +98,10 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
         Route::middleware('modulo:integracoes')->group(function () {
             Route::get('/integracoes', Integracoes\Index::class)->name('integracoes.index');
+        });
+
+        Route::middleware('modulo:filiais')->group(function () {
+            Route::get('/filiais', Filiais\Index::class)->name('filiais.index');
         });
     });
 });

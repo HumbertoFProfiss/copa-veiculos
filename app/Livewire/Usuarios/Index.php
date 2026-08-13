@@ -3,6 +3,7 @@
 namespace App\Livewire\Usuarios;
 
 use App\Livewire\Concerns\WithDataTable;
+use App\Models\Filial;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
@@ -26,6 +27,8 @@ class Index extends Component
 
     public string $papel = 'Vendedor';
 
+    public ?int $filial_id = null;
+
     public ?string $password = '';
 
     public bool $ativo = true;
@@ -40,6 +43,7 @@ class Index extends Component
             ],
             'telefone' => 'nullable|string|max:20',
             'papel' => 'required|string|exists:roles,name',
+            'filial_id' => 'nullable|exists:filiais,id',
             'password' => $this->editandoId ? 'nullable|string|min:6' : 'required|string|min:6',
         ];
     }
@@ -47,7 +51,7 @@ class Index extends Component
     public function novo(): void
     {
         $this->authorize('usuarios.criar');
-        $this->reset(['editandoId', 'name', 'email', 'telefone', 'password']);
+        $this->reset(['editandoId', 'name', 'email', 'telefone', 'password', 'filial_id']);
         $this->papel = 'Vendedor';
         $this->ativo = true;
         $this->mostrarForm = true;
@@ -63,6 +67,7 @@ class Index extends Component
         $this->telefone = $user->telefone;
         $this->ativo = $user->ativo;
         $this->papel = $user->getRoleNames()->first() ?? 'Vendedor';
+        $this->filial_id = $user->filial_id;
         $this->password = '';
         $this->mostrarForm = true;
     }
@@ -80,6 +85,7 @@ class Index extends Component
                 'email' => $dados['email'],
                 'telefone' => $dados['telefone'],
                 'ativo' => $this->ativo,
+                'filial_id' => $dados['filial_id'],
                 ...(filled($dados['password']) ? ['password' => Hash::make($dados['password'])] : []),
             ]);
         } else {
@@ -89,6 +95,7 @@ class Index extends Component
                 'telefone' => $dados['telefone'],
                 'password' => Hash::make($dados['password']),
                 'ativo' => true,
+                'filial_id' => $dados['filial_id'],
                 'email_verified_at' => now(),
             ]);
         }
@@ -126,6 +133,7 @@ class Index extends Component
         return view('livewire.usuarios.index', [
             'usuarios' => $this->query()->orderBy($this->ordenarPor, $this->ordenarDirecao)->paginate($this->porPagina),
             'papeis' => Role::pluck('name'),
+            'filiais' => Filial::where('ativa', true)->orderBy('nome')->get(),
         ])->layout('layouts.admin', ['title' => 'Usuários']);
     }
 }

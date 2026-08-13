@@ -25,6 +25,15 @@
             @endforeach
         </select>
 
+        @if ($filiais->count() > 1)
+            <select wire:model.live="filtroFilial" class="rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                <option value="">Todas as filiais</option>
+                @foreach ($filiais as $filial)
+                    <option value="{{ $filial->id }}">{{ $filial->nome }}</option>
+                @endforeach
+            </select>
+        @endif
+
         @if (count($selecionados))
             <span class="text-sm text-text-secondary">{{ count($selecionados) }} selecionado(s)</span>
             <button wire:click="limparSelecao" type="button" class="text-sm text-primary hover:underline">Limpar</button>
