@@ -15,6 +15,9 @@ use Livewire\Component;
  */
 class Dashboard extends Component
 {
+    /** Prazo maximo pro 1o atendimento antes de contar como "em atraso" (ver prompt §4.7 - SLA). */
+    public const SLA_MINUTOS = 60;
+
     public function render()
     {
         $disponiveis = Veiculo::where('status', 'disponivel')->get();
@@ -41,6 +44,11 @@ class Dashboard extends Component
             'vendasDoMes' => $vendasDoMes->count(),
             'margemMedia' => round($margemMedia, 1),
             'leadsAbertos' => Lead::whereNotIn('estagio', ['ganho', 'perdido'])->where('lead_falso', false)->count(),
+            'leadsEmAtraso' => Lead::whereNotIn('estagio', ['ganho', 'perdido'])
+                ->where('lead_falso', false)
+                ->whereNull('respondido_em')
+                ->where('created_at', '<=', now()->subMinutes(self::SLA_MINUTOS))
+                ->count(),
             'contasAVencer' => ContaPagar::where('status', 'pendente')
                 ->whereBetween('vencimento', [now(), now()->addDays(7)])
                 ->sum('valor'),

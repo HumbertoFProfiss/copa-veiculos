@@ -6,6 +6,7 @@ use App\Models\Empresa;
 use App\Models\Lead;
 use App\Services\Leads\GenericEmailParser;
 use App\Services\Leads\LeadDeduplicator;
+use App\Services\Leads\LeadDistribuidor;
 use App\Services\Leads\LeadFalsoDetector;
 use App\Services\Leads\PortalEmailParser;
 use App\Services\Leads\PortalIdentificador;
@@ -90,6 +91,10 @@ class ProcessarEmailLead implements ShouldQueue
             'lead_falso' => $motivoBloqueio !== null,
             'motivo_bloqueio' => $motivoBloqueio,
         ]);
+
+        if (! $lead->lead_falso) {
+            (new LeadDistribuidor)->distribuir($lead);
+        }
 
         event(new \App\Events\LeadRecebido($lead));
     }

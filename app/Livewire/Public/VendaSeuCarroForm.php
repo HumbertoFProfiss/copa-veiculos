@@ -3,6 +3,7 @@
 namespace App\Livewire\Public;
 
 use App\Models\Lead;
+use App\Services\Leads\LeadDistribuidor;
 use Livewire\Component;
 
 /**
@@ -65,7 +66,7 @@ class VendaSeuCarroForm extends Component
             $mensagem .= " | Obs: {$this->observacoes}";
         }
 
-        Lead::create([
+        $lead = Lead::create([
             'nome' => $this->nome,
             'telefone' => $this->telefone,
             'email' => $this->email ?: null,
@@ -75,6 +76,8 @@ class VendaSeuCarroForm extends Component
             'ip_origem' => request()->ip(),
             'user_agent' => substr((string) request()->userAgent(), 0, 255),
         ]);
+
+        (new LeadDistribuidor)->distribuir($lead);
 
         cache()->put($chaveLimite, cache()->get($chaveLimite, 0) + 1, now()->addMinutes(10));
 

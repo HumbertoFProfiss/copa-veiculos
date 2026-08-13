@@ -6,6 +6,18 @@
         </div>
     </div>
 
+    @if ($leadsEmAtraso > 0)
+        <a href="{{ route('admin.leads.inbox') }}"
+           class="flex items-center gap-3 mb-4 px-4 py-3 rounded-card bg-error/10 border border-error/20 text-error text-sm hover:bg-error/15 transition-colors">
+            <x-heroicon-o-exclamation-circle class="w-5 h-5 shrink-0" />
+            <span>
+                <strong>{{ $leadsEmAtraso }}</strong>
+                {{ $leadsEmAtraso === 1 ? 'lead está' : 'leads estão' }}
+                sem primeiro atendimento há mais de {{ \App\Livewire\Dashboard::SLA_MINUTOS }} minutos.
+            </span>
+        </a>
+    @endif
+
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
         <div class="bg-bg border border-border rounded-card p-5 shadow-soft hover:shadow-soft-md transition-shadow">
             <div class="flex items-start justify-between mb-3">

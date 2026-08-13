@@ -4,6 +4,7 @@ namespace App\Livewire\Public;
 
 use App\Models\Lead;
 use App\Models\Veiculo;
+use App\Services\Leads\LeadDistribuidor;
 use Livewire\Component;
 
 /**
@@ -46,7 +47,7 @@ class InteresseForm extends Component
 
         $this->validate();
 
-        Lead::create([
+        $lead = Lead::create([
             'veiculo_id' => $this->veiculo->id,
             'nome' => $this->nome,
             'telefone' => $this->telefone,
@@ -56,6 +57,8 @@ class InteresseForm extends Component
             'ip_origem' => request()->ip(),
             'user_agent' => substr((string) request()->userAgent(), 0, 255),
         ]);
+
+        (new LeadDistribuidor)->distribuir($lead);
 
         cache()->put($chaveLimite, cache()->get($chaveLimite, 0) + 1, now()->addMinutes(10));
 

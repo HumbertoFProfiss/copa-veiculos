@@ -48,7 +48,10 @@ class LeadDrawer extends Component
             return;
         }
 
-        $lead->update(['estagio' => $novoEstagio]);
+        $lead->update([
+            'estagio' => $novoEstagio,
+            'respondido_em' => $lead->respondido_em ?? now(),
+        ]);
 
         LeadHistorico::create([
             'lead_id' => $lead->id,
@@ -63,6 +66,11 @@ class LeadDrawer extends Component
     public function registrarContato(): void
     {
         $this->authorize('leads.editar');
+
+        $lead = Lead::findOrFail($this->leadId);
+        if (! $lead->respondido_em) {
+            $lead->update(['respondido_em' => now()]);
+        }
 
         LeadHistorico::create([
             'lead_id' => $this->leadId,
