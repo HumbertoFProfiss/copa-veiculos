@@ -1,6 +1,6 @@
 @props(['veiculo'])
 
-<a href="{{ route('veiculo.show', $veiculo) }}" class="group block rounded-2xl border border-brand-100 bg-brand-100 overflow-hidden transition-colors hover:border-brand-500">
+<a href="{{ route('veiculo.show', $veiculo) }}" class="group block rounded-2xl border border-brand-100 bg-[#A7C7E7] overflow-hidden transition-colors hover:border-brand-500">
     <div class="relative aspect-[4/3] bg-white/40 overflow-hidden">
         @if ($veiculo->fotos->isNotEmpty())
             <img src="{{ $veiculo->fotos->first()->url() }}" alt="{{ $veiculo->marca }} {{ $veiculo->modelo }}"
