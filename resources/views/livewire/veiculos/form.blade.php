@@ -178,6 +178,35 @@
                         <label class="block text-xs font-medium text-text-secondary mb-1">Telefone do consignante</label>
                         <input type="text" wire:model="consignado_telefone" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
                     </div>
+                    <div>
+                        <label class="block text-xs font-medium text-text-secondary mb-1">Comissão da revenda</label>
+                        <select wire:model.live="consignado_comissao_tipo" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                            <option value="">Selecione</option>
+                            <option value="fixa">Valor fixo (R$)</option>
+                            <option value="percentual">Percentual (%)</option>
+                        </select>
+                    </div>
+                    @if ($consignado_comissao_tipo)
+                        <div>
+                            <label class="block text-xs font-medium text-text-secondary mb-1">
+                                {{ $consignado_comissao_tipo === 'percentual' ? 'Percentual da comissão (%)' : 'Valor da comissão (R$)' }}
+                            </label>
+                            <input type="number" step="0.01" min="0" wire:model.live="consignado_comissao_valor" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                        </div>
+                        @if ($preco_venda && $consignado_comissao_valor)
+                            @php
+                                $comissaoPreview = $consignado_comissao_tipo === 'percentual'
+                                    ? round($preco_venda * ($consignado_comissao_valor / 100), 2)
+                                    : (float) $consignado_comissao_valor;
+                                $repassePreview = round($preco_venda - $comissaoPreview, 2);
+                            @endphp
+                            <div class="sm:col-span-2 lg:col-span-3 flex items-center gap-2 text-sm text-text-secondary">
+                                <x-heroicon-o-banknotes class="w-4 h-4 shrink-0 text-primary" />
+                                <span>Comissão da revenda: <strong class="text-text-primary tabular-nums">R$ {{ number_format($comissaoPreview, 2, ',', '.') }}</strong></span>
+                                <span>— Repasse ao consignante: <strong class="text-text-primary tabular-nums">R$ {{ number_format($repassePreview, 2, ',', '.') }}</strong></span>
+                            </div>
+                        @endif
+                    @endif
                 @endif
             </div>
         </div>

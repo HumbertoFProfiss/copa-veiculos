@@ -47,6 +47,8 @@ class Veiculo extends Model
         'tipo_propriedade',
         'consignado_nome',
         'consignado_telefone',
+        'consignado_comissao_tipo',
+        'consignado_comissao_valor',
         'preco_compra',
         'preco_tabela_fipe',
         'preco_anuncio',
@@ -75,6 +77,7 @@ class Veiculo extends Model
             'preco_venda' => 'decimal:2',
             'preco_minimo' => 'decimal:2',
             'debitos' => 'decimal:2',
+            'consignado_comissao_valor' => 'decimal:2',
             'chave_reserva' => 'boolean',
             'manual' => 'boolean',
             'gravame' => 'boolean',
@@ -182,5 +185,31 @@ class Veiculo extends Model
         $custos = $this->custos()->sum('valor');
 
         return (float) $this->preco_venda - (float) $this->preco_compra - (float) $custos;
+    }
+
+    /**
+     * Comissão da revenda sobre a venda de um veículo consignado, combinada
+     * por acordo (fixa em R$ OU percentual sobre o preço de venda).
+     */
+    public function comissaoConsignado(float $precoVenda): float
+    {
+        if ($this->tipo_propriedade !== 'consignado' || ! $this->consignado_comissao_tipo) {
+            return 0.0;
+        }
+
+        $valor = (float) ($this->consignado_comissao_valor ?? 0);
+
+        return $this->consignado_comissao_tipo === 'percentual'
+            ? round($precoVenda * ($valor / 100), 2)
+            : $valor;
+    }
+
+    /**
+     * Valor a repassar ao proprietário/consignante após descontar a
+     * comissão da revenda do preço efetivo de venda.
+     */
+    public function repasseConsignado(float $precoVenda): float
+    {
+        return round($precoVenda - $this->comissaoConsignado($precoVenda), 2);
     }
 }

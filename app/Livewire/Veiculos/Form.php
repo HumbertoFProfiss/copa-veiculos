@@ -62,6 +62,10 @@ class Form extends Component
 
     public ?string $consignado_telefone = '';
 
+    public ?string $consignado_comissao_tipo = null;
+
+    public ?float $consignado_comissao_valor = null;
+
     public ?float $preco_compra = null;
 
     public ?float $preco_tabela_fipe = null;
@@ -104,6 +108,7 @@ class Form extends Component
                 'marca', 'modelo', 'descricao', 'versao', 'ano_fabricacao', 'ano_modelo', 'km', 'combustivel',
                 'cambio', 'cor', 'portas', 'motor', 'placa', 'numero_chassi', 'renavam', 'numero_estoque',
                 'tipo_propriedade', 'fornecedor_id', 'filial_id', 'consignado_nome', 'consignado_telefone',
+                'consignado_comissao_tipo', 'consignado_comissao_valor',
                 'preco_compra', 'preco_tabela_fipe', 'preco_anuncio', 'preco_venda', 'preco_minimo',
                 'situacao_documental', 'chave_reserva', 'manual', 'estado_conservacao', 'gravame',
                 'debitos', 'ipva_pago', 'licenciado', 'local_patio', 'status', 'destaque',
@@ -137,6 +142,8 @@ class Form extends Component
             'filial_id' => 'nullable|exists:filiais,id',
             'consignado_nome' => 'nullable|string|max:150',
             'consignado_telefone' => 'nullable|string|max:20',
+            'consignado_comissao_tipo' => 'nullable|in:fixa,percentual',
+            'consignado_comissao_valor' => 'nullable|numeric|min:0',
             'preco_compra' => 'nullable|numeric|min:0',
             'preco_tabela_fipe' => 'nullable|numeric|min:0',
             'preco_anuncio' => 'nullable|numeric|min:0',

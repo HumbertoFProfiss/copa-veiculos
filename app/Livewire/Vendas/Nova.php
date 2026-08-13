@@ -3,7 +3,9 @@
 namespace App\Livewire\Vendas;
 
 use App\Events\VendaConfirmada;
+use App\Models\CategoriaFinanceira;
 use App\Models\Cliente;
+use App\Models\ContaPagar;
 use App\Models\User;
 use App\Models\Veiculo;
 use App\Models\Venda;
@@ -67,6 +69,8 @@ class Nova extends Component
 
         $venda->veiculo->update(['status' => 'vendido']);
 
+        $this->gerarRepasseConsignado($venda);
+
         // Auto-despublicação em todos os canais onde o veículo estava
         // publicado (ver plano §7/§9) - dispara 1 job por canal publicado.
         \App\Models\Publicacao::where('veiculo_id', $venda->veiculo_id)
@@ -82,6 +86,34 @@ class Nova extends Component
         session()->flash('sucesso', 'Venda registrada com sucesso.');
 
         return redirect()->route('admin.vendas.index');
+    }
+
+    protected function gerarRepasseConsignado(Venda $venda): void
+    {
+        $veiculo = $venda->veiculo;
+
+        if ($veiculo->tipo_propriedade !== 'consignado' || blank($veiculo->consignado_nome)) {
+            return;
+        }
+
+        $valorRepasse = $veiculo->repasseConsignado((float) $venda->preco_venda);
+
+        if ($valorRepasse <= 0) {
+            return;
+        }
+
+        $categoria = CategoriaFinanceira::firstOrCreate([
+            'nome' => 'Repasse de consignação',
+            'tipo' => 'despesa',
+        ]);
+
+        ContaPagar::create([
+            'categoria_id' => $categoria->id,
+            'descricao' => 'Repasse consignação - '.$veiculo->consignado_nome.' ('.$veiculo->marca.' '.$veiculo->modelo.')',
+            'valor' => $valorRepasse,
+            'vencimento' => $venda->data_venda,
+            'status' => 'pendente',
+        ]);
     }
 
     public function render()
