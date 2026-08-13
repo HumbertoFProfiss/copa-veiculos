@@ -6,6 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <script>
+        // Aplica o tema antes do resto da pagina carregar, pra nao piscar
+        // claro-depois-escuro (FOUC). Sem preferencia salva, segue o SO.
+        (function () {
+            var salvo = localStorage.getItem('tema');
+            var escuro = salvo ? salvo === 'escuro' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.classList.toggle('dark', escuro);
+        })();
+    </script>
+
     <title>{{ $title ?? config('app.name') }}</title>
     @isset($description)
         <meta name="description" content="{{ $description }}">
@@ -57,7 +67,7 @@
         </script>
     @endif
 </head>
-<body class="font-poppins antialiased bg-white text-ink">
+<body class="font-poppins antialiased bg-white text-ink dark:bg-duskbg dark:text-brand-100">
     @if ($empresa?->analytics_gtm_id)
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $empresa->analytics_gtm_id }}"
             height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -65,9 +75,17 @@
 
     @php $heroTransparente = $heroTransparente ?? false; @endphp
 
-    <div x-data="{ scrolled: {{ $heroTransparente ? 'false' : 'true' }} }"
+    <div x-data="{
+                scrolled: {{ $heroTransparente ? 'false' : 'true' }},
+                escuro: document.documentElement.classList.contains('dark'),
+                alternarTema() {
+                    this.escuro = !this.escuro;
+                    document.documentElement.classList.toggle('dark', this.escuro);
+                    localStorage.setItem('tema', this.escuro ? 'escuro' : 'claro');
+                },
+            }"
          x-init="@if($heroTransparente) scrolled = window.scrollY > 24; window.addEventListener('scroll', () => scrolled = window.scrollY > 24) @endif">
-        <header :class="scrolled ? 'bg-white/90 shadow-sm backdrop-blur-md' : 'bg-transparent'"
+        <header :class="scrolled ? 'bg-white/90 dark:bg-duskbg/90 shadow-sm backdrop-blur-md' : 'bg-transparent'"
                 class="fixed inset-x-0 top-0 z-40 transition-colors duration-300">
             <div class="max-w-7xl mx-auto px-6 sm:px-8 h-20 flex items-center justify-between gap-4">
                 <a href="{{ route('home') }}" class="shrink-0">
@@ -75,7 +93,7 @@
                 </a>
 
                 <nav class="hidden lg:flex items-center gap-8 text-sm font-medium"
-                     :class="scrolled ? 'text-ink' : 'text-white'">
+                     :class="scrolled ? 'text-ink dark:text-brand-100' : 'text-white'">
                     <a href="{{ route('home') }}" class="hover:text-brand-500 transition-colors">Início</a>
                     <a href="{{ route('estoque') }}" class="hover:text-brand-500 transition-colors">Estoque</a>
                     <a href="{{ route('cliente.dashboard') }}" class="hover:text-brand-500 transition-colors">Área do Cliente</a>
@@ -88,9 +106,15 @@
                             WhatsApp
                         </a>
                     @endif
+                    <button type="button" @click="alternarTema()" title="Alternar modo escuro"
+                            class="w-9 h-9 flex items-center justify-center rounded-full border transition-colors"
+                            :class="scrolled ? 'border-brand-100 text-muted hover:border-brand-500 hover:text-brand-700 dark:border-duskborder dark:text-duskmuted dark:hover:text-brand-300' : 'border-white/40 text-white hover:border-white'">
+                        <x-heroicon-o-moon class="w-4 h-4" x-show="!escuro" x-cloak />
+                        <x-heroicon-o-sun class="w-4 h-4" x-show="escuro" x-cloak />
+                    </button>
                     <a href="{{ route('login') }}" title="Administração"
                        class="w-9 h-9 flex items-center justify-center rounded-full border transition-colors"
-                       :class="scrolled ? 'border-brand-100 text-muted hover:border-brand-500 hover:text-brand-700' : 'border-white/40 text-white hover:border-white'">
+                       :class="scrolled ? 'border-brand-100 text-muted hover:border-brand-500 hover:text-brand-700 dark:border-duskborder dark:text-duskmuted dark:hover:text-brand-300' : 'border-white/40 text-white hover:border-white'">
                         <x-heroicon-o-lock-closed class="w-4 h-4" />
                     </a>
                 </div>

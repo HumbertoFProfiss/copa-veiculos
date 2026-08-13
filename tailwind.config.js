@@ -3,6 +3,7 @@ import forms from '@tailwindcss/forms';
 
 /** @type {import('tailwindcss').Config} */
 export default {
+    darkMode: 'class',
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
@@ -32,20 +33,14 @@ export default {
                 warning: '#D97706',
                 error: '#DC2626',
 
-                // Paleta da vitrine publica (home) - preto/dourado, igual ao site legado
-                // (worldcred.com.br). Escopada com nomes proprios pra nao colidir com
-                // os tokens branco/azul usados no painel admin.
-                night: {
-                    DEFAULT: '#0A0A0A',
-                    soft: '#141414',
-                    card: '#1F1F1F',
-                    border: '#2A2A2A',
-                    'border-light': '#353535',
-                },
-                gold: {
-                    DEFAULT: '#E0A526',
-                    dark: '#C67C1E',
-                },
+                // Modo escuro do site publico (home/estoque/veiculo/area do cliente) -
+                // alternado via classe .dark na tag <html> (ver components/layouts/public.blade.php).
+                // Nomes proprios (nao reaproveita "night"/"gold" do tema preto/dourado
+                // abandonado) pra deixar claro que isso e o dark mode atual, nao legado.
+                duskbg: '#0B1622',
+                duskcard: '#132539',
+                duskborder: '#22354A',
+                duskmuted: '#8FA8BD',
 
                 // Paleta de referencia trazida pelo usuario (projeto Dra Jaqueline) -
                 // aplicada na home publica. Nomes proprios (nao "blue-*") pra nao

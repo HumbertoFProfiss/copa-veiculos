@@ -56,22 +56,22 @@
     </section>
 
     <!-- ===== DESTAQUES DA SEMANA ===== -->
-    <section class="bg-white py-24">
+    <section class="bg-white py-24 dark:bg-duskbg">
         <div class="max-w-7xl mx-auto px-6 sm:px-8">
             <p class="mb-3 text-sm font-medium tracking-wide uppercase text-brand-700">Estoque</p>
-            <h2 class="font-heading text-brand-900 text-3xl sm:text-4xl font-semibold">Destaques da Semana</h2>
+            <h2 class="font-heading text-brand-900 dark:text-white text-3xl sm:text-4xl font-semibold">Destaques da Semana</h2>
 
             @if ($destaques->isNotEmpty())
                 <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($destaques as $veiculo)
                         <a href="{{ route('veiculo.show', $veiculo) }}"
-                           class="group block rounded-2xl border border-brand-100 bg-[#A7C7E7] overflow-hidden transition-colors hover:border-brand-500">
-                            <div class="relative aspect-[4/3] bg-brand-100/50 overflow-hidden">
+                           class="group block rounded-2xl border border-brand-100 dark:border-duskborder bg-[#A7C7E7] overflow-hidden transition-colors hover:border-brand-500">
+                            <div class="relative aspect-[4/3] bg-brand-100/50 dark:bg-white/10 overflow-hidden">
                                 @if ($veiculo->fotos->isNotEmpty())
                                     <img src="{{ $veiculo->fotos->first()->url() }}" alt="{{ $veiculo->marca }} {{ $veiculo->modelo }}"
                                          loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 @else
-                                    <div class="w-full h-full flex items-center justify-center text-muted">
+                                    <div class="w-full h-full flex items-center justify-center text-muted dark:text-duskmuted">
                                         <x-heroicon-o-photo class="w-12 h-12" />
                                     </div>
                                 @endif
@@ -81,7 +81,7 @@
                                 </div>
                             </div>
                             <div class="p-6">
-                                <h3 class="font-heading font-medium text-brand-900">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h3>
+                                <h3 class="font-heading font-medium text-brand-900 dark:text-white">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h3>
                                 <div class="flex flex-wrap items-center gap-1.5 mt-2">
                                     <span class="px-2.5 py-1 rounded-full bg-brand-700 text-white text-xs font-medium">
                                         {{ $veiculo->ano_fabricacao }}/{{ $veiculo->ano_modelo }} &middot; {{ number_format($veiculo->km, 0, ',', '.') }} km
@@ -102,28 +102,28 @@
                     @endforeach
                 </div>
             @else
-                <p class="mt-12 text-center text-muted">Nenhum destaque disponível no momento.</p>
+                <p class="mt-12 text-center text-muted dark:text-duskmuted">Nenhum destaque disponível no momento.</p>
             @endif
         </div>
     </section>
 
     <!-- ===== ÚLTIMAS ADIÇÕES ===== -->
     @if ($ultimasAdicoes->isNotEmpty())
-        <section class="bg-brand-100/50 py-24">
+        <section class="bg-brand-100/50 py-24 dark:bg-duskcard/40">
             <div class="max-w-7xl mx-auto px-6 sm:px-8">
                 <p class="mb-3 text-sm font-medium tracking-wide uppercase text-brand-700">Novidades</p>
-                <h2 class="font-heading text-brand-900 text-3xl sm:text-4xl font-semibold">Últimas Adições</h2>
+                <h2 class="font-heading text-brand-900 dark:text-white text-3xl sm:text-4xl font-semibold">Últimas Adições</h2>
 
                 <div class="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6">
                     @foreach ($ultimasAdicoes as $veiculo)
                         <a href="{{ route('veiculo.show', $veiculo) }}"
-                           class="group block rounded-2xl border border-brand-100 bg-[#A7C7E7] overflow-hidden transition-colors hover:border-brand-500">
-                            <div class="relative aspect-[4/3] bg-white/40 overflow-hidden">
+                           class="group block rounded-2xl border border-brand-100 dark:border-duskborder bg-[#A7C7E7] overflow-hidden transition-colors hover:border-brand-500">
+                            <div class="relative aspect-[4/3] bg-white/40 dark:bg-white/10 overflow-hidden">
                                 @if ($veiculo->fotos->isNotEmpty())
                                     <img src="{{ $veiculo->fotos->first()->url() }}" alt="{{ $veiculo->marca }} {{ $veiculo->modelo }}"
                                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 @else
-                                    <div class="w-full h-full flex items-center justify-center text-muted">
+                                    <div class="w-full h-full flex items-center justify-center text-muted dark:text-duskmuted">
                                         <x-heroicon-o-photo class="w-10 h-10" />
                                     </div>
                                 @endif
@@ -132,7 +132,7 @@
                                 </div>
                             </div>
                             <div class="p-5">
-                                <h3 class="font-heading font-medium text-brand-900 text-sm">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h3>
+                                <h3 class="font-heading font-medium text-brand-900 dark:text-white text-sm">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h3>
                                 <span class="inline-block mt-2 px-2.5 py-1 rounded-full bg-brand-700 text-white text-xs font-medium">
                                     {{ $veiculo->ano_fabricacao }}/{{ $veiculo->ano_modelo }} &middot; {{ number_format($veiculo->km, 0, ',', '.') }} km
                                 </span>
@@ -159,32 +159,32 @@
     @endif
 
     <!-- ===== DIFERENCIAIS ===== -->
-    <section class="bg-white py-24">
+    <section class="bg-white py-24 dark:bg-duskbg">
         <div class="max-w-7xl mx-auto px-6 sm:px-8">
             <p class="mb-3 text-base font-medium tracking-wide uppercase text-brand-700">Por que a gente</p>
-            <h2 class="font-heading text-brand-900 text-3xl sm:text-4xl font-semibold">Sobre Nós</h2>
+            <h2 class="font-heading text-brand-900 dark:text-white text-3xl sm:text-4xl font-semibold">Sobre Nós</h2>
 
             <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                <div class="group rounded-2xl border border-brand-100 bg-white p-7 transition-colors hover:bg-brand-100/50">
+                <div class="group rounded-2xl border border-brand-100 dark:border-duskborder bg-white dark:bg-duskcard p-7 transition-colors hover:bg-brand-100/50 dark:hover:bg-duskborder/40">
                     <span class="mb-5 flex size-11 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)">
                         <x-heroicon-o-banknotes class="w-5 h-5" />
                     </span>
-                    <h3 class="font-heading font-medium text-lg text-brand-900">Financiamento</h3>
-                    <p class="mt-2 text-base text-muted">Financie a compra do seu veículo. O carro dos seus sonhos pode ser seu.</p>
+                    <h3 class="font-heading font-medium text-lg text-brand-900 dark:text-white">Financiamento</h3>
+                    <p class="mt-2 text-base text-muted dark:text-duskmuted">Financie a compra do seu veículo. O carro dos seus sonhos pode ser seu.</p>
                 </div>
-                <div class="group rounded-2xl border border-brand-100 bg-white p-7 transition-colors hover:bg-brand-100/50">
+                <div class="group rounded-2xl border border-brand-100 dark:border-duskborder bg-white dark:bg-duskcard p-7 transition-colors hover:bg-brand-100/50 dark:hover:bg-duskborder/40">
                     <span class="mb-5 flex size-11 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)">
                         <x-heroicon-o-truck class="w-5 h-5" />
                     </span>
-                    <h3 class="font-heading font-medium text-lg text-brand-900">Venda seu veículo</h3>
-                    <p class="mt-2 text-base text-muted">A maneira mais rápida de vender o seu carro, com segurança na negociação.</p>
+                    <h3 class="font-heading font-medium text-lg text-brand-900 dark:text-white">Venda seu veículo</h3>
+                    <p class="mt-2 text-base text-muted dark:text-duskmuted">A maneira mais rápida de vender o seu carro, com segurança na negociação.</p>
                 </div>
-                <div class="group rounded-2xl border border-brand-100 bg-white p-7 transition-colors hover:bg-brand-100/50">
+                <div class="group rounded-2xl border border-brand-100 dark:border-duskborder bg-white dark:bg-duskcard p-7 transition-colors hover:bg-brand-100/50 dark:hover:bg-duskborder/40">
                     <span class="mb-5 flex size-11 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)">
                         <x-heroicon-o-building-storefront class="w-5 h-5" />
                     </span>
-                    <h3 class="font-heading font-medium text-lg text-brand-900">Empresa</h3>
-                    <p class="mt-2 text-base text-muted">
+                    <h3 class="font-heading font-medium text-lg text-brand-900 dark:text-white">Empresa</h3>
+                    <p class="mt-2 text-base text-muted dark:text-duskmuted">
                         Somos uma empresa familiar
                         @if ($empresa?->cidade)
                             , localizada em {{ $empresa->cidade }}@if($empresa->uf) — {{ $empresa->uf }}@endif.
@@ -193,56 +193,56 @@
                         @endif
                     </p>
                 </div>
-                <div class="group rounded-2xl border border-brand-100 bg-white p-7 transition-colors hover:bg-brand-100/50">
+                <div class="group rounded-2xl border border-brand-100 dark:border-duskborder bg-white dark:bg-duskcard p-7 transition-colors hover:bg-brand-100/50 dark:hover:bg-duskborder/40">
                     <span class="mb-5 flex size-11 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)">
                         <x-heroicon-o-chat-bubble-left-right class="w-5 h-5" />
                     </span>
-                    <h3 class="font-heading font-medium text-lg text-brand-900">Fale conosco</h3>
-                    <p class="mt-2 text-base text-muted">Precisa falar conosco? Envie um formulário ou nos ligue. Estamos esperando por você.</p>
+                    <h3 class="font-heading font-medium text-lg text-brand-900 dark:text-white">Fale conosco</h3>
+                    <p class="mt-2 text-base text-muted dark:text-duskmuted">Precisa falar conosco? Envie um formulário ou nos ligue. Estamos esperando por você.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ===== SOBRE ===== -->
-    <section class="bg-brand-100/50 py-24">
+    <section class="bg-brand-100/50 py-24 dark:bg-duskcard/40">
         <div class="max-w-7xl mx-auto px-6 sm:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div>
                 <p class="mb-3 text-base font-medium tracking-wide uppercase text-brand-700">Quem somos</p>
-                <h2 class="font-heading text-brand-900 text-3xl sm:text-4xl font-semibold mb-5">Sobre {{ $empresa->nome ?? config('app.name') }}</h2>
-                <p class="text-muted leading-relaxed">
+                <h2 class="font-heading text-brand-900 dark:text-white text-3xl sm:text-4xl font-semibold mb-5">Sobre {{ $empresa->nome ?? config('app.name') }}</h2>
+                <p class="text-muted dark:text-duskmuted leading-relaxed">
                     {{ $empresa->sobre_texto ?? 'Buscamos os melhores veículos do mercado para atender nossos clientes, com atendimento diferenciado, explicando todos os detalhes do veículo e esclarecendo todas as dúvidas.' }}
                 </p>
             </div>
-            <div class="rounded-2xl border border-brand-100 bg-white p-7 shadow-brand">
-                <h3 class="font-heading font-medium text-lg text-brand-900 mb-4">Missão, Visão e Valores</h3>
-                <ul class="space-y-3 text-base text-muted">
-                    <li><strong class="text-brand-900">Missão:</strong> Oferecer um serviço de qualidade, com total satisfação e confiança para o cliente.</li>
-                    <li><strong class="text-brand-900">Visão:</strong> Ser referência no relacionamento com os clientes e na comercialização de veículos.</li>
-                    <li><strong class="text-brand-900">Valores:</strong> Ética, transparência, respeito e compromisso com o resultado.</li>
+            <div class="rounded-2xl border border-brand-100 dark:border-duskborder bg-white dark:bg-duskcard p-7 shadow-brand">
+                <h3 class="font-heading font-medium text-lg text-brand-900 dark:text-white mb-4">Missão, Visão e Valores</h3>
+                <ul class="space-y-3 text-base text-muted dark:text-duskmuted">
+                    <li><strong class="text-brand-900 dark:text-white">Missão:</strong> Oferecer um serviço de qualidade, com total satisfação e confiança para o cliente.</li>
+                    <li><strong class="text-brand-900 dark:text-white">Visão:</strong> Ser referência no relacionamento com os clientes e na comercialização de veículos.</li>
+                    <li><strong class="text-brand-900 dark:text-white">Valores:</strong> Ética, transparência, respeito e compromisso com o resultado.</li>
                 </ul>
             </div>
         </div>
     </section>
 
     <!-- ===== SIMULADOR DE FINANCIAMENTO ===== -->
-    <section id="financiamento" class="bg-white py-24">
+    <section id="financiamento" class="bg-white py-24 dark:bg-duskbg">
         <div class="max-w-2xl mx-auto px-6 text-center">
             <p class="mb-3 text-base font-medium tracking-wide uppercase text-brand-700">Simulação</p>
-            <h2 class="font-heading text-brand-900 text-3xl sm:text-4xl font-semibold mb-2">Simulador de Financiamento</h2>
-            <p class="text-sm text-muted mb-10">* Valores sujeitos a análise de crédito</p>
+            <h2 class="font-heading text-brand-900 dark:text-white text-3xl sm:text-4xl font-semibold mb-2">Simulador de Financiamento</h2>
+            <p class="text-sm text-muted dark:text-duskmuted mb-10">* Valores sujeitos a análise de crédito</p>
 
-            <form id="formSimulador" class="rounded-2xl border border-brand-100 bg-white p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left shadow-brand">
+            <form id="formSimulador" class="rounded-2xl border border-brand-100 dark:border-duskborder bg-white dark:bg-duskcard p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left shadow-brand">
                 <div>
-                    <label class="block text-xs text-muted mb-1">Valor do Carro</label>
+                    <label class="block text-xs text-muted dark:text-duskmuted mb-1">Valor do Carro</label>
                     <input type="number" id="simValor" placeholder="Ex: 50000" required class="input">
                 </div>
                 <div>
-                    <label class="block text-xs text-muted mb-1">Entrada (R$)</label>
+                    <label class="block text-xs text-muted dark:text-duskmuted mb-1">Entrada (R$)</label>
                     <input type="number" id="simEntrada" min="0" placeholder="Ex: 10000" required class="input">
                 </div>
                 <div>
-                    <label class="block text-xs text-muted mb-1">Prazo (meses)</label>
+                    <label class="block text-xs text-muted dark:text-duskmuted mb-1">Prazo (meses)</label>
                     <select id="simPrazo" class="input">
                         <option value="12">12 meses</option>
                         <option value="24" selected>24 meses</option>
@@ -258,15 +258,15 @@
                 </div>
             </form>
 
-            <div id="resultadoSimulador" class="mt-6 rounded-2xl border border-brand-100 bg-white p-6 text-left shadow-brand" style="display:none">
-                <p class="flex justify-between text-sm text-muted py-1.5 border-b border-brand-100">
-                    <span>Valor da Entrada</span> <span id="resEntrada" class="text-brand-900 font-medium tabular-nums">R$ 0,00</span>
+            <div id="resultadoSimulador" class="mt-6 rounded-2xl border border-brand-100 dark:border-duskborder bg-white dark:bg-duskcard p-6 text-left shadow-brand" style="display:none">
+                <p class="flex justify-between text-sm text-muted dark:text-duskmuted py-1.5 border-b border-brand-100 dark:border-duskborder">
+                    <span>Valor da Entrada</span> <span id="resEntrada" class="text-brand-900 dark:text-white font-medium tabular-nums">R$ 0,00</span>
                 </p>
-                <p class="flex justify-between text-sm text-muted py-1.5 border-b border-brand-100">
-                    <span>Valor Financiado</span> <span id="resFinanciado" class="text-brand-900 font-medium tabular-nums">R$ 0,00</span>
+                <p class="flex justify-between text-sm text-muted dark:text-duskmuted py-1.5 border-b border-brand-100 dark:border-duskborder">
+                    <span>Valor Financiado</span> <span id="resFinanciado" class="text-brand-900 dark:text-white font-medium tabular-nums">R$ 0,00</span>
                 </p>
                 <p class="flex justify-between text-base py-2">
-                    <span class="text-brand-900 font-semibold">Parcela Mensal</span> <span id="resParcela" class="font-heading text-brand-700 font-semibold tabular-nums">R$ 0,00</span>
+                    <span class="text-brand-900 dark:text-white font-semibold">Parcela Mensal</span> <span id="resParcela" class="font-heading text-brand-700 font-semibold tabular-nums">R$ 0,00</span>
                 </p>
                 @if ($empresa?->whatsappUrl())
                     <a href="{{ $empresa->whatsappUrl() }}" target="_blank" rel="noopener"
@@ -279,32 +279,32 @@
     </section>
 
     <!-- ===== VENDA SEU CARRO ===== -->
-    <section id="venda-seu-carro" class="bg-brand-100/50 py-24">
+    <section id="venda-seu-carro" class="bg-brand-100/50 py-24 dark:bg-duskcard/40">
         <div class="max-w-7xl mx-auto px-6 sm:px-8">
             <p class="mb-3 text-sm font-medium tracking-wide uppercase text-brand-700 text-center">Avaliação</p>
-            <h2 class="font-heading text-brand-900 text-3xl sm:text-4xl font-semibold text-center mb-2">Venda seu Carro</h2>
-            <p class="text-center text-muted mb-12 max-w-xl mx-auto">Avaliamos seu veículo de forma rápida e transparente. Preencha os dados e entraremos em contato.</p>
+            <h2 class="font-heading text-brand-900 dark:text-white text-3xl sm:text-4xl font-semibold text-center mb-2">Venda seu Carro</h2>
+            <p class="text-center text-muted dark:text-duskmuted mb-12 max-w-xl mx-auto">Avaliamos seu veículo de forma rápida e transparente. Preencha os dados e entraremos em contato.</p>
 
             @livewire('public.venda-seu-carro-form')
         </div>
     </section>
 
     <!-- ===== LOCALIZAÇÃO ===== -->
-    <section id="contato" class="bg-white py-24">
+    <section id="contato" class="bg-white py-24 dark:bg-duskbg">
         <div class="max-w-7xl mx-auto px-6 sm:px-8">
             <p class="mb-3 text-sm font-medium tracking-wide uppercase text-brand-700 text-center">Visite a loja</p>
-            <h2 class="font-heading text-brand-900 text-3xl sm:text-4xl font-semibold text-center mb-2">Onde Estamos</h2>
-            <p class="text-center text-muted mb-12">{{ $empresa?->endereco ?? 'Endereço a configurar em Configurações' }}</p>
+            <h2 class="font-heading text-brand-900 dark:text-white text-3xl sm:text-4xl font-semibold text-center mb-2">Onde Estamos</h2>
+            <p class="text-center text-muted dark:text-duskmuted mb-12">{{ $empresa?->endereco ?? 'Endereço a configurar em Configurações' }}</p>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="rounded-2xl overflow-hidden border border-brand-100 shadow-brand">
+                <div class="rounded-2xl overflow-hidden border border-brand-100 dark:border-duskborder shadow-brand">
                     @if ($empresa?->endereco)
                         <iframe
                             src="https://maps.google.com/maps?q={{ urlencode($empresa->endereco.', '.$empresa->cidade.' - '.$empresa->uf) }}&output=embed&z=15"
                             width="100%" height="360" style="border:0" allowfullscreen loading="lazy"
                             title="Localização {{ $empresa->nome }}"></iframe>
                     @else
-                        <div class="h-[360px] bg-brand-100/50 flex items-center justify-center text-muted text-sm">
+                        <div class="h-[360px] bg-brand-100/50 dark:bg-duskcard flex items-center justify-center text-muted dark:text-duskmuted text-sm">
                             Mapa aparece aqui quando o endereço for configurado
                         </div>
                     @endif
@@ -312,27 +312,27 @@
                 <div class="space-y-5">
                     <div class="flex items-start gap-4">
                         <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)"><x-heroicon-o-map-pin class="w-5 h-5" /></span>
-                        <div><strong class="text-brand-900 block text-sm">Endereço</strong><p class="text-muted text-sm">{{ $empresa?->endereco ?? 'A configurar' }}</p></div>
+                        <div><strong class="text-brand-900 dark:text-white block text-sm">Endereço</strong><p class="text-muted dark:text-duskmuted text-sm">{{ $empresa?->endereco ?? 'A configurar' }}</p></div>
                     </div>
                     <div class="flex items-start gap-4">
                         <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)"><x-heroicon-o-phone class="w-5 h-5" /></span>
-                        <div><strong class="text-brand-900 block text-sm">Telefone</strong><p class="text-muted text-sm">
+                        <div><strong class="text-brand-900 dark:text-white block text-sm">Telefone</strong><p class="text-muted dark:text-duskmuted text-sm">
                             @if ($empresa?->telefone)<a href="tel:{{ $empresa->telefone }}" class="hover:text-brand-700">{{ $empresa->telefone }}</a>@else A configurar @endif
                         </p></div>
                     </div>
                     <div class="flex items-start gap-4">
                         <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)"><x-heroicon-o-chat-bubble-left-right class="w-5 h-5" /></span>
-                        <div><strong class="text-brand-900 block text-sm">WhatsApp</strong><p class="text-muted text-sm">
+                        <div><strong class="text-brand-900 dark:text-white block text-sm">WhatsApp</strong><p class="text-muted dark:text-duskmuted text-sm">
                             @if ($empresa?->whatsappUrl())<a href="{{ $empresa->whatsappUrl() }}" target="_blank" rel="noopener" class="hover:text-brand-700">{{ $empresa->whatsapp }}</a>@else A configurar @endif
                         </p></div>
                     </div>
                     <div class="flex items-start gap-4">
                         <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)"><x-heroicon-o-clock class="w-5 h-5" /></span>
-                        <div><strong class="text-brand-900 block text-sm">Horário</strong><p class="text-muted text-sm">{{ $empresa?->horario_funcionamento ?? 'A configurar' }}</p></div>
+                        <div><strong class="text-brand-900 dark:text-white block text-sm">Horário</strong><p class="text-muted dark:text-duskmuted text-sm">{{ $empresa?->horario_funcionamento ?? 'A configurar' }}</p></div>
                     </div>
                     <div class="flex items-start gap-4">
                         <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)"><x-heroicon-o-envelope class="w-5 h-5" /></span>
-                        <div><strong class="text-brand-900 block text-sm">E-mail</strong><p class="text-muted text-sm">
+                        <div><strong class="text-brand-900 dark:text-white block text-sm">E-mail</strong><p class="text-muted dark:text-duskmuted text-sm">
                             @if ($empresa?->email_contato)<a href="mailto:{{ $empresa->email_contato }}" class="hover:text-brand-700">{{ $empresa->email_contato }}</a>@else A configurar @endif
                         </p></div>
                     </div>

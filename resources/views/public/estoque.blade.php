@@ -1,9 +1,9 @@
 <x-layouts.public :title="'Estoque - '.config('app.name')">
     <div class="max-w-7xl mx-auto px-6 sm:px-8 py-16">
         <p class="mb-3 text-sm font-medium tracking-wide uppercase text-brand-700">Catálogo</p>
-        <h1 class="font-heading text-brand-900 text-3xl sm:text-4xl font-semibold mb-8">Estoque</h1>
+        <h1 class="font-heading text-brand-900 dark:text-white text-3xl sm:text-4xl font-semibold mb-8">Estoque</h1>
 
-        <form method="GET" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 mb-10 bg-brand-100/50 border border-brand-100 rounded-2xl p-5">
+        <form method="GET" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 mb-10 bg-brand-100/50 dark:bg-duskcard/40 border border-brand-100 dark:border-duskborder rounded-2xl p-5">
             <select name="marca" class="input">
                 <option value="">Marca</option>
                 @foreach ($marcasDisponiveis as $marca)
@@ -28,7 +28,7 @@
         </form>
 
         @if ($veiculos->isEmpty())
-            <p class="text-muted text-center py-16">Nenhum veículo encontrado com esses filtros.</p>
+            <p class="text-muted dark:text-duskmuted text-center py-16">Nenhum veículo encontrado com esses filtros.</p>
         @else
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach ($veiculos as $veiculo)
