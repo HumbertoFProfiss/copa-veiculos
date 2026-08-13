@@ -26,7 +26,7 @@
                             <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-brand-100/60 text-muted">Aguardando entrega</span>
                         @elseif ($venda->garantia_ativa)
                             <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                                Ativa &middot; {{ $venda->garantia_dias_restantes }} dias restantes
+                                Ativa
                             </span>
                         @else
                             <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-600">Expirada</span>

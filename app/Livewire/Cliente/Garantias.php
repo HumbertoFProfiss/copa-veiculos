@@ -19,9 +19,6 @@ class Garantias extends Component
             ->map(function (Venda $venda) {
                 $venda->garantia_ativa = $venda->data_entrega
                     && now()->lt($venda->data_entrega->copy()->addDays($venda->prazo_garantia_dias));
-                $venda->garantia_dias_restantes = $venda->data_entrega
-                    ? now()->diffInDays($venda->data_entrega->copy()->addDays($venda->prazo_garantia_dias), false)
-                    : null;
 
                 return $venda;
             });
