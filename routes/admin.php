@@ -102,6 +102,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
         Route::middleware('modulo:integracoes')->group(function () {
             Route::get('/integracoes', Integracoes\Index::class)->name('integracoes.index');
+            Route::get('/integracoes/canais', Integracoes\Canais::class)->name('integracoes.canais');
         });
 
         Route::middleware('modulo:filiais')->group(function () {

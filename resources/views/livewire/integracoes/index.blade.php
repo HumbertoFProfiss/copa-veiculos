@@ -1,4 +1,6 @@
 <div>
+    <x-integracoes.tabs ativo="index" />
+
     <h1 class="text-xl font-semibold text-text-primary mb-1">Integrações</h1>
     <p class="text-sm text-text-secondary mb-6">Tokens de API pra consumir a API REST e webhooks pra receber eventos em tempo real num sistema externo.</p>
 
