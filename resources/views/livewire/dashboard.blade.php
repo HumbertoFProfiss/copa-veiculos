@@ -91,4 +91,83 @@
             </div>
         </div>
     </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
+        <div class="bg-bg border border-border rounded-card p-5 shadow-soft">
+            <h2 class="text-sm font-semibold text-text-primary mb-4">Vendas por mês</h2>
+            <div wire:ignore x-data="graficoVendas(@js($series))" x-init="montar($refs.canvas)" class="h-64">
+                <canvas x-ref="canvas"></canvas>
+            </div>
+        </div>
+
+        <div class="bg-bg border border-border rounded-card p-5 shadow-soft">
+            <h2 class="text-sm font-semibold text-text-primary mb-4">Leads recebidos por mês</h2>
+            <div wire:ignore x-data="graficoLeads(@js($series))" x-init="montar($refs.canvas)" class="h-64">
+                <canvas x-ref="canvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function graficoVendas(series) {
+            return {
+                montar(canvas) {
+                    new Chart(canvas, {
+                        data: {
+                            labels: series.labels,
+                            datasets: [
+                                {
+                                    type: 'bar',
+                                    label: 'Vendas (qtd)',
+                                    data: series.vendasQtd,
+                                    backgroundColor: '#1D4ED8',
+                                    yAxisID: 'y',
+                                },
+                                {
+                                    type: 'line',
+                                    label: 'Faturamento (R$)',
+                                    data: series.vendasReceita,
+                                    borderColor: '#059669',
+                                    backgroundColor: '#059669',
+                                    tension: 0.3,
+                                    yAxisID: 'y1',
+                                },
+                            ],
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: { beginAtZero: true, ticks: { precision: 0 }, position: 'left' },
+                                y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false } },
+                            },
+                        },
+                    });
+                },
+            };
+        }
+
+        function graficoLeads(series) {
+            return {
+                montar(canvas) {
+                    new Chart(canvas, {
+                        type: 'bar',
+                        data: {
+                            labels: series.labels,
+                            datasets: [{
+                                label: 'Leads recebidos',
+                                data: series.leadsQtd,
+                                backgroundColor: '#3B82F6',
+                            }],
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+                        },
+                    });
+                },
+            };
+        }
+    </script>
 </div>

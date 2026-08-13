@@ -18,6 +18,33 @@ class Dashboard extends Component
     /** Prazo maximo pro 1o atendimento antes de contar como "em atraso" (ver prompt §4.7 - SLA). */
     public const SLA_MINUTOS = 60;
 
+    /** Quantos meses (incluindo o atual) os gráficos do dashboard mostram. */
+    public const MESES_GRAFICO = 6;
+
+    protected function seriesUltimosMeses(): array
+    {
+        $labels = [];
+        $vendasQtd = [];
+        $vendasReceita = [];
+        $leadsQtd = [];
+
+        for ($i = self::MESES_GRAFICO - 1; $i >= 0; $i--) {
+            $mes = now()->subMonths($i);
+            $inicio = $mes->copy()->startOfMonth();
+            $fim = $mes->copy()->endOfMonth();
+
+            $labels[] = ucfirst($mes->translatedFormat('M/y'));
+
+            $vendasDoMes = Venda::where('status', 'confirmada')->whereBetween('data_venda', [$inicio, $fim])->get();
+            $vendasQtd[] = $vendasDoMes->count();
+            $vendasReceita[] = round((float) $vendasDoMes->sum(fn (Venda $v) => (float) $v->preco_venda - (float) $v->desconto), 2);
+
+            $leadsQtd[] = Lead::whereBetween('created_at', [$inicio, $fim])->where('lead_falso', false)->count();
+        }
+
+        return compact('labels', 'vendasQtd', 'vendasReceita', 'leadsQtd');
+    }
+
     public function render()
     {
         $disponiveis = Veiculo::where('status', 'disponivel')->get();
@@ -52,6 +79,7 @@ class Dashboard extends Component
             'contasAVencer' => ContaPagar::where('status', 'pendente')
                 ->whereBetween('vencimento', [now(), now()->addDays(7)])
                 ->sum('valor'),
+            'series' => $this->seriesUltimosMeses(),
         ])->layout('layouts.admin', ['title' => 'Dashboard']);
     }
 }
