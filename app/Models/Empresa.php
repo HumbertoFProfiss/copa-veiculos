@@ -10,6 +10,26 @@ class Empresa extends Model
 {
     use HasFactory;
 
+    /**
+     * Modulos incluidos em cada plano base (ver prompt §5). "somente_site" e
+     * o produto reduzido (§4.16): so estoque, recebimento de leads e
+     * configuracoes - sem o ERP completo. Modulos fora dessa lista para um
+     * plano so ficam acessiveis via modulos_ativos (add-on avulso).
+     */
+    public const MODULOS_POR_PLANO = [
+        'somente_site' => ['dashboard', 'veiculos', 'crm', 'leads', 'configuracoes'],
+        'completo' => [
+            'dashboard', 'veiculos', 'clientes', 'fornecedores', 'importacoes',
+            'crm', 'leads', 'vendas', 'contratos', 'financeiro', 'anuncios',
+            'relatorios', 'usuarios', 'configuracoes',
+        ],
+        'completo_opcionais' => [
+            'dashboard', 'veiculos', 'clientes', 'fornecedores', 'importacoes',
+            'crm', 'leads', 'vendas', 'contratos', 'financeiro', 'anuncios',
+            'relatorios', 'usuarios', 'configuracoes',
+        ],
+    ];
+
     protected $fillable = [
         'nome',
         'cnpj',
@@ -50,6 +70,17 @@ class Empresa extends Model
     public function possuiModulo(string $slug): bool
     {
         return $this->modulosAtivos()->where('modulo_slug', $slug)->exists();
+    }
+
+    /**
+     * Acesso a um modulo do ERP: incluido no plano base OU liberado como
+     * add-on avulso via modulos_ativos. Usado pelo middleware EnsureModuloAtivo.
+     */
+    public function possuiAcessoModulo(string $modulo): bool
+    {
+        $incluidosNoPlano = self::MODULOS_POR_PLANO[$this->plano] ?? [];
+
+        return in_array($modulo, $incluidosNoPlano, true) || $this->possuiModulo($modulo);
     }
 
     public function whatsappUrl(): ?string

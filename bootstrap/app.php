@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureModuloAtivo;
 use App\Http\Middleware\ResolveTenant;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -25,6 +26,10 @@ return Application::configure(basePath: dirname(__DIR__))
         // Guarda "cliente" tem login próprio - sem isso, um cliente deslogado
         // acessando /cliente/* cairia no login da equipe (guarda "web").
         $middleware->redirectGuestsTo(fn ($request) => $request->routeIs('cliente.*') ? route('cliente.login') : route('login'));
+
+        $middleware->alias([
+            'modulo' => EnsureModuloAtivo::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

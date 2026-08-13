@@ -41,13 +41,13 @@
                             <x-admin.sidebar-link route="admin.veiculos.index" icon="truck" label="Estoque" />
                         @endcan
                         @can('clientes.ver')
-                            <x-admin.sidebar-link route="admin.clientes.index" icon="users" label="Clientes" />
+                            <x-admin.sidebar-link route="admin.clientes.index" icon="users" label="Clientes" modulo="clientes" />
                         @endcan
                         @can('fornecedores.ver')
-                            <x-admin.sidebar-link route="admin.fornecedores.index" icon="building-storefront" label="Fornecedores" />
+                            <x-admin.sidebar-link route="admin.fornecedores.index" icon="building-storefront" label="Fornecedores" modulo="fornecedores" />
                         @endcan
                         @can('importacoes.ver')
-                            <x-admin.sidebar-link route="admin.importacoes.index" icon="arrow-up-tray" label="Importar Estoque" />
+                            <x-admin.sidebar-link route="admin.importacoes.index" icon="arrow-up-tray" label="Importar Estoque" modulo="importacoes" />
                         @endcan
                     </div>
                 @endif
@@ -60,10 +60,10 @@
                             <x-admin.sidebar-link route="admin.leads.inbox" icon="inbox" label="Caixa de Leads" />
                         @endcan
                         @can('vendas.ver')
-                            <x-admin.sidebar-link route="admin.vendas.index" icon="currency-dollar" label="Vendas" />
+                            <x-admin.sidebar-link route="admin.vendas.index" icon="currency-dollar" label="Vendas" modulo="vendas" />
                         @endcan
                         @can('contratos.ver')
-                            <x-admin.sidebar-link route="admin.contratos.index" icon="document-text" label="Contratos" />
+                            <x-admin.sidebar-link route="admin.contratos.index" icon="document-text" label="Contratos" modulo="contratos" />
                         @endcan
                     </div>
                 @endif
@@ -72,13 +72,13 @@
                     <div class="space-y-1">
                         <div x-show="!colapsada" x-transition.opacity class="px-3 text-[11px] font-semibold text-text-secondary/70 uppercase tracking-wider mb-1">Gestão</div>
                         @can('financeiro.ver')
-                            <x-admin.sidebar-link route="admin.financeiro.index" icon="banknotes" label="Financeiro" />
+                            <x-admin.sidebar-link route="admin.financeiro.index" icon="banknotes" label="Financeiro" modulo="financeiro" />
                         @endcan
                         @can('anuncios.ver')
-                            <x-admin.sidebar-link route="admin.anuncios.index" icon="megaphone" label="Anúncios" />
+                            <x-admin.sidebar-link route="admin.anuncios.index" icon="megaphone" label="Anúncios" modulo="anuncios" />
                         @endcan
                         @can('relatorios.ver')
-                            <x-admin.sidebar-link route="admin.relatorios.index" icon="chart-bar" label="Relatórios" />
+                            <x-admin.sidebar-link route="admin.relatorios.index" icon="chart-bar" label="Relatórios" modulo="relatorios" />
                         @endcan
                     </div>
                 @endif
@@ -87,7 +87,7 @@
                     <div class="space-y-1 pt-3 border-t border-border">
                         <div x-show="!colapsada" x-transition.opacity class="px-3 text-[11px] font-semibold text-text-secondary/70 uppercase tracking-wider mb-1">Sistema</div>
                         @can('usuarios.ver')
-                            <x-admin.sidebar-link route="admin.usuarios.index" icon="user-group" label="Usuários" />
+                            <x-admin.sidebar-link route="admin.usuarios.index" icon="user-group" label="Usuários" modulo="usuarios" />
                         @endcan
                         @can('configuracoes.ver')
                             <x-admin.sidebar-link route="admin.configuracoes.index" icon="cog-6-tooth" label="Configurações" />
