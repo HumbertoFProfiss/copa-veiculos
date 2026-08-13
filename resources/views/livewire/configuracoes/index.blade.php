@@ -38,6 +38,13 @@
         @endif
 
         <form wire:submit="salvar" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="sm:col-span-2">
+                <label class="block text-xs font-medium text-text-secondary mb-1">Domínio próprio (opcional)</label>
+                <input type="text" wire:model="dominio_customizado" placeholder="worldcred.com.br"
+                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                <p class="text-xs text-text-secondary mt-1">Se preenchido, esse domínio (apontado via DNS pra este servidor) mostra essa revenda direto, sem precisar de subdomínio.</p>
+                @error('dominio_customizado') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
+            </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Telefone</label>
                 <input type="text" wire:model="telefone" placeholder="(14) 3882-5011"

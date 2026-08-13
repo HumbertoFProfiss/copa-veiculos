@@ -3,6 +3,7 @@
 namespace App\Livewire\Configuracoes;
 
 use App\Services\Ia\AiProviderFactory;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -44,10 +45,13 @@ class Index extends Component
     #[Validate('nullable|string|max:1000')]
     public ?string $sobre_texto = '';
 
+    public ?string $dominio_customizado = '';
+
     public function mount(): void
     {
         $empresa = app('tenant');
 
+        $this->dominio_customizado = $empresa->dominio_customizado;
         $this->telefone = $empresa->telefone;
         $this->whatsapp = $empresa->whatsapp;
         $this->email_contato = $empresa->email_contato;
@@ -64,7 +68,12 @@ class Index extends Component
     {
         $this->authorize('configuracoes.editar');
 
-        $dados = $this->validate();
+        $dados = $this->validate() + $this->validate([
+            'dominio_customizado' => [
+                'nullable', 'string', 'max:255', 'regex:/^[a-z0-9.-]+\.[a-z]{2,}$/i',
+                Rule::unique('empresas', 'dominio_customizado')->ignore(app('tenant')->id),
+            ],
+        ]);
 
         app('tenant')->update($dados);
 

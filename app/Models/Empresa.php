@@ -14,6 +14,7 @@ class Empresa extends Model
         'nome',
         'cnpj',
         'slug',
+        'dominio_customizado',
         'plano',
         'status',
         'trial_termina_em',
