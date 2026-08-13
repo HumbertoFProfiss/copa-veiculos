@@ -18,9 +18,9 @@ export default {
                 heading: ['Fraunces', ...defaultTheme.fontFamily.serif],
             },
             colors: {
-                bg: '#FFFFFF',
-                surface: '#E2E8F0',
-                border: '#CBD5E1',
+                bg: '#CBD5E1',
+                surface: '#FFFFFF',
+                border: '#94A3B8',
                 'text-primary': '#0F172A',
                 'text-secondary': '#64748B',
                 primary: {
