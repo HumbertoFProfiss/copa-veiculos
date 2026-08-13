@@ -36,7 +36,8 @@
     <header class="bg-white dark:bg-duskcard border-b border-brand-100 dark:border-duskborder">
         <div class="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
             <a href="{{ route('home') }}" class="flex items-center gap-2">
-                <img src="{{ asset('logo.png') }}" alt="{{ app('tenant')?->nome }}" class="h-12 w-auto">
+                <img src="{{ asset('logo.png') }}" alt="{{ app('tenant')?->nome }}" class="h-12 w-auto dark:hidden">
+                <img src="{{ asset('logo-dark.png') }}" alt="{{ app('tenant')?->nome }}" class="h-12 w-auto hidden dark:block">
             </a>
             <div class="flex items-center gap-4 text-sm">
                 <button type="button" @click="alternarTema()" title="Alternar modo escuro"

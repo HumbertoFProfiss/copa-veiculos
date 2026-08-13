@@ -34,6 +34,14 @@
             @if ($consultaPlacaAlerta)
                 <p class="text-xs text-warning mt-3 font-medium">{{ $consultaPlacaAlerta }}</p>
             @endif
+            @if ($preco_tabela_fipe && ! $consultaPlacaErro)
+                <div class="mt-3 flex items-center gap-2 text-sm">
+                    <x-heroicon-o-check-circle class="w-4 h-4 text-success shrink-0" />
+                    <span class="text-text-secondary">Valor na Tabela FIPE:</span>
+                    <span class="font-semibold text-text-primary tabular-nums">R$ {{ number_format($preco_tabela_fipe, 2, ',', '.') }}</span>
+                    <span class="text-text-secondary">— use pra comparar com o preço de compra e de venda logo abaixo.</span>
+                </div>
+            @endif
         </div>
     @endif
 
@@ -173,11 +181,11 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                     <label class="block text-xs font-medium text-text-secondary mb-1">Valor de compra</label>
-                    <input type="number" step="0.01" wire:model="preco_compra" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                    <input type="number" step="0.01" wire:model.live.debounce.400ms="preco_compra" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-text-secondary mb-1">Tabela FIPE</label>
-                    <input type="number" step="0.01" wire:model="preco_tabela_fipe" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                    <input type="number" step="0.01" wire:model.live.debounce.400ms="preco_tabela_fipe" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-text-secondary mb-1">Valor de anúncio</label>
@@ -185,7 +193,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-text-secondary mb-1">Valor de venda</label>
-                    <input type="number" step="0.01" wire:model="preco_venda" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                    <input type="number" step="0.01" wire:model.live.debounce.400ms="preco_venda" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-text-secondary mb-1">Valor mínimo</label>
@@ -201,6 +209,36 @@
                     </div>
                 @endif
             </div>
+
+            @if ($preco_tabela_fipe && ($preco_compra || $preco_venda))
+                <div class="mt-4 p-4 rounded-control bg-surface border border-border">
+                    <p class="text-xs font-medium text-text-secondary uppercase tracking-wide mb-3">Comparação com a Tabela FIPE</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <div class="text-xs text-text-secondary mb-0.5">Tabela FIPE</div>
+                            <div class="text-sm font-semibold text-text-primary tabular-nums">R$ {{ number_format($preco_tabela_fipe, 2, ',', '.') }}</div>
+                        </div>
+                        @if ($preco_compra)
+                            @php $diffCompra = (($preco_compra - $preco_tabela_fipe) / $preco_tabela_fipe) * 100; @endphp
+                            <div>
+                                <div class="text-xs text-text-secondary mb-0.5">Compra vs. FIPE</div>
+                                <div class="text-sm font-semibold tabular-nums {{ $diffCompra <= 0 ? 'text-success' : 'text-warning' }}">
+                                    {{ $diffCompra >= 0 ? '+' : '' }}{{ number_format($diffCompra, 1, ',', '.') }}%
+                                </div>
+                            </div>
+                        @endif
+                        @if ($preco_venda)
+                            @php $diffVenda = (($preco_venda - $preco_tabela_fipe) / $preco_tabela_fipe) * 100; @endphp
+                            <div>
+                                <div class="text-xs text-text-secondary mb-0.5">Venda vs. FIPE</div>
+                                <div class="text-sm font-semibold tabular-nums {{ $diffVenda >= 0 ? 'text-success' : 'text-error' }}">
+                                    {{ $diffVenda >= 0 ? '+' : '' }}{{ number_format($diffVenda, 1, ',', '.') }}%
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endif
 
             @if ($veiculo)
                 @livewire('ia.sugestao-preco', ['veiculo' => $veiculo], key('sugestao-preco-'.$veiculo->id))

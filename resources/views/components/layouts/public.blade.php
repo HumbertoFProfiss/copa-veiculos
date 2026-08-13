@@ -89,7 +89,8 @@
                 class="fixed inset-x-0 top-0 z-40 transition-colors duration-300">
             <div class="max-w-7xl mx-auto px-6 sm:px-8 h-20 flex items-center justify-between gap-4">
                 <a href="{{ route('home') }}" class="shrink-0">
-                    <img src="{{ asset('logo.png') }}" alt="{{ $empresa->nome ?? config('app.name') }}" class="h-14 w-auto">
+                    <img src="{{ asset('logo.png') }}" alt="{{ $empresa->nome ?? config('app.name') }}" class="h-14 w-auto dark:hidden">
+                    <img src="{{ asset('logo-dark.png') }}" alt="{{ $empresa->nome ?? config('app.name') }}" class="h-14 w-auto hidden dark:block">
                 </a>
 
                 <nav class="hidden lg:flex items-center gap-8 text-sm font-medium"
@@ -132,7 +133,7 @@
         <div class="max-w-7xl mx-auto px-6 sm:px-8">
             <div class="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
                 <div>
-                    <img src="{{ asset('logo.png') }}" alt="{{ $empresa->nome ?? config('app.name') }}" class="h-12 w-auto mb-4">
+                    <img src="{{ asset('logo-dark.png') }}" alt="{{ $empresa->nome ?? config('app.name') }}" class="h-12 w-auto mb-4">
                     <p class="text-sm text-brand-100/80">{{ $empresa->endereco ?? '' }}</p>
                 </div>
 
