@@ -20,7 +20,7 @@
     <header class="bg-white border-b border-brand-100">
         <div class="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
             <a href="{{ route('home') }}" class="flex items-center gap-2">
-                <img src="{{ asset('logo.png') }}" alt="{{ app('tenant')?->nome }}" class="h-9 w-auto">
+                <img src="{{ asset('logo.png') }}" alt="{{ app('tenant')?->nome }}" class="h-12 w-auto">
             </a>
             @auth('cliente')
                 <div class="flex items-center gap-4 text-sm">

@@ -161,7 +161,7 @@
     <!-- ===== DIFERENCIAIS ===== -->
     <section class="bg-white py-24">
         <div class="max-w-7xl mx-auto px-6 sm:px-8">
-            <p class="mb-3 text-sm font-medium tracking-wide uppercase text-brand-700">Por que a gente</p>
+            <p class="mb-3 text-base font-medium tracking-wide uppercase text-brand-700">Por que a gente</p>
             <h2 class="font-heading text-brand-900 text-3xl sm:text-4xl font-semibold">Sobre Nós</h2>
 
             <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -169,22 +169,22 @@
                     <span class="mb-5 flex size-11 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)">
                         <x-heroicon-o-banknotes class="w-5 h-5" />
                     </span>
-                    <h3 class="font-heading font-medium text-brand-900">Financiamento</h3>
-                    <p class="mt-2 text-sm text-muted">Financie a compra do seu veículo. O carro dos seus sonhos pode ser seu.</p>
+                    <h3 class="font-heading font-medium text-lg text-brand-900">Financiamento</h3>
+                    <p class="mt-2 text-base text-muted">Financie a compra do seu veículo. O carro dos seus sonhos pode ser seu.</p>
                 </div>
                 <div class="group rounded-2xl border border-brand-100 bg-white p-7 transition-colors hover:bg-brand-100/50">
                     <span class="mb-5 flex size-11 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)">
                         <x-heroicon-o-truck class="w-5 h-5" />
                     </span>
-                    <h3 class="font-heading font-medium text-brand-900">Venda seu veículo</h3>
-                    <p class="mt-2 text-sm text-muted">A maneira mais rápida de vender o seu carro, com segurança na negociação.</p>
+                    <h3 class="font-heading font-medium text-lg text-brand-900">Venda seu veículo</h3>
+                    <p class="mt-2 text-base text-muted">A maneira mais rápida de vender o seu carro, com segurança na negociação.</p>
                 </div>
                 <div class="group rounded-2xl border border-brand-100 bg-white p-7 transition-colors hover:bg-brand-100/50">
                     <span class="mb-5 flex size-11 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)">
                         <x-heroicon-o-building-storefront class="w-5 h-5" />
                     </span>
-                    <h3 class="font-heading font-medium text-brand-900">Empresa</h3>
-                    <p class="mt-2 text-sm text-muted">
+                    <h3 class="font-heading font-medium text-lg text-brand-900">Empresa</h3>
+                    <p class="mt-2 text-base text-muted">
                         Somos uma empresa familiar
                         @if ($empresa?->cidade)
                             , localizada em {{ $empresa->cidade }}@if($empresa->uf) — {{ $empresa->uf }}@endif.
@@ -197,8 +197,8 @@
                     <span class="mb-5 flex size-11 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)">
                         <x-heroicon-o-chat-bubble-left-right class="w-5 h-5" />
                     </span>
-                    <h3 class="font-heading font-medium text-brand-900">Fale conosco</h3>
-                    <p class="mt-2 text-sm text-muted">Precisa falar conosco? Envie um formulário ou nos ligue. Estamos esperando por você.</p>
+                    <h3 class="font-heading font-medium text-lg text-brand-900">Fale conosco</h3>
+                    <p class="mt-2 text-base text-muted">Precisa falar conosco? Envie um formulário ou nos ligue. Estamos esperando por você.</p>
                 </div>
             </div>
         </div>
@@ -208,15 +208,15 @@
     <section class="bg-brand-100/50 py-24">
         <div class="max-w-7xl mx-auto px-6 sm:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div>
-                <p class="mb-3 text-sm font-medium tracking-wide uppercase text-brand-700">Quem somos</p>
+                <p class="mb-3 text-base font-medium tracking-wide uppercase text-brand-700">Quem somos</p>
                 <h2 class="font-heading text-brand-900 text-3xl sm:text-4xl font-semibold mb-5">Sobre {{ $empresa->nome ?? config('app.name') }}</h2>
                 <p class="text-muted leading-relaxed">
                     {{ $empresa->sobre_texto ?? 'Buscamos os melhores veículos do mercado para atender nossos clientes, com atendimento diferenciado, explicando todos os detalhes do veículo e esclarecendo todas as dúvidas.' }}
                 </p>
             </div>
             <div class="rounded-2xl border border-brand-100 bg-white p-7 shadow-brand">
-                <h3 class="font-heading font-medium text-brand-900 mb-4">Missão, Visão e Valores</h3>
-                <ul class="space-y-3 text-sm text-muted">
+                <h3 class="font-heading font-medium text-lg text-brand-900 mb-4">Missão, Visão e Valores</h3>
+                <ul class="space-y-3 text-base text-muted">
                     <li><strong class="text-brand-900">Missão:</strong> Oferecer um serviço de qualidade, com total satisfação e confiança para o cliente.</li>
                     <li><strong class="text-brand-900">Visão:</strong> Ser referência no relacionamento com os clientes e na comercialização de veículos.</li>
                     <li><strong class="text-brand-900">Valores:</strong> Ética, transparência, respeito e compromisso com o resultado.</li>
@@ -228,9 +228,9 @@
     <!-- ===== SIMULADOR DE FINANCIAMENTO ===== -->
     <section id="financiamento" class="bg-white py-24">
         <div class="max-w-2xl mx-auto px-6 text-center">
-            <p class="mb-3 text-sm font-medium tracking-wide uppercase text-brand-700">Simulação</p>
+            <p class="mb-3 text-base font-medium tracking-wide uppercase text-brand-700">Simulação</p>
             <h2 class="font-heading text-brand-900 text-3xl sm:text-4xl font-semibold mb-2">Simulador de Financiamento</h2>
-            <p class="text-xs text-muted mb-10">* Valores sujeitos a análise de crédito</p>
+            <p class="text-sm text-muted mb-10">* Valores sujeitos a análise de crédito</p>
 
             <form id="formSimulador" class="rounded-2xl border border-brand-100 bg-white p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left shadow-brand">
                 <div>
