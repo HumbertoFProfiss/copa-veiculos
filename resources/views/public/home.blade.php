@@ -8,15 +8,15 @@
     @endphp
 
     <!-- ===== HERO ===== -->
-    <section id="home" class="relative flex min-h-screen items-center overflow-hidden bg-brand-900">
+    <section id="home" class="relative flex min-h-[600px] items-center overflow-hidden bg-brand-900">
         @if ($heroFotos->isNotEmpty())
             <img src="{{ $heroFotos->first()->url() }}" alt="Veículo em destaque"
-                 class="absolute inset-0 h-full w-full object-cover">
+                 class="absolute inset-0 h-full w-full object-cover object-center">
         @endif
         <div class="absolute inset-0"
              style="background: linear-gradient(115deg, rgba(11,58,93,0.92) 10%, rgba(18,104,163,0.75) 50%, rgba(79,168,232,0.35) 100%)"></div>
 
-        <div class="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 pt-28 pb-24 w-full">
+        <div class="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 pt-32 pb-16 w-full">
             <div class="max-w-2xl">
                 <p class="mb-5 text-sm font-medium tracking-widest text-brand-300 uppercase">
                     @if ($empresa?->cidade)
@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <div class="mt-20 flex flex-col gap-6 border-t border-white/20 pt-8 sm:flex-row sm:gap-12">
+            <div class="mt-12 flex flex-col gap-6 border-t border-white/20 pt-8 sm:flex-row sm:gap-12">
                 <p class="text-sm font-medium text-brand-100">{{ $totalEstoque }} veículos em estoque</p>
                 @if ($empresa?->horario_funcionamento)
                     <p class="text-sm font-medium text-brand-100">{{ $empresa->horario_funcionamento }}</p>
