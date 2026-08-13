@@ -22,61 +22,83 @@
 
         <!-- Sidebar -->
         <aside :class="colapsada ? 'w-[72px]' : 'w-64'"
-               class="shrink-0 border-r border-border bg-bg transition-all duration-200 flex flex-col">
+               class="shrink-0 bg-bg shadow-soft-md transition-all duration-200 flex flex-col relative z-10">
             <div class="h-16 flex items-center px-4 border-b border-border">
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-2 overflow-hidden">
                     <img src="{{ asset('logo.png') }}" alt="{{ config('app.name') }}" class="h-8 w-auto shrink-0">
                 </a>
             </div>
 
-            <nav class="flex-1 overflow-y-auto p-3 space-y-1">
-                <x-admin.sidebar-link route="dashboard" icon="squares-2x2" label="Dashboard" />
-
-                @can('veiculos.ver')
-                    <x-admin.sidebar-link route="admin.veiculos.index" icon="truck" label="Estoque" />
-                @endcan
-                @can('clientes.ver')
-                    <x-admin.sidebar-link route="admin.clientes.index" icon="users" label="Clientes" />
-                @endcan
-                @can('fornecedores.ver')
-                    <x-admin.sidebar-link route="admin.fornecedores.index" icon="building-storefront" label="Fornecedores" />
-                @endcan
-                @can('leads.ver')
-                    <x-admin.sidebar-link route="admin.crm.pipeline" icon="chat-bubble-left-right" label="CRM" />
-                    <x-admin.sidebar-link route="admin.leads.inbox" icon="inbox" label="Caixa de Leads" />
-                @endcan
-                @can('vendas.ver')
-                    <x-admin.sidebar-link route="admin.vendas.index" icon="currency-dollar" label="Vendas" />
-                @endcan
-                @can('contratos.ver')
-                    <x-admin.sidebar-link route="admin.contratos.index" icon="document-text" label="Contratos" />
-                @endcan
-                @can('financeiro.ver')
-                    <x-admin.sidebar-link route="admin.financeiro.index" icon="banknotes" label="Financeiro" />
-                @endcan
-                @can('anuncios.ver')
-                    <x-admin.sidebar-link route="admin.anuncios.index" icon="megaphone" label="Anúncios" />
-                @endcan
-                @can('importacoes.ver')
-                    <x-admin.sidebar-link route="admin.importacoes.index" icon="arrow-up-tray" label="Importar Estoque" />
-                @endcan
-                @can('relatorios.ver')
-                    <x-admin.sidebar-link route="admin.relatorios.index" icon="chart-bar" label="Relatórios" />
-                @endcan
-
-                <div class="pt-3 mt-3 border-t border-border space-y-1">
-                    @can('usuarios.ver')
-                        <x-admin.sidebar-link route="admin.usuarios.index" icon="user-group" label="Usuários" />
-                    @endcan
-                    @can('configuracoes.ver')
-                        <x-admin.sidebar-link route="admin.configuracoes.index" icon="cog-6-tooth" label="Configurações" />
-                    @endcan
+            <nav class="flex-1 overflow-y-auto p-3 space-y-4">
+                <div class="space-y-1">
+                    <x-admin.sidebar-link route="dashboard" icon="squares-2x2" label="Dashboard" />
                 </div>
+
+                @if (Auth::user()->can('veiculos.ver') || Auth::user()->can('clientes.ver') || Auth::user()->can('fornecedores.ver'))
+                    <div class="space-y-1">
+                        <div x-show="!colapsada" x-transition.opacity class="px-3 text-[11px] font-semibold text-text-secondary/70 uppercase tracking-wider mb-1">Operação</div>
+                        @can('veiculos.ver')
+                            <x-admin.sidebar-link route="admin.veiculos.index" icon="truck" label="Estoque" />
+                        @endcan
+                        @can('clientes.ver')
+                            <x-admin.sidebar-link route="admin.clientes.index" icon="users" label="Clientes" />
+                        @endcan
+                        @can('fornecedores.ver')
+                            <x-admin.sidebar-link route="admin.fornecedores.index" icon="building-storefront" label="Fornecedores" />
+                        @endcan
+                        @can('importacoes.ver')
+                            <x-admin.sidebar-link route="admin.importacoes.index" icon="arrow-up-tray" label="Importar Estoque" />
+                        @endcan
+                    </div>
+                @endif
+
+                @if (Auth::user()->can('leads.ver') || Auth::user()->can('vendas.ver') || Auth::user()->can('contratos.ver'))
+                    <div class="space-y-1">
+                        <div x-show="!colapsada" x-transition.opacity class="px-3 text-[11px] font-semibold text-text-secondary/70 uppercase tracking-wider mb-1">Relacionamento</div>
+                        @can('leads.ver')
+                            <x-admin.sidebar-link route="admin.crm.pipeline" icon="chat-bubble-left-right" label="CRM" />
+                            <x-admin.sidebar-link route="admin.leads.inbox" icon="inbox" label="Caixa de Leads" />
+                        @endcan
+                        @can('vendas.ver')
+                            <x-admin.sidebar-link route="admin.vendas.index" icon="currency-dollar" label="Vendas" />
+                        @endcan
+                        @can('contratos.ver')
+                            <x-admin.sidebar-link route="admin.contratos.index" icon="document-text" label="Contratos" />
+                        @endcan
+                    </div>
+                @endif
+
+                @if (Auth::user()->can('financeiro.ver') || Auth::user()->can('anuncios.ver') || Auth::user()->can('relatorios.ver'))
+                    <div class="space-y-1">
+                        <div x-show="!colapsada" x-transition.opacity class="px-3 text-[11px] font-semibold text-text-secondary/70 uppercase tracking-wider mb-1">Gestão</div>
+                        @can('financeiro.ver')
+                            <x-admin.sidebar-link route="admin.financeiro.index" icon="banknotes" label="Financeiro" />
+                        @endcan
+                        @can('anuncios.ver')
+                            <x-admin.sidebar-link route="admin.anuncios.index" icon="megaphone" label="Anúncios" />
+                        @endcan
+                        @can('relatorios.ver')
+                            <x-admin.sidebar-link route="admin.relatorios.index" icon="chart-bar" label="Relatórios" />
+                        @endcan
+                    </div>
+                @endif
+
+                @if (Auth::user()->can('usuarios.ver') || Auth::user()->can('configuracoes.ver'))
+                    <div class="space-y-1 pt-3 border-t border-border">
+                        <div x-show="!colapsada" x-transition.opacity class="px-3 text-[11px] font-semibold text-text-secondary/70 uppercase tracking-wider mb-1">Sistema</div>
+                        @can('usuarios.ver')
+                            <x-admin.sidebar-link route="admin.usuarios.index" icon="user-group" label="Usuários" />
+                        @endcan
+                        @can('configuracoes.ver')
+                            <x-admin.sidebar-link route="admin.configuracoes.index" icon="cog-6-tooth" label="Configurações" />
+                        @endcan
+                    </div>
+                @endif
             </nav>
 
             <div class="p-3 border-t border-border">
                 <button @click="colapsada = !colapsada" type="button"
-                        class="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-control text-text-secondary hover:bg-surface text-sm">
+                        class="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-control text-text-secondary hover:bg-surface hover:text-primary transition-colors text-sm">
                     <x-heroicon-o-chevron-double-left x-show="!colapsada" class="w-4 h-4" />
                     <x-heroicon-o-chevron-double-right x-show="colapsada" class="w-4 h-4" />
                 </button>
@@ -85,34 +107,48 @@
 
         <div class="flex-1 flex flex-col min-w-0">
             <!-- Topbar -->
-            <header class="h-16 shrink-0 border-b border-border bg-bg flex items-center justify-between px-6 gap-4">
-                <div class="text-sm text-text-secondary">
+            <header class="h-16 shrink-0 bg-bg/80 backdrop-blur border-b border-border flex items-center justify-between px-6 gap-4 sticky top-0 z-20">
+                <div class="flex items-center gap-2.5">
                     @if (app()->bound('tenant') && app('tenant'))
-                        {{ app('tenant')->nome }}
+                        <span class="w-2 h-2 rounded-full bg-success shrink-0"></span>
+                        <span class="text-sm font-medium text-text-primary">{{ app('tenant')->nome }}</span>
+                        @if (app('tenant')->plano ?? false)
+                            <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-control text-[11px] font-semibold bg-primary-soft text-primary uppercase tracking-wide">
+                                {{ str_replace('_', ' ', app('tenant')->plano) }}
+                            </span>
+                        @endif
                     @endif
                 </div>
 
-                <div class="flex items-center gap-4">
-                    <button type="button" class="relative text-text-secondary hover:text-text-primary" aria-label="Notificações">
+                <div class="flex items-center gap-3">
+                    <button type="button" class="relative w-9 h-9 flex items-center justify-center rounded-control text-text-secondary hover:bg-surface hover:text-text-primary transition-colors" aria-label="Notificações">
                         <x-heroicon-o-bell class="w-5 h-5" />
                     </button>
 
+                    <div class="w-px h-6 bg-border"></div>
+
                     <div class="relative" x-data="{ aberto: false }">
-                        <button @click="aberto = !aberto" type="button" class="flex items-center gap-2">
-                            <span class="w-8 h-8 rounded-full bg-primary-soft text-primary flex items-center justify-center text-sm font-semibold">
+                        <button @click="aberto = !aberto" type="button" class="flex items-center gap-2 px-1.5 py-1 rounded-control hover:bg-surface transition-colors">
+                            <span class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold shadow-soft">
                                 {{ strtoupper(substr(auth()->user()->name ?? '?', 0, 1)) }}
                             </span>
+                            <x-heroicon-o-chevron-down class="w-3.5 h-3.5 text-text-secondary hidden sm:block" />
                         </button>
                         <div x-show="aberto" @click.outside="aberto = false" x-transition
-                             class="absolute right-0 mt-2 w-48 bg-bg border border-border rounded-card shadow-sm py-1 z-10"
+                             class="absolute right-0 mt-2 w-52 bg-bg border border-border rounded-card shadow-soft-lg py-1 z-30 overflow-hidden"
                              style="display: none;">
-                            <div class="px-4 py-2 text-sm text-text-primary border-b border-border">
-                                {{ auth()->user()->name }}
+                            <div class="px-4 py-3 border-b border-border">
+                                <div class="text-sm font-medium text-text-primary">{{ auth()->user()->name }}</div>
+                                <div class="text-xs text-text-secondary">{{ auth()->user()->email }}</div>
                             </div>
-                            <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-text-secondary hover:bg-surface">Meu perfil</a>
+                            <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-text-secondary hover:bg-surface hover:text-text-primary">
+                                <x-heroicon-o-user-circle class="w-4 h-4" /> Meu perfil
+                            </a>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-error hover:bg-surface">Sair</button>
+                                <button type="submit" class="w-full flex items-center gap-2 text-left px-4 py-2 text-sm text-error hover:bg-error/5">
+                                    <x-heroicon-o-arrow-right-start-on-rectangle class="w-4 h-4" /> Sair
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -121,7 +157,8 @@
 
             <main class="flex-1 p-6 bg-surface">
                 @if (session('sucesso'))
-                    <div class="mb-4 px-4 py-3 rounded-card bg-success/10 text-success text-sm">
+                    <div class="mb-4 flex items-center gap-2.5 px-4 py-3 rounded-card bg-success/10 text-success text-sm border border-success/20">
+                        <x-heroicon-o-check-circle class="w-5 h-5 shrink-0" />
                         {{ session('sucesso') }}
                     </div>
                 @endif

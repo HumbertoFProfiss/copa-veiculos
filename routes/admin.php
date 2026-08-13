@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ContratoPdfController;
 use App\Livewire\Anuncios;
 use App\Livewire\Clientes;
+use App\Livewire\Configuracoes;
 use App\Livewire\Contratos;
 use App\Livewire\Crm;
 use App\Livewire\Dashboard;
@@ -61,5 +62,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::get('/anuncios', Anuncios\Index::class)->name('anuncios.index');
 
         Route::get('/relatorios', Relatorios\Estoque::class)->name('relatorios.index');
+
+        Route::get('/configuracoes', Configuracoes\Index::class)->name('configuracoes.index');
     });
 });
