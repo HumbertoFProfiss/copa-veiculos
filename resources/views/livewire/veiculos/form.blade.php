@@ -117,6 +117,32 @@
             </div>
             @if ($veiculo)
                 @livewire('ia.sugestao-descricao', ['veiculo' => $veiculo], key('sugestao-descricao-'.$veiculo->id))
+            @else
+                <div class="mt-3">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xs font-semibold text-text-secondary uppercase tracking-wide">Sugestão de descrição (IA)</h3>
+                        @unless ($descricaoSugeridaPendente)
+                            <button wire:click="solicitarDescricaoIaNovoVeiculo" wire:loading.attr="disabled" type="button" class="text-xs text-primary hover:underline disabled:opacity-60">
+                                <span wire:loading.remove wire:target="solicitarDescricaoIaNovoVeiculo">Pedir sugestão</span>
+                                <span wire:loading wire:target="solicitarDescricaoIaNovoVeiculo">Escrevendo...</span>
+                            </button>
+                        @endunless
+                    </div>
+
+                    @unless ($iaDisponivel)
+                        <p class="text-xs text-text-secondary">Assistente de IA não configurado (defina AI_PROVIDER/AI_API_KEY no .env).</p>
+                    @endunless
+
+                    @if ($descricaoSugeridaPendente)
+                        <div class="bg-primary-soft border border-primary/20 rounded-control p-3">
+                            <p class="text-sm text-text-primary whitespace-pre-line">{{ $descricaoSugeridaPendente }}</p>
+                            <div class="flex items-center gap-3 mt-3">
+                                <button wire:click="usarDescricaoSugeridaPendente" type="button" class="text-xs font-medium text-success hover:underline">Usar essa descrição</button>
+                                <button wire:click="descartarDescricaoSugeridaPendente" type="button" class="text-xs text-text-secondary hover:underline">Descartar</button>
+                            </div>
+                        </div>
+                    @endif
+                </div>
             @endif
             <label class="inline-flex items-center gap-2 mt-4 text-sm text-text-secondary">
                 <input type="checkbox" wire:model="destaque" class="rounded-control border-border text-primary focus:ring-primary">

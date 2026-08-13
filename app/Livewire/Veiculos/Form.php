@@ -8,6 +8,8 @@ use App\Models\Veiculo;
 use App\Models\VeiculoOpcional;
 use App\Services\ConsultaPlaca\ConsultaPlacaException;
 use App\Services\ConsultaPlaca\ConsultaPlacaService;
+use App\Services\Ia\AiProviderFactory;
+use App\Services\Ia\DescricaoGerador;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -28,6 +30,9 @@ class Form extends Component
     public ?string $versao = '';
 
     public ?string $descricao = '';
+
+    /** Sugestão de descrição da IA ainda não aceita, usada só na tela de Novo Veículo (sem $veiculo salvo pra vincular uma IaSugestao). */
+    public ?string $descricaoSugeridaPendente = null;
 
     public ?int $ano_fabricacao = null;
 
@@ -181,6 +186,32 @@ class Form extends Component
         $this->descricao = $descricao;
     }
 
+    public function solicitarDescricaoIaNovoVeiculo(): void
+    {
+        $this->authorize('veiculos.criar');
+
+        $gerador = new DescricaoGerador(AiProviderFactory::make());
+        $this->descricaoSugeridaPendente = $gerador->gerarTexto([
+            'marca' => $this->marca,
+            'modelo' => $this->modelo,
+            'versao' => $this->versao,
+            'ano' => "{$this->ano_fabricacao}/{$this->ano_modelo}",
+            'km' => $this->km,
+            'cor' => $this->cor,
+        ], limiteCaracteres: 1000);
+    }
+
+    public function usarDescricaoSugeridaPendente(): void
+    {
+        $this->descricao = $this->descricaoSugeridaPendente;
+        $this->descricaoSugeridaPendente = null;
+    }
+
+    public function descartarDescricaoSugeridaPendente(): void
+    {
+        $this->descricaoSugeridaPendente = null;
+    }
+
     public function buscarPorPlaca(): void
     {
         $this->consultaPlacaErro = null;
@@ -315,6 +346,7 @@ class Form extends Component
             'filiais' => Filial::where('ativa', true)->orderBy('nome')->get(),
             'opcionaisCatalogo' => \App\Models\OpcionalCatalogo::orderBy('ordem')->get(),
             'categoriasCusto' => \App\Models\CategoriaFinanceira::where('tipo', 'despesa')->orderBy('nome')->get(),
+            'iaDisponivel' => AiProviderFactory::make()->disponivel(),
         ])->layout('layouts.admin', ['title' => $this->veiculo ? 'Editar veículo' : 'Novo veículo']);
     }
 }
