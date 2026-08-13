@@ -58,6 +58,9 @@ class Index extends Component
     #[Validate('nullable|string|max:30')]
     public ?string $analytics_meta_pixel_id = '';
 
+    #[Validate('required|integer|min:1|max:50')]
+    public int $limite_destaques = 6;
+
     public function mount(): void
     {
         $empresa = app('tenant');
@@ -76,6 +79,7 @@ class Index extends Component
         $this->analytics_ga4_id = $empresa->analytics_ga4_id;
         $this->analytics_gtm_id = $empresa->analytics_gtm_id;
         $this->analytics_meta_pixel_id = $empresa->analytics_meta_pixel_id;
+        $this->limite_destaques = $empresa->limite_destaques;
     }
 
     public function salvar(): void

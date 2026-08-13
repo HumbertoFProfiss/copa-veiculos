@@ -10,11 +10,13 @@ class HomeController extends Controller
 {
     public function __invoke(): View
     {
+        $empresa = app('tenant');
+
         $destaques = Veiculo::where('status', 'disponivel')
             ->where('destaque', true)
             ->with('fotos')
             ->latest()
-            ->take(6)
+            ->take($empresa->limite_destaques ?: 6)
             ->get();
 
         $ultimasAdicoes = Veiculo::where('status', 'disponivel')
@@ -24,8 +26,6 @@ class HomeController extends Controller
             ->get();
 
         $totalEstoque = Veiculo::where('status', 'disponivel')->count();
-
-        $empresa = app('tenant');
 
         return view('public.home', compact('destaques', 'ultimasAdicoes', 'totalEstoque', 'empresa'));
     }

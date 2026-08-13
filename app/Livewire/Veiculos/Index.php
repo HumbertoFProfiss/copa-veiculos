@@ -29,6 +29,26 @@ class Index extends Component
         session()->flash('sucesso', 'Veículo removido.');
     }
 
+    public function alternarDestaque(int $id): void
+    {
+        $this->authorize('veiculos.editar');
+
+        $veiculo = Veiculo::findOrFail($id);
+
+        if (! $veiculo->destaque) {
+            $limite = app('tenant')->limite_destaques ?: 6;
+            $atual = Veiculo::where('destaque', true)->count();
+
+            if ($atual >= $limite) {
+                session()->flash('erro', "Limite de {$limite} veículos em destaque atingido. Remova um destaque antes de adicionar outro (ajustável em Configurações).");
+
+                return;
+            }
+        }
+
+        $veiculo->update(['destaque' => ! $veiculo->destaque]);
+    }
+
     protected function query(): Builder
     {
         return Veiculo::query()

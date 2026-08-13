@@ -69,6 +69,13 @@
                        class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
                 @error('horario_funcionamento') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
+            <div>
+                <label class="block text-xs font-medium text-text-secondary mb-1">Limite de veículos em destaque</label>
+                <input type="number" min="1" max="50" wire:model="limite_destaques"
+                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                <p class="text-xs text-text-secondary mt-1">Quantos veículos marcados com estrela aparecem na home do site.</p>
+                @error('limite_destaques') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
+            </div>
             <div class="sm:col-span-2">
                 <label class="block text-xs font-medium text-text-secondary mb-1">Endereço</label>
                 <input type="text" wire:model="endereco" placeholder="Av. Exemplo, 1000 - Bairro"

@@ -64,6 +64,7 @@ class Empresa extends Model
         'analytics_ga4_id',
         'analytics_gtm_id',
         'analytics_meta_pixel_id',
+        'limite_destaques',
     ];
 
     protected function casts(): array

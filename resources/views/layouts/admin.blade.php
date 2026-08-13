@@ -195,6 +195,13 @@
                     </div>
                 @endif
 
+                @if (session('erro'))
+                    <div class="mb-4 flex items-center gap-2.5 px-4 py-3 rounded-card bg-error/10 text-error text-sm border border-error/20">
+                        <x-heroicon-o-exclamation-triangle class="w-5 h-5 shrink-0" />
+                        {{ session('erro') }}
+                    </div>
+                @endif
+
                 {{ $slot }}
             </main>
         </div>

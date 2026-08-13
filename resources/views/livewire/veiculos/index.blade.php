@@ -43,6 +43,7 @@
     <x-admin.data-table>
         <x-slot:head>
             <th class="w-10 px-4 py-3"><input type="checkbox" wire:model.live="selecionarTodos"></th>
+            <th class="w-10 px-4 py-3"></th>
             <th class="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wide">Foto</th>
             <x-admin.th-sort coluna="modelo" :ordenar-por="$ordenarPor" :ordenar-direcao="$ordenarDirecao">Veículo</x-admin.th-sort>
             <x-admin.th-sort coluna="ano_modelo" :ordenar-por="$ordenarPor" :ordenar-direcao="$ordenarDirecao">Ano</x-admin.th-sort>
@@ -57,6 +58,17 @@
             <tr wire:key="veiculo-{{ $veiculo->id }}" class="hover:bg-surface">
                 <td class="px-4 py-3">
                     <input type="checkbox" value="{{ $veiculo->id }}" wire:model.live="selecionados">
+                </td>
+                <td class="px-4 py-3">
+                    <button wire:click="alternarDestaque({{ $veiculo->id }})" type="button"
+                            title="{{ $veiculo->destaque ? 'Remover destaque' : 'Marcar como destaque na home do site' }}"
+                            class="{{ $veiculo->destaque ? 'text-warning' : 'text-text-secondary hover:text-warning' }}">
+                        @if ($veiculo->destaque)
+                            <x-heroicon-s-star class="w-5 h-5" />
+                        @else
+                            <x-heroicon-o-star class="w-5 h-5" />
+                        @endif
+                    </button>
                 </td>
                 <td class="px-4 py-3">
                     @if ($veiculo->fotos->isNotEmpty())
@@ -105,7 +117,7 @@
             </tr>
         @empty
             <tr>
-                <td colspan="9" class="px-4 py-12 text-center text-text-secondary text-sm">
+                <td colspan="10" class="px-4 py-12 text-center text-text-secondary text-sm">
                     Nenhum veículo encontrado.
                 </td>
             </tr>
