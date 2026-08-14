@@ -19,7 +19,7 @@
             </div>
             <div>
                 <div class="text-xs text-text-secondary mb-1">Plano</div>
-                <x-admin.status-badge variant="info" :label="ucfirst(str_replace('_', ' ', $empresa->plano))" />
+                <x-admin.status-badge variant="info" :label="$empresa->nomePlanoExibicao()" />
             </div>
         </div>
     </div>
@@ -217,13 +217,22 @@
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
             <div>
                 <div class="text-xs text-text-secondary mb-1">Plano atual</div>
-                <x-admin.status-badge variant="info" :label="ucfirst(str_replace('_', ' ', $empresa->plano))" />
+                <x-admin.status-badge variant="info" :label="$empresa->nomePlanoExibicao()" />
             </div>
             <div>
                 <div class="text-xs text-text-secondary mb-1">Valor mensal</div>
                 <div class="text-sm font-medium text-text-primary tabular-nums">
                     {{ $precoPlanoAtual !== null ? 'R$ '.number_format($precoPlanoAtual, 2, ',', '.') : '—' }}
                 </div>
+                @if ($empresa->plano === 'completo_opcionais' && $empresa->diasRestantesTrial() !== null)
+                    <div class="text-xs {{ $empresa->diasRestantesTrial() > 0 ? 'text-warning' : 'text-error' }} mt-1">
+                        @if ($empresa->diasRestantesTrial() > 0)
+                            {{ $empresa->diasRestantesTrial() }} {{ $empresa->diasRestantesTrial() === 1 ? 'dia restante' : 'dias restantes' }} de teste
+                        @else
+                            Período de teste encerrado
+                        @endif
+                    </div>
+                @endif
             </div>
             @php $proximaPendente = $faturas->firstWhere('status', 'pendente') ?? $faturas->firstWhere('status', 'atrasada'); @endphp
             <div>

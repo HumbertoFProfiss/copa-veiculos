@@ -36,11 +36,15 @@ class Empresa extends Model
      * "somente_site" nao teve valor definido no prompt - R$97 e um
      * placeholder razoavel pro produto reduzido, ajustavel aqui se o
      * valor real de mercado definido pelo usuario for outro.
+     *
+     * "completo_opcionais" esta zerado a principio - vira periodo de teste
+     * de 7 dias (ver nomePlanoExibicao/diasRestantesTrial) em vez de cobrar
+     * os R$550/mes originais, por decisao explicita do usuario.
      */
     public const PRECOS_PLANOS = [
         'somente_site' => 97.00,
         'completo' => 300.00,
-        'completo_opcionais' => 550.00,
+        'completo_opcionais' => 0.00,
     ];
 
     protected $fillable = [
@@ -74,6 +78,40 @@ class Empresa extends Model
         return [
             'trial_termina_em' => 'datetime',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function (Empresa $empresa) {
+            if ($empresa->plano === 'completo_opcionais' && ! $empresa->trial_termina_em) {
+                $empresa->trial_termina_em = now()->addDays(7);
+            }
+        });
+    }
+
+    public function nomePlanoExibicao(): string
+    {
+        if ($this->plano === 'completo_opcionais') {
+            return 'Período de teste - 7 dias';
+        }
+
+        return ucfirst(str_replace('_', ' ', $this->plano));
+    }
+
+    /**
+     * null quando nao ha data de teste definida; 0 quando ja encerrou.
+     */
+    public function diasRestantesTrial(): ?int
+    {
+        if (! $this->trial_termina_em) {
+            return null;
+        }
+
+        if ($this->trial_termina_em->isPast()) {
+            return 0;
+        }
+
+        return (int) ceil(now()->diffInHours($this->trial_termina_em) / 24);
     }
 
     public function usuarios(): HasMany

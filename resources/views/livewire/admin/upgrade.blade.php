@@ -5,7 +5,7 @@
     <h1 class="text-xl font-semibold text-text-primary mb-2">Módulo não incluído no seu plano</h1>
     <p class="text-text-secondary mb-1">
         Seu plano atual é
-        <x-admin.status-badge variant="info" :label="ucfirst(str_replace('_', ' ', app('tenant')->plano))" />
+        <x-admin.status-badge variant="info" :label="app('tenant')->nomePlanoExibicao()" />
     </p>
     <p class="text-text-secondary mt-4">
         O módulo <strong class="text-text-primary">{{ ucfirst($modulo) }}</strong> não está incluído no seu plano
