@@ -67,4 +67,26 @@ class Contrato extends Model
             default => 'neutral',
         };
     }
+
+    public const ASSINATURA_STATUS_LABELS = [
+        'nao_iniciada' => 'Não iniciada',
+        'pendente' => 'Aguardando assinatura (simulação)',
+        'assinado' => 'Assinado (simulação)',
+        'recusado' => 'Recusado (simulação)',
+    ];
+
+    public function assinaturaStatusLabel(): string
+    {
+        return self::ASSINATURA_STATUS_LABELS[$this->assinatura_status] ?? $this->assinatura_status;
+    }
+
+    public function assinaturaStatusVariant(): string
+    {
+        return match ($this->assinatura_status) {
+            'assinado' => 'success',
+            'pendente' => 'warning',
+            'recusado' => 'error',
+            default => 'neutral',
+        };
+    }
 }

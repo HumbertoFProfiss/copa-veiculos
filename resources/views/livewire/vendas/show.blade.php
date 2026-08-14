@@ -113,6 +113,132 @@
         </div>
     @endif
 
+    @if (session('erro'))
+        <div class="mb-4 flex items-center gap-2.5 px-4 py-3 rounded-card bg-error/10 text-error text-sm border border-error/20">
+            <x-heroicon-o-exclamation-triangle class="w-5 h-5 shrink-0" />
+            {{ session('erro') }}
+        </div>
+    @endif
+
+    <div class="bg-bg border border-border rounded-card p-5 mb-6">
+        <div class="flex items-center justify-between mb-1">
+            <h2 class="text-sm font-semibold text-text-primary">Proposta de financiamento (MultiBanco)</h2>
+            @can('vendas.criar')
+                <button wire:click="abrirFormFinanciamento" type="button" class="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline">
+                    <x-heroicon-o-plus class="w-3.5 h-3.5" /> Simular proposta
+                </button>
+            @endcan
+        </div>
+        <p class="text-xs text-warning mb-4 font-medium">SIMULAÇÃO — proposta ilustrativa, sem envio real ao banco. Taxas cadastradas manualmente aqui dentro; aprovação real depende de análise do banco escolhido.</p>
+
+        @forelse ($venda->propostasFinanciamento as $proposta)
+            <div class="flex items-center justify-between gap-3 px-3 py-2.5 rounded-control bg-surface mb-2">
+                <div class="min-w-0">
+                    <p class="text-sm font-medium text-text-primary truncate">{{ $proposta->banco->nome }} — {{ $proposta->num_parcelas }}x de R$ {{ number_format($proposta->valor_parcela, 2, ',', '.') }}</p>
+                    <p class="text-xs text-text-secondary">
+                        Financiado: R$ {{ number_format($proposta->valor_financiado, 2, ',', '.') }} · Entrada: R$ {{ number_format($proposta->entrada, 2, ',', '.') }} · Taxa: {{ number_format($proposta->taxa_juros_am, 2, ',', '.') }}% a.m.
+                    </p>
+                </div>
+                <div class="flex items-center gap-3 shrink-0">
+                    <x-admin.status-badge :variant="$proposta->statusVariant()" :label="$proposta->statusLabel()" />
+                    @can('vendas.criar')
+                        @if ($proposta->status === 'simulada')
+                            <button wire:click="aprovarProposta({{ $proposta->id }})" type="button" class="text-xs text-success hover:underline">Aprovar</button>
+                            <button wire:click="recusarProposta({{ $proposta->id }})" type="button" class="text-xs text-error hover:underline">Recusar</button>
+                        @endif
+                        <button wire:click="excluirProposta({{ $proposta->id }})" wire:confirm="Excluir essa proposta?" type="button" class="text-text-secondary hover:text-error">
+                            <x-heroicon-o-trash class="w-4 h-4" />
+                        </button>
+                    @endcan
+                </div>
+            </div>
+        @empty
+            <p class="text-sm text-text-secondary py-4">Nenhuma proposta de financiamento simulada pra essa venda.</p>
+        @endforelse
+    </div>
+
+    @if ($mostrarFormFinanciamento)
+        <div class="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-20" wire:click.self="$set('mostrarFormFinanciamento', false)">
+            <div class="bg-bg rounded-card border border-border w-full max-w-lg p-6">
+                <h2 class="text-lg font-semibold text-text-primary mb-1">Simular proposta de financiamento</h2>
+                <p class="text-xs text-warning mb-4 font-medium">SIMULAÇÃO — cálculo real de parcela, mas sem envio ao banco.</p>
+                <form wire:submit="simularFinanciamento" class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-medium text-text-secondary mb-1">Banco *</label>
+                        <select wire:model="financiamento_banco_id" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                            <option value="">Selecione...</option>
+                            @foreach ($bancos as $banco)
+                                <option value="{{ $banco->id }}">{{ $banco->nome }} ({{ number_format($banco->taxa_juros_am_padrao, 2, ',', '.') }}% a.m.)</option>
+                            @endforeach
+                        </select>
+                        @error('financiamento_banco_id') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-text-secondary mb-1">Valor financiado (R$) *</label>
+                            <input type="number" step="0.01" min="0" wire:model="financiamento_valor_financiado" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                            @error('financiamento_valor_financiado') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-text-secondary mb-1">Entrada (R$)</label>
+                            <input type="number" step="0.01" min="0" wire:model="financiamento_entrada" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-text-secondary mb-1">Número de parcelas *</label>
+                        <input type="number" min="1" max="60" wire:model="financiamento_num_parcelas" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                        @error('financiamento_num_parcelas') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    <div class="flex items-center gap-3 pt-2">
+                        <button type="submit" class="px-4 py-2 rounded-control bg-primary text-white text-sm font-medium hover:bg-primary-light">Simular</button>
+                        <button type="button" wire:click="$set('mostrarFormFinanciamento', false)" class="px-4 py-2 rounded-control border border-border text-sm text-text-secondary hover:bg-surface">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endif
+
+    <div class="bg-bg border border-border rounded-card p-5 mb-6">
+        <div class="flex items-center justify-between mb-1">
+            <h2 class="text-sm font-semibold text-text-primary">Nota fiscal</h2>
+            @can('vendas.criar')
+                @if ($venda->status === 'confirmada' && ! $venda->notasFiscais->where('status', 'emitida')->count())
+                    <button wire:click="emitirNotaFiscal" wire:confirm="Emitir uma nota fiscal SIMULADA pra essa venda? Documento sem validade fiscal, só pra demonstração do sistema."
+                            type="button" class="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline">
+                        <x-heroicon-o-document-text class="w-3.5 h-3.5" /> Emitir nota fiscal (simulação)
+                    </button>
+                @endif
+            @endcan
+        </div>
+        <p class="text-xs text-warning mb-4 font-medium">SIMULAÇÃO — sem validade fiscal/jurídica. Emitir de verdade depende de certificado digital e credenciamento na SEFAZ.</p>
+
+        @forelse ($venda->notasFiscais as $nota)
+            <div class="flex items-center justify-between gap-3 px-3 py-2.5 rounded-control bg-surface mb-2">
+                <div class="min-w-0">
+                    <p class="text-sm font-medium text-text-primary truncate">NF-e simulada nº {{ $nota->numero }}/{{ $nota->serie }} — R$ {{ number_format($nota->valor, 2, ',', '.') }}</p>
+                    <p class="text-xs text-text-secondary font-mono truncate">Chave (simulada): {{ $nota->chave_acesso }}</p>
+                </div>
+                <div class="flex items-center gap-3 shrink-0">
+                    <x-admin.status-badge :variant="$nota->statusVariant()" :label="$nota->statusLabel()" />
+                    <a href="{{ route('admin.notas-fiscais.pdf', $nota) }}" target="_blank" class="text-xs text-primary hover:underline">PDF</a>
+                    @can('vendas.criar')
+                        @if ($nota->status === 'emitida')
+                            <button wire:click="cancelarNotaFiscal({{ $nota->id }})" wire:confirm="Cancelar essa nota fiscal simulada?" type="button" class="text-xs text-error hover:underline">Cancelar</button>
+                        @endif
+                    @endcan
+                </div>
+            </div>
+        @empty
+            <p class="text-sm text-text-secondary py-4">
+                @if ($venda->status !== 'confirmada')
+                    Nota fiscal só pode ser emitida quando a venda estiver confirmada.
+                @else
+                    Nenhuma nota fiscal emitida pra essa venda.
+                @endif
+            </p>
+        @endforelse
+    </div>
+
     <div class="bg-bg border border-border rounded-card p-5">
         <div class="flex items-center justify-between mb-1">
             <h2 class="text-sm font-semibold text-text-primary">Garantia</h2>

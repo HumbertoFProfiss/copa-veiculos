@@ -63,4 +63,14 @@ class Venda extends Model
     {
         return $this->hasMany(GarantiaChamado::class);
     }
+
+    public function propostasFinanciamento(): HasMany
+    {
+        return $this->hasMany(PropostaFinanciamento::class);
+    }
+
+    public function notasFiscais(): HasMany
+    {
+        return $this->hasMany(NotaFiscal::class);
+    }
 }
