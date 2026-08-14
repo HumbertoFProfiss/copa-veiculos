@@ -6,6 +6,7 @@ use App\Models\Banco;
 use App\Models\GarantiaChamado;
 use App\Models\NotaFiscal;
 use App\Models\PropostaFinanciamento;
+use App\Models\RenaveTransferencia;
 use App\Models\Venda;
 use App\Services\Vendas\ConfirmadorVenda;
 use Livewire\Component;
@@ -218,9 +219,44 @@ class Show extends Component
         session()->flash('sucesso', 'Nota fiscal simulada cancelada.');
     }
 
+    public function gerarTransferenciaRenave(): void
+    {
+        $this->authorize('vendas.criar');
+
+        if ($this->venda->status !== 'confirmada') {
+            session()->flash('erro', 'Só é possível registrar a transferência Renave de uma venda confirmada.');
+
+            return;
+        }
+
+        if ($this->venda->renaveTransferencias()->where('status', 'concluida')->exists()) {
+            session()->flash('erro', 'Já existe uma transferência Renave concluída pra essa venda.');
+
+            return;
+        }
+
+        $this->venda->renaveTransferencias()->create([
+            'gerada_por' => auth()->id(),
+            'protocolo' => RenaveTransferencia::gerarProtocoloSimulado(),
+            'status' => 'concluida',
+            'transferida_em' => now(),
+        ]);
+
+        $this->venda->refresh();
+        session()->flash('sucesso', 'Transferência Renave simulada registrada.');
+    }
+
+    public function cancelarTransferenciaRenave(int $id): void
+    {
+        $this->authorize('vendas.criar');
+        RenaveTransferencia::findOrFail($id)->update(['status' => 'cancelada', 'cancelada_em' => now()]);
+        $this->venda->refresh();
+        session()->flash('sucesso', 'Transferência Renave simulada cancelada.');
+    }
+
     public function render()
     {
-        $this->venda->load(['veiculo', 'cliente', 'vendedor', 'filial', 'parcelas', 'carroTroca', 'garantiasChamados', 'propostasFinanciamento.banco', 'notasFiscais']);
+        $this->venda->load(['veiculo', 'cliente', 'vendedor', 'filial', 'parcelas', 'carroTroca', 'garantiasChamados', 'propostasFinanciamento.banco', 'notasFiscais', 'renaveTransferencias']);
 
         return view('livewire.vendas.show', [
             'statusLabels' => GarantiaChamado::STATUS_LABELS,

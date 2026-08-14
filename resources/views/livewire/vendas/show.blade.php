@@ -239,6 +239,47 @@
         @endforelse
     </div>
 
+    <div class="bg-bg border border-border rounded-card p-5 mb-6">
+        <div class="flex items-center justify-between mb-1">
+            <h2 class="text-sm font-semibold text-text-primary">Transferência Renave</h2>
+            @can('vendas.criar')
+                @if ($venda->status === 'confirmada' && ! $venda->renaveTransferencias->where('status', 'concluida')->count())
+                    <button wire:click="gerarTransferenciaRenave" wire:confirm="Registrar uma transferência Renave SIMULADA pra essa venda? Documento sem validade legal, só pra demonstração do sistema."
+                            type="button" class="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline">
+                        <x-heroicon-o-truck class="w-3.5 h-3.5" /> Registrar transferência (simulação)
+                    </button>
+                @endif
+            @endcan
+        </div>
+        <p class="text-xs text-warning mb-4 font-medium">SIMULAÇÃO — sem validade legal. Registrar de verdade depende de credenciamento no Registro Nacional de Veículos Automotores (DENATRAN).</p>
+
+        @forelse ($venda->renaveTransferencias as $transferencia)
+            <div class="flex items-center justify-between gap-3 px-3 py-2.5 rounded-control bg-surface mb-2">
+                <div class="min-w-0">
+                    <p class="text-sm font-medium text-text-primary truncate">Protocolo {{ $transferencia->protocolo }}</p>
+                    <p class="text-xs text-text-secondary">Registrada em {{ $transferencia->transferida_em->format('d/m/Y H:i') }}</p>
+                </div>
+                <div class="flex items-center gap-3 shrink-0">
+                    <x-admin.status-badge :variant="$transferencia->statusVariant()" :label="$transferencia->statusLabel()" />
+                    <a href="{{ route('admin.renave.pdf', $transferencia) }}" target="_blank" class="text-xs text-primary hover:underline">PDF</a>
+                    @can('vendas.criar')
+                        @if ($transferencia->status === 'concluida')
+                            <button wire:click="cancelarTransferenciaRenave({{ $transferencia->id }})" wire:confirm="Cancelar essa transferência Renave simulada?" type="button" class="text-xs text-error hover:underline">Cancelar</button>
+                        @endif
+                    @endcan
+                </div>
+            </div>
+        @empty
+            <p class="text-sm text-text-secondary py-4">
+                @if ($venda->status !== 'confirmada')
+                    Transferência Renave só pode ser registrada quando a venda estiver confirmada.
+                @else
+                    Nenhuma transferência Renave registrada pra essa venda.
+                @endif
+            </p>
+        @endforelse
+    </div>
+
     <div class="bg-bg border border-border rounded-card p-5">
         <div class="flex items-center justify-between mb-1">
             <h2 class="text-sm font-semibold text-text-primary">Garantia</h2>

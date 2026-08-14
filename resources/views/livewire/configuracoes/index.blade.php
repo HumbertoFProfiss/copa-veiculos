@@ -185,7 +185,11 @@
         <x-admin.integracao-card
             icon="truck"
             titulo="Renave"
-            requisito="credenciamento no Registro Nacional de Veículos Automotores (DENATRAN)." />
+            :configurada="true"
+            :demo="true"
+            detalhe="Registro de transferência simulado disponível em cada venda confirmada — protocolo fictício gerado automaticamente, com aviso de simulação no comprovante. Registrar de verdade ainda depende de credenciamento no Registro Nacional de Veículos Automotores (DENATRAN)."
+            requisito="credenciamento no Registro Nacional de Veículos Automotores (DENATRAN)."
+            :link-demo="route('admin.vendas.index')" />
 
         <x-admin.integracao-card
             icon="chat-bubble-left-right"

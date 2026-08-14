@@ -8,19 +8,22 @@ uses(Tests\TestCase::class);
 
 beforeEach(fn () => usarMysqlRealDeDev());
 
-it('mostra NF-e, assinatura eletronica e MultiBanco como demo configurada, e Renave continua nao configurada', function () {
+it('mostra NF-e, assinatura eletronica, MultiBanco e Renave como demo configurada', function () {
     $empresa = Empresa::first();
     app()->instance('tenant', $empresa);
     $user = usuarioProprietario($empresa);
 
-    Livewire::actingAs($user)->test(ConfiguracoesIndex::class)
+    $componente = Livewire::actingAs($user)->test(ConfiguracoesIndex::class)
         ->assertSeeHtml('Configurada (demo)')
         ->assertSeeHtml('Ver demonstração')
         ->assertSee('Nota Fiscal Eletrônica (NF-e)')
         ->assertSee('Assinatura eletrônica')
         ->assertSee('MultiBanco (financiamento)')
-        ->assertSee('Renave')
-        ->assertSee('Não configurada');
+        ->assertSee('Renave');
+
+    $html = $componente->html();
+    $posicaoRenave = strpos($html, '>Renave<');
+    expect(substr($html, $posicaoRenave, 400))->toContain('Configurada (demo)');
 });
 
 it('mostra WhatsApp Business e Portais com API como configurados de verdade (nao e simulacao)', function () {

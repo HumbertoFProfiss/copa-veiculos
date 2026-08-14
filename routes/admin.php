@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ContratoPdfController;
 use App\Http\Controllers\Admin\NotaFiscalPdfController;
+use App\Http\Controllers\Admin\RenaveTransferenciaPdfController;
 use App\Livewire\Admin\Upgrade;
 use App\Livewire\Anuncios;
 use App\Livewire\Chamadas;
@@ -74,6 +75,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::get('/vendas/nova', Vendas\Nova::class)->name('vendas.nova');
             Route::get('/vendas/{venda}', Vendas\Show::class)->name('vendas.show');
             Route::get('/notas-fiscais/{notaFiscal}/pdf', NotaFiscalPdfController::class)->name('notas-fiscais.pdf');
+            Route::get('/renave/{renaveTransferencia}/pdf', RenaveTransferenciaPdfController::class)->name('renave.pdf');
         });
 
         Route::middleware('modulo:contratos')->group(function () {

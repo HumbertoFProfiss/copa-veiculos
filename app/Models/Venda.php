@@ -73,4 +73,9 @@ class Venda extends Model
     {
         return $this->hasMany(NotaFiscal::class);
     }
+
+    public function renaveTransferencias(): HasMany
+    {
+        return $this->hasMany(RenaveTransferencia::class);
+    }
 }
