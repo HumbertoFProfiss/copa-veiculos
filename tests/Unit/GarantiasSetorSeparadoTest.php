@@ -45,7 +45,7 @@ beforeEach(function () {
 });
 
 afterEach(function () {
-    GarantiaChamado::whereIn('id', [$this->chamadoAberto->id, $this->chamadoAprovado->id])->delete();
+    GarantiaChamado::where('venda_id', $this->venda->id)->delete();
     $this->venda->delete();
     $this->veiculo->delete();
     $this->cliente->delete();
@@ -77,4 +77,34 @@ it('o link do menu lateral e a rota de garantias estao acessiveis pra quem tem p
         ->get(route('admin.garantias.index'))
         ->assertOk()
         ->assertSee('Garantias');
+});
+
+it('cria um novo chamado de garantia direto na tela de garantias, escolhendo a venda', function () {
+    Livewire::actingAs($this->user)->test(GarantiasIndex::class)
+        ->call('novaGarantia')
+        ->set('venda_id', $this->venda->id)
+        ->set('descricao_problema', 'Chave reserva nao funciona')
+        ->set('novoStatus', 'aberto')
+        ->set('custo_peca', 80)
+        ->set('custo_servico', 0)
+        ->call('salvarGarantia')
+        ->assertHasNoErrors()
+        ->assertSee('Chave reserva nao funciona');
+
+    $chamado = GarantiaChamado::where('venda_id', $this->venda->id)
+        ->where('descricao_problema', 'Chave reserva nao funciona')
+        ->first();
+
+    expect($chamado)->not->toBeNull()
+        ->and($chamado->veiculo_id)->toBe($this->veiculo->id)
+        ->and($chamado->cliente_id)->toBe($this->cliente->id)
+        ->and((float) $chamado->custo_peca)->toBe(80.0);
+});
+
+it('exige a selecao de uma venda pra criar o chamado', function () {
+    Livewire::actingAs($this->user)->test(GarantiasIndex::class)
+        ->call('novaGarantia')
+        ->set('descricao_problema', 'Sem venda selecionada')
+        ->call('salvarGarantia')
+        ->assertHasErrors(['venda_id']);
 });
