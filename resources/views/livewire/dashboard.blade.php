@@ -50,6 +50,38 @@
         </div>
     </div>
 
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+        <div class="bg-bg border border-border rounded-card p-5 shadow-soft hover:shadow-soft-md transition-shadow">
+            <div class="flex items-start justify-between mb-3">
+                <div class="w-10 h-10 rounded-control bg-success/10 text-success flex items-center justify-center">
+                    <x-heroicon-o-banknotes class="w-5 h-5" />
+                </div>
+            </div>
+            <div class="text-xs font-medium text-text-secondary uppercase tracking-wide mb-1">Faturamento bruto (mês)</div>
+            <div class="text-2xl font-semibold text-text-primary tabular-nums">R$ {{ number_format($faturamentoBrutoMes, 2, ',', '.') }}</div>
+        </div>
+
+        <div class="bg-bg border border-border rounded-card p-5 shadow-soft hover:shadow-soft-md transition-shadow">
+            <div class="flex items-start justify-between mb-3">
+                <div class="w-10 h-10 rounded-control flex items-center justify-center {{ $lucroLiquidoMes >= 0 ? 'bg-success/10 text-success' : 'bg-error/10 text-error' }}">
+                    <x-heroicon-o-chart-bar class="w-5 h-5" />
+                </div>
+            </div>
+            <div class="text-xs font-medium text-text-secondary uppercase tracking-wide mb-1">Lucro líquido (mês)</div>
+            <div class="text-2xl font-semibold tabular-nums {{ $lucroLiquidoMes >= 0 ? 'text-success' : 'text-error' }}">R$ {{ number_format($lucroLiquidoMes, 2, ',', '.') }}</div>
+        </div>
+
+        <div class="bg-bg border border-border rounded-card p-5 shadow-soft hover:shadow-soft-md transition-shadow">
+            <div class="flex items-start justify-between mb-3">
+                <div class="w-10 h-10 rounded-control bg-warning/10 text-warning flex items-center justify-center">
+                    <x-heroicon-o-wrench-screwdriver class="w-5 h-5" />
+                </div>
+            </div>
+            <div class="text-xs font-medium text-text-secondary uppercase tracking-wide mb-1">Custos pós-venda (mês)</div>
+            <div class="text-2xl font-semibold text-text-primary tabular-nums">R$ {{ number_format($custosPosVendaMes, 2, ',', '.') }}</div>
+        </div>
+    </div>
+
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="bg-bg border border-border rounded-card p-4 shadow-soft flex items-center gap-3">
             <div class="w-9 h-9 shrink-0 rounded-control bg-surface text-text-secondary flex items-center justify-center">
@@ -108,8 +140,33 @@
         </div>
     </div>
 
-    <div class="bg-bg border border-border rounded-card p-5 shadow-soft mt-4">
-        <h2 class="text-sm font-semibold text-text-primary mb-4">Atividades recentes</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
+        <div class="bg-bg border border-border rounded-card p-5 shadow-soft">
+            <h2 class="text-sm font-semibold text-text-primary mb-4">Ranking de vendedores (mês)</h2>
+            @if ($rankingVendedores->isNotEmpty())
+                <div class="space-y-1">
+                    @foreach ($rankingVendedores as $i => $item)
+                        <div class="flex items-center gap-3 px-2 py-2 rounded-control {{ $i === 0 ? 'bg-warning/10' : '' }}">
+                            <div class="w-6 text-center shrink-0">
+                                @if ($i === 0)
+                                    <x-heroicon-s-trophy class="w-4 h-4 text-warning inline" />
+                                @else
+                                    <span class="text-xs text-text-secondary tabular-nums">{{ $i + 1 }}º</span>
+                                @endif
+                            </div>
+                            <span class="text-sm text-text-primary flex-1 min-w-0 truncate">{{ $item['vendedor']?->name ?? '—' }}</span>
+                            <span class="text-xs text-text-secondary shrink-0">{{ $item['quantidade'] }} venda(s)</span>
+                            <span class="text-sm font-medium text-text-primary tabular-nums shrink-0">R$ {{ number_format($item['faturamento'], 0, ',', '.') }}</span>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <p class="text-sm text-text-secondary py-4">Nenhuma venda confirmada este mês ainda.</p>
+            @endif
+        </div>
+
+        <div class="bg-bg border border-border rounded-card p-5 shadow-soft">
+            <h2 class="text-sm font-semibold text-text-primary mb-4">Atividades recentes</h2>
         @if ($atividades->isNotEmpty())
             <div class="space-y-1">
                 @foreach ($atividades as $atividade)
@@ -125,6 +182,7 @@
         @else
             <p class="text-sm text-text-secondary py-4">Nenhuma atividade registrada ainda.</p>
         @endif
+        </div>
     </div>
 
     <script>

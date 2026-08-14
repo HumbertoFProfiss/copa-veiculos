@@ -185,7 +185,17 @@ class Veiculo extends Model
 
     public function margem(): ?float
     {
-        if (! $this->preco_venda || ! $this->preco_compra) {
+        if (! $this->preco_venda) {
+            return null;
+        }
+
+        // Consignado não tem "preço de compra" - o ganho da revenda é a
+        // comissão combinada com o consignante, não venda-menos-compra.
+        if ($this->tipo_propriedade === 'consignado') {
+            return $this->comissaoConsignado((float) $this->preco_venda) - $this->custosGarantiaConfirmados();
+        }
+
+        if (! $this->preco_compra) {
             return null;
         }
 

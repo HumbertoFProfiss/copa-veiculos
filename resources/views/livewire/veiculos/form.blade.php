@@ -213,33 +213,30 @@
                         <input type="text" wire:model="consignado_telefone" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-text-secondary mb-1">Comissão da revenda</label>
-                        <select wire:model.live="consignado_comissao_tipo" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
-                            <option value="">Selecione</option>
-                            <option value="fixa">Valor fixo (R$)</option>
-                            <option value="percentual">Percentual (%)</option>
-                        </select>
+                        <label class="block text-xs font-medium text-text-secondary mb-1">Comissão da revenda (R$)</label>
+                        <input type="number" step="0.01" min="0" wire:model.live="consignado_comissao_rs" placeholder="Ex: 2000"
+                               class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
                     </div>
-                    @if ($consignado_comissao_tipo)
-                        <div>
-                            <label class="block text-xs font-medium text-text-secondary mb-1">
-                                {{ $consignado_comissao_tipo === 'percentual' ? 'Percentual da comissão (%)' : 'Valor da comissão (R$)' }}
-                            </label>
-                            <input type="number" step="0.01" min="0" wire:model.live="consignado_comissao_valor" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                    <div>
+                        <label class="block text-xs font-medium text-text-secondary mb-1">Comissão da revenda (%)</label>
+                        <input type="number" step="0.01" min="0" max="100" wire:model.live="consignado_comissao_pct" placeholder="Ex: 10"
+                               class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                    </div>
+                    <p class="sm:col-span-2 lg:col-span-3 text-xs text-text-secondary -mt-2">
+                        Preencha um dos dois — o outro é calculado sozinho a partir do Valor de venda (na aba "Preços" abaixo).
+                    </p>
+                    @if ($preco_venda && $consignado_comissao_valor)
+                        @php
+                            $comissaoPreview = $consignado_comissao_tipo === 'percentual'
+                                ? round($preco_venda * ($consignado_comissao_valor / 100), 2)
+                                : (float) $consignado_comissao_valor;
+                            $repassePreview = round($preco_venda - $comissaoPreview, 2);
+                        @endphp
+                        <div class="sm:col-span-2 lg:col-span-3 flex items-center gap-2 text-sm text-text-secondary">
+                            <x-heroicon-o-banknotes class="w-4 h-4 shrink-0 text-primary" />
+                            <span>Comissão da revenda: <strong class="text-text-primary tabular-nums">R$ {{ number_format($comissaoPreview, 2, ',', '.') }}</strong></span>
+                            <span>— Repasse ao consignante: <strong class="text-text-primary tabular-nums">R$ {{ number_format($repassePreview, 2, ',', '.') }}</strong></span>
                         </div>
-                        @if ($preco_venda && $consignado_comissao_valor)
-                            @php
-                                $comissaoPreview = $consignado_comissao_tipo === 'percentual'
-                                    ? round($preco_venda * ($consignado_comissao_valor / 100), 2)
-                                    : (float) $consignado_comissao_valor;
-                                $repassePreview = round($preco_venda - $comissaoPreview, 2);
-                            @endphp
-                            <div class="sm:col-span-2 lg:col-span-3 flex items-center gap-2 text-sm text-text-secondary">
-                                <x-heroicon-o-banknotes class="w-4 h-4 shrink-0 text-primary" />
-                                <span>Comissão da revenda: <strong class="text-text-primary tabular-nums">R$ {{ number_format($comissaoPreview, 2, ',', '.') }}</strong></span>
-                                <span>— Repasse ao consignante: <strong class="text-text-primary tabular-nums">R$ {{ number_format($repassePreview, 2, ',', '.') }}</strong></span>
-                            </div>
-                        @endif
                     @endif
                 @endif
             </div>
@@ -247,11 +244,19 @@
 
         <div class="bg-bg border border-border rounded-card p-5">
             <h2 class="text-sm font-semibold text-text-primary mb-4">Preços</h2>
+            @if ($tipo_propriedade === 'consignado')
+                <p class="text-xs text-text-secondary mb-4 flex items-center gap-1.5">
+                    <x-heroicon-o-information-circle class="w-3.5 h-3.5 shrink-0" />
+                    Veículo consignado não tem "Valor de compra" — o custo da revenda aqui é a comissão combinada com o consignante (seção "Identificação e origem" acima).
+                </p>
+            @endif
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div>
-                    <label class="block text-xs font-medium text-text-secondary mb-1">Valor de compra</label>
-                    <input type="number" step="0.01" wire:model.live.debounce.400ms="preco_compra" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
-                </div>
+                @unless ($tipo_propriedade === 'consignado')
+                    <div>
+                        <label class="block text-xs font-medium text-text-secondary mb-1">Valor de compra</label>
+                        <input type="number" step="0.01" wire:model.live.debounce.400ms="preco_compra" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                    </div>
+                @endunless
                 <div>
                     <label class="block text-xs font-medium text-text-secondary mb-1">Tabela FIPE</label>
                     <input type="number" step="0.01" wire:model.live.debounce.400ms="preco_tabela_fipe" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
@@ -359,9 +364,36 @@
     </form>
 
     @if ($veiculo)
-        <div class="bg-bg border border-border rounded-card p-5 mt-6">
+        <div id="fotos" class="bg-bg border border-border rounded-card p-5 mt-6 scroll-mt-6">
             <h2 class="text-sm font-semibold text-text-primary mb-4">Fotos</h2>
             @livewire('veiculos.foto-manager', ['veiculo' => $veiculo], key('fotos-'.$veiculo->id))
+        </div>
+
+        <div class="bg-bg border border-border rounded-card p-5 mt-6">
+            <h2 class="text-sm font-semibold text-text-primary mb-1">Vídeo</h2>
+            <p class="text-xs text-text-secondary mb-4">Link do YouTube — aparece na página do veículo no site.</p>
+
+            <form wire:submit="adicionarVideo" class="flex gap-2 mb-4">
+                <input type="url" wire:model="novoVideoUrl" placeholder="https://www.youtube.com/watch?v=..."
+                       class="flex-1 rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                <button type="submit" class="px-4 py-2 rounded-control bg-surface border border-border text-sm font-medium text-text-primary hover:bg-primary-soft">
+                    Adicionar
+                </button>
+            </form>
+            @error('novoVideoUrl') <p class="text-xs text-error -mt-2 mb-4">{{ $message }}</p> @enderror
+
+            @if ($veiculo->videos->isNotEmpty())
+                <div class="space-y-2">
+                    @foreach ($veiculo->videos as $video)
+                        <div class="flex items-center justify-between gap-3 px-3 py-2 rounded-control bg-surface border border-border text-sm">
+                            <a href="{{ $video->url }}" target="_blank" rel="noopener" class="text-primary hover:underline truncate">{{ $video->url }}</a>
+                            <button wire:click="removerVideo({{ $video->id }})" type="button" class="text-text-secondary hover:text-error shrink-0">
+                                <x-heroicon-o-x-mark class="w-4 h-4" />
+                            </button>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
 
         <div class="bg-bg border border-border rounded-card p-5 mt-6">
@@ -400,7 +432,7 @@
             </div>
         </div>
 
-        <div class="bg-bg border border-border rounded-card p-5 mt-6">
+        <div id="custos" class="bg-bg border border-border rounded-card p-5 mt-6 scroll-mt-6">
             <h2 class="text-sm font-semibold text-text-primary mb-1">Custos do veículo</h2>
             <p class="text-xs text-text-secondary mb-4">Clique numa categoria pra preencher rápido, ajuste o valor e adicione.</p>
 

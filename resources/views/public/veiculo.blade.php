@@ -60,6 +60,19 @@
                     </div>
                 @endif
 
+                @if ($veiculo->videos->isNotEmpty())
+                    <div class="mt-10">
+                        <h2 class="font-heading text-lg font-medium text-brand-900 dark:text-white mb-4">Vídeo</h2>
+                        @foreach ($veiculo->videos as $video)
+                            @if ($video->urlEmbed())
+                                <div class="aspect-video rounded-2xl overflow-hidden mb-4">
+                                    <iframe src="{{ $video->urlEmbed() }}" class="w-full h-full" allowfullscreen loading="lazy" title="Vídeo do veículo"></iframe>
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
+                @endif
+
                 @if ($veiculo->descricao)
                     <div class="mt-10">
                         <h2 class="font-heading text-lg font-medium text-brand-900 dark:text-white mb-4">Descrição</h2>

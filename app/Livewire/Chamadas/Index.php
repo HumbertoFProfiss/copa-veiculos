@@ -45,7 +45,7 @@ class Index extends Component
             'veiculo_id' => 'nullable|exists:veiculos,id',
             'veiculo_procurado' => 'nullable|string|max:150',
             'tipo' => 'required|in:ligacao,whatsapp,presencial,email',
-            'intencao' => 'required|in:comprar,vender,consignar',
+            'intencao' => 'required|in:comprar,vender,consignar,outros',
             'resultado' => 'required|in:sem_resposta,em_negociacao,fechado,perdido',
             'observacoes' => 'nullable|string|max:2000',
         ];

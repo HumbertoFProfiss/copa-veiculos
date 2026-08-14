@@ -23,6 +23,7 @@ class ChamadaProposta extends Model
         'comprar' => 'Comprar',
         'vender' => 'Vender',
         'consignar' => 'Consignar',
+        'outros' => 'Outros assuntos',
     ];
 
     public const RESULTADO_LABELS = [

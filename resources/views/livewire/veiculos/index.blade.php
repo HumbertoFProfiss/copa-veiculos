@@ -108,8 +108,14 @@
                 </td>
                 <td class="px-4 py-3 text-right">
                     <div class="flex items-center justify-end gap-2">
-                        <a href="{{ route('admin.veiculos.editar', $veiculo) }}" class="text-text-secondary hover:text-primary">
+                        <a href="{{ route('admin.veiculos.editar', $veiculo) }}" title="Editar" class="text-text-secondary hover:text-primary">
                             <x-heroicon-o-pencil-square class="w-4 h-4" />
+                        </a>
+                        <a href="{{ route('admin.veiculos.editar', $veiculo) }}#custos" title="Custos do veículo" class="text-text-secondary hover:text-primary">
+                            <x-heroicon-o-wrench-screwdriver class="w-4 h-4" />
+                        </a>
+                        <a href="{{ route('admin.veiculos.editar', $veiculo) }}#fotos" title="Fotos do veículo" class="text-text-secondary hover:text-primary">
+                            <x-heroicon-o-photo class="w-4 h-4" />
                         </a>
                         @can('veiculos.excluir')
                             <button wire:click="excluir({{ $veiculo->id }})"

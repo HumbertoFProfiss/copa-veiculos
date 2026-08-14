@@ -110,6 +110,32 @@ class Dashboard extends Component
             })
             : 0;
 
+        $faturamentoBrutoMes = (float) $vendasDoMes->sum(fn (Venda $v) => (float) $v->preco_venda - (float) $v->desconto);
+
+        $lucroLiquidoMes = (float) $vendasDoMes->sum(function (Venda $v) {
+            $liquido = (float) $v->preco_venda - (float) $v->desconto;
+            $custoCompra = (float) ($v->veiculo->preco_compra ?? 0);
+            $custosVeiculo = (float) $v->veiculo->custos->sum('valor');
+            $custosGarantia = $v->veiculo->custosGarantiaConfirmados();
+            $comissao = (float) ($v->comissao_vendedor ?? 0);
+
+            return $liquido - $custoCompra - $custosVeiculo - $custosGarantia - $comissao;
+        });
+
+        $custosPosVendaMes = (float) \App\Models\GarantiaChamado::whereIn('status', ['aprovado', 'concluido'])
+            ->whereHas('venda', fn ($q) => $q->whereBetween('data_venda', [now()->startOfMonth(), now()->endOfMonth()]))
+            ->get()
+            ->sum(fn (\App\Models\GarantiaChamado $g) => (float) $g->custo_peca + (float) $g->custo_servico);
+
+        $rankingVendedores = $vendasDoMes->groupBy('vendedor_id')
+            ->map(fn ($vendas, $vendedorId) => [
+                'vendedor' => $vendas->first()->vendedor,
+                'quantidade' => $vendas->count(),
+                'faturamento' => (float) $vendas->sum(fn (Venda $v) => (float) $v->preco_venda - (float) $v->desconto),
+            ])
+            ->sortByDesc('faturamento')
+            ->values();
+
         return view('livewire.dashboard', [
             'totalDisponiveis' => $disponiveis->count(),
             'valorEmEstoque' => $disponiveis->sum('preco_venda'),
@@ -127,6 +153,10 @@ class Dashboard extends Component
             'contasAVencer' => ContaPagar::where('status', 'pendente')
                 ->whereBetween('vencimento', [now(), now()->addDays(7)])
                 ->sum('valor'),
+            'faturamentoBrutoMes' => $faturamentoBrutoMes,
+            'lucroLiquidoMes' => $lucroLiquidoMes,
+            'custosPosVendaMes' => $custosPosVendaMes,
+            'rankingVendedores' => $rankingVendedores,
             'series' => $this->seriesUltimosMeses(),
             'atividades' => $this->atividadesRecentes(),
         ])->layout('layouts.admin', ['title' => 'Dashboard']);

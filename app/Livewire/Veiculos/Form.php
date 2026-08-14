@@ -6,6 +6,7 @@ use App\Models\Filial;
 use App\Models\Fornecedor;
 use App\Models\Veiculo;
 use App\Models\VeiculoOpcional;
+use App\Models\VeiculoVideo;
 use App\Services\ConsultaPlaca\ConsultaPlacaException;
 use App\Services\ConsultaPlaca\ConsultaPlacaService;
 use App\Services\Ia\AiProviderFactory;
@@ -72,6 +73,11 @@ class Form extends Component
 
     public ?float $consignado_comissao_valor = null;
 
+    /** Campos só de exibição - espelham consignado_comissao_valor/tipo nas duas unidades (R$ e %), sempre sincronizados um a partir do outro. */
+    public ?float $consignado_comissao_rs = null;
+
+    public ?float $consignado_comissao_pct = null;
+
     public ?float $preco_compra = null;
 
     public ?float $preco_tabela_fipe = null;
@@ -106,6 +112,8 @@ class Form extends Component
 
     public string $novoOpcional = '';
 
+    public string $novoVideoUrl = '';
+
     public const CUSTOS_CATEGORIAS_RAPIDAS = [
         'Funilaria e pintura',
         'Mecânica e revisão',
@@ -136,9 +144,53 @@ class Form extends Component
                 'situacao_documental', 'chave_reserva', 'manual', 'estado_conservacao', 'gravame',
                 'debitos', 'ipva_pago', 'licenciado', 'local_patio', 'status', 'destaque',
             ]));
+            $this->sincronizarComissaoConsignado();
         } else {
             $this->filial_id = auth()->user()->filial_id;
         }
+    }
+
+    /** Deriva os dois campos de exibição (R$ e %) a partir de consignado_comissao_tipo/valor - chamado ao carregar o veículo e sempre que preço de venda ou comissão mudam. */
+    protected function sincronizarComissaoConsignado(): void
+    {
+        if (blank($this->consignado_comissao_tipo) || blank($this->consignado_comissao_valor)) {
+            return;
+        }
+
+        if ($this->consignado_comissao_tipo === 'percentual') {
+            $this->consignado_comissao_pct = $this->consignado_comissao_valor;
+            $this->consignado_comissao_rs = $this->preco_venda
+                ? round($this->preco_venda * ($this->consignado_comissao_valor / 100), 2)
+                : null;
+        } else {
+            $this->consignado_comissao_rs = $this->consignado_comissao_valor;
+            $this->consignado_comissao_pct = $this->preco_venda
+                ? round(($this->consignado_comissao_valor / $this->preco_venda) * 100, 2)
+                : null;
+        }
+    }
+
+    public function updatedConsignadoComissaoRs(?float $valor): void
+    {
+        $this->consignado_comissao_tipo = 'fixa';
+        $this->consignado_comissao_valor = $valor;
+        $this->consignado_comissao_pct = ($valor !== null && $this->preco_venda)
+            ? round(($valor / $this->preco_venda) * 100, 2)
+            : null;
+    }
+
+    public function updatedConsignadoComissaoPct(?float $valor): void
+    {
+        $this->consignado_comissao_tipo = 'percentual';
+        $this->consignado_comissao_valor = $valor;
+        $this->consignado_comissao_rs = ($valor !== null && $this->preco_venda)
+            ? round($this->preco_venda * ($valor / 100), 2)
+            : null;
+    }
+
+    public function updatedPrecoVenda(): void
+    {
+        $this->sincronizarComissaoConsignado();
     }
 
     protected function rules(): array
@@ -254,6 +306,27 @@ class Form extends Component
     public function removerOpcional(int $id): void
     {
         VeiculoOpcional::where('id', $id)->delete();
+        $this->veiculo?->refresh();
+    }
+
+    public function adicionarVideo(): void
+    {
+        if (! $this->veiculo) {
+            return;
+        }
+
+        $this->validateOnly('novoVideoUrl', [
+            'novoVideoUrl' => ['required', 'url', 'max:255', 'regex:/(youtube\.com|youtu\.be)/i'],
+        ], [], ['novoVideoUrl' => 'link do vídeo']);
+
+        $this->veiculo->videos()->create(['tipo' => 'youtube', 'url' => $this->novoVideoUrl]);
+        $this->novoVideoUrl = '';
+        $this->veiculo->refresh();
+    }
+
+    public function removerVideo(int $id): void
+    {
+        VeiculoVideo::where('id', $id)->delete();
         $this->veiculo?->refresh();
     }
 
