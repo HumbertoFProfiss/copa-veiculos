@@ -3,10 +3,25 @@
         <a href="{{ route('admin.vendas.index') }}" class="text-text-secondary hover:text-text-primary">
             <x-heroicon-o-arrow-left class="w-5 h-5" />
         </a>
-        <h1 class="text-xl font-semibold text-text-primary">
-            {{ $venda->veiculo->marca }} {{ $venda->veiculo->modelo }} — Venda #{{ $venda->id }}
+        <h1 class="text-xl font-semibold text-text-primary flex-1 min-w-0">
+            {{ $venda->veiculo?->marca ?? 'Veículo removido' }} {{ $venda->veiculo?->modelo }} — Venda #{{ $venda->id }}
         </h1>
-        <x-admin.status-badge :variant="$venda->status === 'confirmada' ? 'success' : ($venda->status === 'cancelada' ? 'error' : 'neutral')" :label="ucfirst($venda->status)" />
+        <x-admin.status-badge :variant="match($venda->status) { 'confirmada' => 'success', 'cancelada' => 'error', default => 'warning' }" :label="ucfirst($venda->status)" />
+
+        @can('vendas.criar')
+            @if ($venda->status === 'pendente')
+                <button wire:click="confirmarVenda" wire:confirm="Confirmar essa venda? O veículo vai ficar marcado como vendido e anúncios ativos serão despublicados."
+                        type="button" class="px-3 py-1.5 rounded-control bg-success text-white text-xs font-medium hover:opacity-90">
+                    Confirmar venda
+                </button>
+            @endif
+            @if ($venda->status !== 'cancelada')
+                <button wire:click="cancelarVenda" wire:confirm="Cancelar essa venda?{{ $venda->status === 'confirmada' ? ' O veículo volta a ficar disponível no estoque.' : '' }}"
+                        type="button" class="px-3 py-1.5 rounded-control border border-error/30 text-error text-xs font-medium hover:bg-error/10">
+                    Cancelar venda
+                </button>
+            @endif
+        @endcan
     </div>
 
     @if (session('sucesso'))
@@ -50,22 +65,22 @@
             @endif
             <div>
                 <div class="text-text-secondary text-xs mb-0.5">Preço de compra</div>
-                <div class="font-medium text-text-primary tabular-nums">R$ {{ number_format($venda->veiculo->preco_compra ?? 0, 2, ',', '.') }}</div>
+                <div class="font-medium text-text-primary tabular-nums">R$ {{ number_format($venda->veiculo?->preco_compra ?? 0, 2, ',', '.') }}</div>
             </div>
             <div>
                 <div class="text-text-secondary text-xs mb-0.5">Custos do veículo</div>
-                <div class="font-medium text-text-primary tabular-nums">R$ {{ number_format($venda->veiculo->custos->sum('valor'), 2, ',', '.') }}</div>
+                <div class="font-medium text-text-primary tabular-nums">R$ {{ number_format($venda->veiculo?->custos->sum('valor') ?? 0, 2, ',', '.') }}</div>
             </div>
             <div>
                 <div class="text-text-secondary text-xs mb-0.5">Custos de garantia (confirmados)</div>
-                <div class="font-medium text-text-primary tabular-nums">R$ {{ number_format($venda->veiculo->custosGarantiaConfirmados(), 2, ',', '.') }}</div>
+                <div class="font-medium text-text-primary tabular-nums">R$ {{ number_format($venda->veiculo?->custosGarantiaConfirmados() ?? 0, 2, ',', '.') }}</div>
             </div>
             <div>
                 <div class="text-text-secondary text-xs mb-0.5">Comissão do vendedor</div>
                 <div class="font-medium text-text-primary tabular-nums">R$ {{ number_format($venda->comissao_vendedor ?? 0, 2, ',', '.') }}</div>
             </div>
         </div>
-        @if ($venda->veiculo->margem() !== null)
+        @if ($venda->veiculo && $venda->veiculo->margem() !== null)
             <div class="mt-4 pt-4 border-t border-border">
                 <span class="text-sm text-text-secondary">Margem líquida do veículo:</span>
                 <span class="ml-2 text-lg font-semibold tabular-nums {{ $venda->veiculo->margem() >= 0 ? 'text-success' : 'text-error' }}">

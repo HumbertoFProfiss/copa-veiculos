@@ -2,14 +2,12 @@
 
 namespace App\Livewire\Vendas;
 
-use App\Events\VendaConfirmada;
-use App\Models\CategoriaFinanceira;
 use App\Models\Cliente;
-use App\Models\ContaPagar;
 use App\Models\User;
 use App\Models\Veiculo;
 use App\Models\Venda;
 use App\Services\Financeiro\ComissaoCalculator;
+use App\Services\Vendas\ConfirmadorVenda;
 use Livewire\Component;
 
 class Nova extends Component
@@ -29,6 +27,9 @@ class Nova extends Component
     public string $data_venda = '';
 
     public int $prazo_garantia_dias = 90;
+
+    /** "pendente" pra vendas que ainda dependem de aprovação/financiamento; "confirmada" fecha a venda na hora (reserva o veículo, gera repasse etc). */
+    public string $status = 'pendente';
 
     public function mount(): void
     {
@@ -52,6 +53,7 @@ class Nova extends Component
             'desconto' => 'nullable|numeric|min:0',
             'data_venda' => 'required|date',
             'prazo_garantia_dias' => 'required|integer|min:0',
+            'status' => 'required|in:pendente,confirmada',
         ];
     }
 
@@ -60,60 +62,22 @@ class Nova extends Component
         $this->authorize('vendas.criar');
 
         $dados = $this->validate();
-        $dados['status'] = 'confirmada';
         $dados['filial_id'] = Veiculo::find($dados['veiculo_id'])?->filial_id;
+
+        $confirmarAgora = $dados['status'] === 'confirmada';
+        $dados['status'] = 'pendente';
 
         $venda = Venda::create($dados);
 
         $venda->update(['comissao_vendedor' => (new ComissaoCalculator)->calcular($venda)]);
 
-        $venda->veiculo->update(['status' => 'vendido']);
+        if ($confirmarAgora) {
+            (new ConfirmadorVenda)->confirmar($venda);
+        }
 
-        $this->gerarRepasseConsignado($venda);
-
-        // Auto-despublicação em todos os canais onde o veículo estava
-        // publicado (ver plano §7/§9) - dispara 1 job por canal publicado.
-        \App\Models\Publicacao::where('veiculo_id', $venda->veiculo_id)
-            ->where('status', 'publicado')
-            ->get()
-            ->each(fn ($publicacao) => \App\Jobs\DespublicarVeiculoEmCanal::dispatch(
-                $venda->empresa_id,
-                $publicacao->id,
-            ));
-
-        event(new VendaConfirmada($venda));
-
-        session()->flash('sucesso', 'Venda registrada com sucesso.');
+        session()->flash('sucesso', $confirmarAgora ? 'Venda registrada e confirmada com sucesso.' : 'Venda registrada como pendente.');
 
         return redirect()->route('admin.vendas.index');
-    }
-
-    protected function gerarRepasseConsignado(Venda $venda): void
-    {
-        $veiculo = $venda->veiculo;
-
-        if ($veiculo->tipo_propriedade !== 'consignado' || blank($veiculo->consignado_nome)) {
-            return;
-        }
-
-        $valorRepasse = $veiculo->repasseConsignado((float) $venda->preco_venda);
-
-        if ($valorRepasse <= 0) {
-            return;
-        }
-
-        $categoria = CategoriaFinanceira::firstOrCreate([
-            'nome' => 'Repasse de consignação',
-            'tipo' => 'despesa',
-        ]);
-
-        ContaPagar::create([
-            'categoria_id' => $categoria->id,
-            'descricao' => 'Repasse consignação - '.$veiculo->consignado_nome.' ('.$veiculo->marca.' '.$veiculo->modelo.')',
-            'valor' => $valorRepasse,
-            'vencimento' => $venda->data_venda,
-            'status' => 'pendente',
-        ]);
     }
 
     public function render()

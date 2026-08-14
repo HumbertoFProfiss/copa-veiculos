@@ -4,6 +4,7 @@ namespace App\Livewire\Vendas;
 
 use App\Models\GarantiaChamado;
 use App\Models\Venda;
+use App\Services\Vendas\ConfirmadorVenda;
 use Livewire\Component;
 
 class Show extends Component
@@ -30,6 +31,32 @@ class Show extends Component
             'custo_peca' => 'nullable|numeric|min:0',
             'custo_servico' => 'nullable|numeric|min:0',
         ];
+    }
+
+    public function confirmarVenda(): void
+    {
+        $this->authorize('vendas.criar');
+
+        if ($this->venda->status !== 'pendente') {
+            return;
+        }
+
+        (new ConfirmadorVenda)->confirmar($this->venda);
+        $this->venda->refresh();
+        session()->flash('sucesso', 'Venda confirmada.');
+    }
+
+    public function cancelarVenda(): void
+    {
+        $this->authorize('vendas.criar');
+
+        if ($this->venda->status === 'cancelada') {
+            return;
+        }
+
+        (new ConfirmadorVenda)->cancelar($this->venda);
+        $this->venda->refresh();
+        session()->flash('sucesso', 'Venda cancelada.');
     }
 
     public function novaGarantia(): void

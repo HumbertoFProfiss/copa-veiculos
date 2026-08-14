@@ -57,6 +57,7 @@ it('gera repasse automatico em contas a pagar quando um veiculo consignado e ven
         ->set('cliente_id', $cliente->id)
         ->set('vendedor_id', $user->id)
         ->set('preco_venda', 50000)
+        ->set('status', 'confirmada')
         ->call('salvar');
 
     $venda = Venda::where('veiculo_id', $veiculo->id)->first();

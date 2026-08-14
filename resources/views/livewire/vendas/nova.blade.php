@@ -66,8 +66,18 @@
             <input type="number" wire:model="prazo_garantia_dias" class="w-full max-w-[150px] rounded-control border-border text-sm focus:border-primary focus:ring-primary">
         </div>
 
+        <div>
+            <label class="block text-xs font-medium text-text-secondary mb-1">Status inicial</label>
+            <select wire:model="status" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                <option value="pendente">Pendente — ainda depende de aprovação/financiamento</option>
+                <option value="confirmada">Confirmada — fecha a venda agora (reserva o veículo)</option>
+            </select>
+        </div>
+
         <div class="flex items-center gap-3 pt-2">
-            <button type="submit" class="px-4 py-2 rounded-control bg-primary text-white text-sm font-medium hover:bg-primary-light">Confirmar venda</button>
+            <button type="submit" class="px-4 py-2 rounded-control bg-primary text-white text-sm font-medium hover:bg-primary-light">
+                {{ $status === 'confirmada' ? 'Registrar e confirmar venda' : 'Registrar venda pendente' }}
+            </button>
             <a href="{{ route('admin.vendas.index') }}" class="px-4 py-2 rounded-control border border-border text-sm text-text-secondary hover:bg-surface">Cancelar</a>
         </div>
     </form>

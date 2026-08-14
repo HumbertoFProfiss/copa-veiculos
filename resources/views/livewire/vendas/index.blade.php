@@ -24,14 +24,14 @@
         @forelse ($vendas as $venda)
             <tr wire:key="venda-{{ $venda->id }}" class="hover:bg-surface">
                 <td class="px-4 py-3 font-medium text-text-primary">
-                    <a href="{{ route('admin.vendas.show', $venda) }}" class="hover:text-primary hover:underline">{{ $venda->veiculo->marca }} {{ $venda->veiculo->modelo }}</a>
+                    <a href="{{ route('admin.vendas.show', $venda) }}" class="hover:text-primary hover:underline">{{ $venda->veiculo?->marca ?? 'Veículo removido' }} {{ $venda->veiculo?->modelo }}</a>
                 </td>
                 <td class="px-4 py-3 text-text-secondary">{{ $venda->cliente->nome }}</td>
                 <td class="px-4 py-3 text-text-secondary">{{ $venda->vendedor->name }}</td>
                 <td class="px-4 py-3 tabular-nums text-text-primary">R$ {{ number_format($venda->preco_venda - $venda->desconto, 2, ',', '.') }}</td>
                 <td class="px-4 py-3 text-text-secondary">{{ $venda->data_venda->format('d/m/Y') }}</td>
                 <td class="px-4 py-3">
-                    <x-admin.status-badge :variant="$venda->status === 'confirmada' ? 'success' : ($venda->status === 'cancelada' ? 'error' : 'neutral')" :label="ucfirst($venda->status)" />
+                    <x-admin.status-badge :variant="match($venda->status) { 'confirmada' => 'success', 'cancelada' => 'error', default => 'warning' }" :label="ucfirst($venda->status)" />
                 </td>
                 <td class="px-4 py-3 text-right">
                     <div class="flex items-center justify-end gap-3">

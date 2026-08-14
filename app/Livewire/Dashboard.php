@@ -103,7 +103,7 @@ class Dashboard extends Component
 
         $margemMedia = $vendasDoMes->isNotEmpty()
             ? $vendasDoMes->avg(function (Venda $v) {
-                $custo = (float) ($v->veiculo->preco_compra ?? 0);
+                $custo = (float) ($v->veiculo?->preco_compra ?? 0);
                 $liquido = (float) $v->preco_venda - (float) $v->desconto;
 
                 return $custo > 0 ? (($liquido - $custo) / $custo) * 100 : 0;
@@ -114,9 +114,9 @@ class Dashboard extends Component
 
         $lucroLiquidoMes = (float) $vendasDoMes->sum(function (Venda $v) {
             $liquido = (float) $v->preco_venda - (float) $v->desconto;
-            $custoCompra = (float) ($v->veiculo->preco_compra ?? 0);
-            $custosVeiculo = (float) $v->veiculo->custos->sum('valor');
-            $custosGarantia = $v->veiculo->custosGarantiaConfirmados();
+            $custoCompra = (float) ($v->veiculo?->preco_compra ?? 0);
+            $custosVeiculo = (float) ($v->veiculo?->custos->sum('valor') ?? 0);
+            $custosGarantia = $v->veiculo?->custosGarantiaConfirmados() ?? 0;
             $comissao = (float) ($v->comissao_vendedor ?? 0);
 
             return $liquido - $custoCompra - $custosVeiculo - $custosGarantia - $comissao;

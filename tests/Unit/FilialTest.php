@@ -130,6 +130,7 @@ it('a venda herda automaticamente a filial do veiculo vendido', function () {
         ->set('cliente_id', $cliente->id)
         ->set('vendedor_id', $user->id)
         ->set('preco_venda', 50000)
+        ->set('status', 'confirmada')
         ->call('salvar');
 
     $venda = \App\Models\Venda::where('veiculo_id', $veiculo->id)->first();
