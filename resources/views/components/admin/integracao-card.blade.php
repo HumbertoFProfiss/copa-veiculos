@@ -1,4 +1,4 @@
-@props(['icon', 'titulo', 'requisito', 'configurada' => false, 'detalhe' => null])
+@props(['icon', 'titulo', 'requisito', 'configurada' => false, 'detalhe' => null, 'demo' => false, 'linkDemo' => null])
 
 <div class="bg-bg border border-border rounded-card p-5 shadow-soft flex flex-col gap-3">
     <div class="flex items-start justify-between gap-3">
@@ -10,7 +10,7 @@
             <div class="font-medium text-text-primary text-sm">{{ $titulo }}</div>
         </div>
 
-        <x-admin.status-badge :variant="$configurada ? 'success' : 'neutral'" :label="$configurada ? 'Configurada' : 'Não configurada'" />
+        <x-admin.status-badge :variant="$configurada ? 'success' : 'neutral'" :label="$configurada ? ($demo ? 'Configurada (demo)' : 'Configurada') : 'Não configurada'" />
     </div>
 
     @if ($configurada && $detalhe)
@@ -22,7 +22,12 @@
     @endif
 
     <div>
-        @if ($configurada)
+        @if ($configurada && $linkDemo)
+            <a href="{{ $linkDemo }}"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control text-xs font-medium bg-success/10 text-success hover:bg-success/20">
+                <x-heroicon-o-check class="w-3.5 h-3.5" /> Ver demonstração
+            </a>
+        @elseif ($configurada)
             <button type="button" disabled
                 class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control text-xs font-medium bg-success/10 text-success cursor-default">
                 <x-heroicon-o-check class="w-3.5 h-3.5" /> Ativa

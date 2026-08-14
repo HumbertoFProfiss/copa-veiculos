@@ -176,7 +176,11 @@
         <x-admin.integracao-card
             icon="document-text"
             titulo="Nota Fiscal Eletrônica (NF-e)"
-            requisito="certificado digital A1/A3 da empresa + credenciamento na SEFAZ do seu estado." />
+            :configurada="true"
+            :demo="true"
+            detalhe="Emissão simulada disponível em cada venda confirmada — número e chave de acesso gerados automaticamente, com aviso de simulação no documento. Emitir de verdade ainda depende de certificado digital A1/A3 e credenciamento na SEFAZ do seu estado."
+            requisito="certificado digital A1/A3 da empresa + credenciamento na SEFAZ do seu estado."
+            :link-demo="route('admin.vendas.index')" />
 
         <x-admin.integracao-card
             icon="truck"
@@ -191,12 +195,20 @@
         <x-admin.integracao-card
             icon="pencil-square"
             titulo="Assinatura eletrônica"
-            requisito="conta em um provedor de assinatura (ex: ClickSign, D4Sign) e a chave de API dele." />
+            :configurada="true"
+            :demo="true"
+            detalhe="Fluxo de envio, assinatura e recusa simulado disponível em Contratos — sem provedor real conectado ainda. Assinar de verdade depende de contratar um serviço como ClickSign ou D4Sign."
+            requisito="conta em um provedor de assinatura (ex: ClickSign, D4Sign) e a chave de API dele."
+            :link-demo="route('admin.contratos.index')" />
 
         <x-admin.integracao-card
             icon="building-library"
             titulo="MultiBanco (financiamento)"
-            requisito="parceria/API com os bancos — hoje as taxas de financiamento são cadastradas manualmente." />
+            :configurada="true"
+            :demo="true"
+            detalhe="Simulação de proposta de financiamento disponível em cada venda, com parcela calculada de verdade (Tabela Price) sobre taxas cadastradas manualmente por banco. Sem envio real ao banco ainda."
+            requisito="parceria/API com os bancos — hoje as taxas de financiamento são cadastradas manualmente."
+            :link-demo="route('admin.vendas.index')" />
 
         <x-admin.integracao-card
             icon="globe-alt"
