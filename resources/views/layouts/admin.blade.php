@@ -77,6 +77,7 @@
                         @endcan
                         @can('vendas.ver')
                             <x-admin.sidebar-link route="admin.vendas.index" icon="currency-dollar" label="Vendas" modulo="vendas" />
+                            <x-admin.sidebar-link route="admin.garantias.index" icon="wrench-screwdriver" label="Garantias" modulo="vendas" />
                         @endcan
                         @can('contratos.ver')
                             <x-admin.sidebar-link route="admin.contratos.index" icon="document-text" label="Contratos" modulo="contratos" />

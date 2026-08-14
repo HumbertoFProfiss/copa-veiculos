@@ -213,7 +213,10 @@
 
     <!-- ===== SOBRE ===== -->
     <section id="sobre" class="bg-brand-100/50 py-24 dark:bg-duskcard/40">
-        <div class="max-w-7xl mx-auto px-6 sm:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
+            <div class="rounded-2xl overflow-hidden shadow-brand border border-brand-100 dark:border-duskborder">
+                <img src="{{ asset('fachada.jpg') }}" alt="Fachada {{ $empresa->nome ?? config('app.name') }}" class="w-full h-full object-cover" loading="lazy">
+            </div>
             <div>
                 <p class="mb-3 text-base font-medium tracking-wide uppercase text-brand-700">Quem somos</p>
                 <h2 class="font-heading text-brand-900 dark:text-white text-3xl sm:text-4xl font-semibold mb-5">Sobre {{ $empresa->nome ?? config('app.name') }}</h2>

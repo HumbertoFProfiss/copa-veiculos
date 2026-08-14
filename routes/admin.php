@@ -14,6 +14,7 @@ use App\Livewire\Dashboard;
 use App\Livewire\Filiais;
 use App\Livewire\Financeiro;
 use App\Livewire\Fornecedores;
+use App\Livewire\Garantias;
 use App\Livewire\Importacoes;
 use App\Livewire\Integracoes;
 use App\Livewire\Leads;
@@ -76,6 +77,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::get('/vendas/{venda}', Vendas\Show::class)->name('vendas.show');
             Route::get('/notas-fiscais/{notaFiscal}/pdf', NotaFiscalPdfController::class)->name('notas-fiscais.pdf');
             Route::get('/renave/{renaveTransferencia}/pdf', RenaveTransferenciaPdfController::class)->name('renave.pdf');
+            Route::get('/garantias', Garantias\Index::class)->name('garantias.index');
         });
 
         Route::middleware('modulo:contratos')->group(function () {
