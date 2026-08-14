@@ -189,8 +189,11 @@
 
         <x-admin.integracao-card
             icon="chat-bubble-left-right"
-            titulo="WhatsApp Business (Cloud API)"
-            requisito="conta Meta Business verificada + número de telefone dedicado. Por enquanto, o CRM usa link manual (wa.me)." />
+            titulo="WhatsApp Business"
+            :configurada="true"
+            detalhe="Funciona de verdade via link direto (wa.me) em Leads, CRM e na página pública — abre a conversa já com a mensagem certa. A versão Cloud API (enviar/receber mensagem dentro do painel) depende de conta Meta Business verificada."
+            requisito="conta Meta Business verificada + número de telefone dedicado. Por enquanto, o CRM usa link manual (wa.me)."
+            :link-demo="route('admin.crm.pipeline')" />
 
         <x-admin.integracao-card
             icon="pencil-square"
@@ -213,7 +216,10 @@
         <x-admin.integracao-card
             icon="globe-alt"
             titulo="Portais com API (WebMotors, iCarros...)"
-            requisito="contrato comercial + credencial de desenvolvedor de cada portal. Hoje a publicação funciona via CSV." />
+            :configurada="true"
+            detalhe="Publicação real via CSV/feed funcionando pra WebMotors, iCarros, Facebook Marketplace e outros — direto na tela do veículo, com status de publicado/erro por canal. Integração via API/OAuth de cada portal depende de contrato comercial com eles."
+            requisito="contrato comercial + credencial de desenvolvedor de cada portal. Hoje a publicação funciona via CSV."
+            :link-demo="route('admin.integracoes.canais')" />
 
         <x-admin.integracao-card
             icon="credit-card"
