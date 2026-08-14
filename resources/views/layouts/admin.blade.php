@@ -38,9 +38,16 @@
         <!-- Sidebar -->
         <aside :class="colapsada ? 'w-[72px]' : 'w-64'"
                class="shrink-0 bg-bg shadow-soft-md transition-all duration-200 flex flex-col relative z-10">
-            <div class="h-16 flex items-center px-4 border-b border-border">
+            <div class="h-16 flex items-center justify-between gap-2 px-4 border-b border-border">
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-2 overflow-hidden">
                     <img src="{{ asset('logo.png') }}" alt="{{ config('app.name') }}" class="h-10 w-auto shrink-0">
+                </a>
+                <a href="{{ route('home') }}" target="_blank" rel="noopener"
+                   x-show="!colapsada" x-transition.opacity
+                   title="Voltar ao site"
+                   class="shrink-0 inline-flex items-center gap-1.5 px-2 py-1.5 rounded-control text-xs font-medium text-text-secondary hover:bg-surface hover:text-primary transition-colors">
+                    <x-heroicon-o-arrow-top-right-on-square class="w-4 h-4" />
+                    <span>Voltar ao site</span>
                 </a>
             </div>
 
