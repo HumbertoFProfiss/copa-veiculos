@@ -58,10 +58,27 @@ class DescricaoGerador
 
         $resposta = $this->provider->completar($prompt, $contexto);
 
-        if (strlen($resposta) > $limiteCaracteres) {
-            $resposta = substr($resposta, 0, $limiteCaracteres - 1).'…';
+        if (mb_strlen($resposta) > $limiteCaracteres) {
+            $resposta = $this->truncarNoLimiteDePalavra($resposta, $limiteCaracteres);
         }
 
         return $resposta;
+    }
+
+    /**
+     * Corta no último espaço antes do limite, em vez de no meio de uma
+     * palavra (ou de um caractere UTF-8 multibyte, com mb_substr) - a IA
+     * nem sempre respeita o limite pedido no prompt.
+     */
+    protected function truncarNoLimiteDePalavra(string $texto, int $limiteCaracteres): string
+    {
+        $cortado = mb_substr($texto, 0, $limiteCaracteres - 1);
+        $ultimoEspaco = mb_strrpos($cortado, ' ');
+
+        if ($ultimoEspaco !== false) {
+            $cortado = mb_substr($cortado, 0, $ultimoEspaco);
+        }
+
+        return rtrim($cortado, " ,.;:-").'…';
     }
 }
