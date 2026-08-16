@@ -39,7 +39,7 @@
     </div>
 
     @if ($leadSelecionadoId)
-        <div class="fixed inset-0 bg-black/40 flex justify-end z-20" wire:click.self="fecharDrawer">
+        <div class="fixed inset-0 bg-black/40 flex justify-end z-20">
             <div class="w-full max-w-md bg-bg h-full overflow-y-auto shadow-xl">
                 @livewire('crm.lead-drawer', ['leadId' => $leadSelecionadoId], key('drawer-'.$leadSelecionadoId))
             </div>

@@ -24,6 +24,10 @@
             <span class="text-sm font-medium text-error tabular-nums">R$ {{ number_format($custosAgregados, 2, ',', '.') }}</span>
         </div>
         <div class="flex items-center justify-between px-5 py-3">
+            <span class="text-sm text-text-secondary">(-) Custos de garantia</span>
+            <span class="text-sm font-medium text-error tabular-nums">R$ {{ number_format($custosGarantia, 2, ',', '.') }}</span>
+        </div>
+        <div class="flex items-center justify-between px-5 py-3">
             <span class="text-sm text-text-secondary">(-) Comissões</span>
             <span class="text-sm font-medium text-error tabular-nums">R$ {{ number_format($comissoes, 2, ',', '.') }}</span>
         </div>

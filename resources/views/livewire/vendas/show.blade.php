@@ -158,9 +158,14 @@
     </div>
 
     @if ($mostrarFormFinanciamento)
-        <div class="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-20" wire:click.self="$set('mostrarFormFinanciamento', false)">
+        <div class="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-20">
             <div class="bg-bg rounded-card border border-border w-full max-w-lg p-6">
-                <h2 class="text-lg font-semibold text-text-primary mb-1">Simular proposta de financiamento</h2>
+                <div class="flex items-center justify-between mb-1">
+                    <h2 class="text-lg font-semibold text-text-primary">Simular proposta de financiamento</h2>
+                    <button type="button" wire:click="$set('mostrarFormFinanciamento', false)" class="text-text-secondary hover:text-text-primary" aria-label="Fechar">
+                        <x-heroicon-o-x-mark class="w-5 h-5" />
+                    </button>
+                </div>
                 <p class="text-xs text-warning mb-4 font-medium">SIMULAÇÃO — cálculo real de parcela, mas sem envio ao banco.</p>
                 <form wire:submit="simularFinanciamento" class="space-y-3">
                     <div>
@@ -319,9 +324,14 @@
     </div>
 
     @if ($mostrarFormGarantia)
-        <div class="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-20" wire:click.self="$set('mostrarFormGarantia', false)">
+        <div class="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-20">
             <div class="bg-bg rounded-card border border-border w-full max-w-lg p-6">
-                <h2 class="text-lg font-semibold text-text-primary mb-4">{{ $editandoGarantiaId ? 'Editar chamado' : 'Novo chamado de garantia' }}</h2>
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold text-text-primary">{{ $editandoGarantiaId ? 'Editar chamado' : 'Novo chamado de garantia' }}</h2>
+                    <button type="button" wire:click="$set('mostrarFormGarantia', false)" class="text-text-secondary hover:text-text-primary" aria-label="Fechar">
+                        <x-heroicon-o-x-mark class="w-5 h-5" />
+                    </button>
+                </div>
                 <form wire:submit="salvarGarantia" class="space-y-3">
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Descrição do problema *</label>

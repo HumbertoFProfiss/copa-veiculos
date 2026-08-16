@@ -76,9 +76,14 @@
     <div class="mt-4">{{ $chamadas->links() }}</div>
 
     @if ($mostrarForm)
-        <div class="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-20" wire:click.self="$set('mostrarForm', false)">
+        <div class="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-20">
             <div class="bg-bg rounded-card border border-border w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
-                <h2 class="text-lg font-semibold text-text-primary mb-4">{{ $editandoId ? 'Editar chamada' : 'Nova chamada' }}</h2>
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold text-text-primary">{{ $editandoId ? 'Editar chamada' : 'Nova chamada' }}</h2>
+                    <button type="button" wire:click="$set('mostrarForm', false)" class="text-text-secondary hover:text-text-primary" aria-label="Fechar">
+                        <x-heroicon-o-x-mark class="w-5 h-5" />
+                    </button>
+                </div>
                 <form wire:submit="salvar" class="space-y-3">
                     <div class="grid grid-cols-2 gap-3">
                         <div>
