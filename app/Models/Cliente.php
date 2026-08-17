@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\BelongsToEmpresa;
+use App\Models\Concerns\TracksCriadoPor;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,10 +12,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Cliente extends Model implements AuthenticatableContract
 {
-    use Authenticatable, BelongsToEmpresa, HasFactory;
+    use Authenticatable, BelongsToEmpresa, HasFactory, TracksCriadoPor;
 
     protected $fillable = [
-        'empresa_id', 'nome', 'cpf', 'rg', 'email', 'telefone', 'whatsapp',
+        'empresa_id', 'criado_por', 'nome', 'cpf', 'rg', 'email', 'telefone', 'whatsapp',
         'endereco', 'cidade', 'uf', 'cep', 'profissao', 'renda_estimada', 'password',
     ];
 

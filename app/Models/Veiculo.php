@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\BelongsToEmpresa;
+use App\Models\Concerns\TracksCriadoPor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,7 +13,7 @@ use Illuminate\Support\Str;
 
 class Veiculo extends Model
 {
-    use BelongsToEmpresa, HasFactory, SoftDeletes;
+    use BelongsToEmpresa, HasFactory, SoftDeletes, TracksCriadoPor;
 
     public const CAMBIO_OPCOES = ['Manual', 'Automático', 'Automatizado', 'CVT', 'Semi-automático'];
 
@@ -28,6 +29,7 @@ class Veiculo extends Model
     protected $fillable = [
         'empresa_id',
         'fornecedor_id',
+        'criado_por',
         'filial_id',
         'marca',
         'modelo',

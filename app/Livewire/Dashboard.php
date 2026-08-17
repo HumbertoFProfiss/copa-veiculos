@@ -52,37 +52,46 @@ class Dashboard extends Component
      * cadastrado, cliente cadastrado, venda confirmada e lead recebido -
      * cada modelo já tem created_at, só precisa mesclar e ordenar.
      */
+    /**
+     * " — Nome" quando ha um responsavel identificado, ou string vazia
+     * (registro antigo sem criado_por, ou lead ainda sem vendedor).
+     */
+    protected function sufixoAutor(?string $nome): string
+    {
+        return $nome ? " — {$nome}" : '';
+    }
+
     protected function atividadesRecentes(): Collection
     {
-        $veiculos = Veiculo::latest()->take(8)->get()->map(fn (Veiculo $v) => [
+        $veiculos = Veiculo::with('criador')->latest()->take(8)->get()->map(fn (Veiculo $v) => [
             'icone' => 'truck',
             'cor' => 'text-primary bg-primary-soft',
-            'texto' => "Veículo cadastrado: {$v->marca} {$v->modelo}",
+            'texto' => "Veículo cadastrado: {$v->marca} {$v->modelo}".$this->sufixoAutor($v->criador?->name),
             'data' => $v->created_at,
             'url' => route('admin.veiculos.editar', $v),
         ]);
 
-        $clientes = Cliente::latest()->take(8)->get()->map(fn (Cliente $c) => [
+        $clientes = Cliente::with('criador')->latest()->take(8)->get()->map(fn (Cliente $c) => [
             'icone' => 'user',
             'cor' => 'text-primary bg-primary-soft',
-            'texto' => "Cliente cadastrado: {$c->nome}",
+            'texto' => "Cliente cadastrado: {$c->nome}".$this->sufixoAutor($c->criador?->name),
             'data' => $c->created_at,
             'url' => route('admin.clientes.index'),
         ]);
 
-        $vendas = Venda::where('status', 'confirmada')->with(['veiculo', 'cliente'])->latest()->take(8)->get()
+        $vendas = Venda::where('status', 'confirmada')->with(['veiculo', 'cliente', 'vendedor'])->latest()->take(8)->get()
             ->map(fn (Venda $v) => [
                 'icone' => 'banknotes',
                 'cor' => 'text-success bg-success/10',
-                'texto' => "Venda registrada: {$v->veiculo?->marca} {$v->veiculo?->modelo} para {$v->cliente?->nome}",
+                'texto' => "Venda registrada: {$v->veiculo?->marca} {$v->veiculo?->modelo} para {$v->cliente?->nome}".$this->sufixoAutor($v->vendedor?->name),
                 'data' => $v->created_at,
                 'url' => route('admin.vendas.index'),
             ]);
 
-        $leads = Lead::where('lead_falso', false)->latest()->take(8)->get()->map(fn (Lead $l) => [
+        $leads = Lead::where('lead_falso', false)->with('vendedor')->latest()->take(8)->get()->map(fn (Lead $l) => [
             'icone' => 'chat-bubble-left-right',
             'cor' => 'text-warning bg-warning/10',
-            'texto' => "Novo lead: {$l->nome}",
+            'texto' => "Novo lead: {$l->nome}".$this->sufixoAutor($l->vendedor?->name),
             'data' => $l->created_at,
             'url' => route('admin.leads.inbox'),
         ]);
