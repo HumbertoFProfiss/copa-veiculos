@@ -365,9 +365,11 @@
          resta espaco dentro do proprio pai - assim que esse conteudo extra aparece
          (depois do primeiro salvar), sticky solta o botao de vez. Fixed nao tem
          esse problema: fica sempre visivel, independente de quanto conteudo tem
-         abaixo. z-0 (menor que o z-10 do menu lateral) faz o menu cobrir a barra
-         onde eles se sobrepoem, sem precisar calcular a largura do menu em JS. --}}
-    <div class="fixed bottom-0 left-0 right-0 z-0 px-6 py-3 bg-bg/95 backdrop-blur border-t border-border flex items-center gap-3">
+         abaixo. z-20 (mesmo nivel do topo/modais) garante que nada mais cobre a
+         barra. O "left" acompanha a largura do menu lateral (variavel "colapsada"
+         herdada do layout admin via Alpine) pra nao sobrepor o menu. --}}
+    <div x-bind:style="'left: ' + (colapsada ? '72px' : '256px')"
+         class="fixed bottom-0 right-0 z-20 px-6 py-3 bg-bg/95 backdrop-blur border-t border-border flex items-center gap-3">
         <button type="button" wire:click="salvar" class="inline-flex items-center gap-2 px-4 py-2 rounded-control bg-primary text-white text-sm font-medium hover:bg-primary-light">
             <x-heroicon-o-check class="w-4 h-4" />
             Salvar
