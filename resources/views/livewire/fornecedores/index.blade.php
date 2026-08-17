@@ -84,11 +84,11 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">CPF/CNPJ</label>
-                            <input type="text" wire:model="cpf_cnpj" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                            <input type="text" wire:model="cpf_cnpj" maxlength="18" x-on:input="$el.value = maskCpfCnpj($el.value)" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">Telefone</label>
-                            <input type="text" wire:model="telefone" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                            <input type="text" wire:model="telefone" maxlength="15" x-on:input="$el.value = maskTelefone($el.value)" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
                         </div>
                     </div>
                     <div>
