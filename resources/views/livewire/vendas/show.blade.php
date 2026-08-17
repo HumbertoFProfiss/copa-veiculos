@@ -63,6 +63,16 @@
                     <div class="font-medium text-error tabular-nums">- R$ {{ number_format($venda->desconto, 2, ',', '.') }}</div>
                 </div>
             @endif
+            @if ($venda->forma_pagamento === 'financiado')
+                <div>
+                    <div class="text-text-secondary text-xs mb-0.5">Valor de entrada</div>
+                    <div class="font-medium text-text-primary tabular-nums">R$ {{ number_format($venda->valor_entrada ?? 0, 2, ',', '.') }}</div>
+                </div>
+                <div>
+                    <div class="text-text-secondary text-xs mb-0.5">Valor financiado</div>
+                    <div class="font-medium text-text-primary tabular-nums">R$ {{ number_format($venda->valor_financiado ?? 0, 2, ',', '.') }}</div>
+                </div>
+            @endif
             <div>
                 <div class="text-text-secondary text-xs mb-0.5">Preço de compra</div>
                 <div class="font-medium text-text-primary tabular-nums">R$ {{ number_format($venda->veiculo?->preco_compra ?? 0, 2, ',', '.') }}</div>

@@ -43,6 +43,10 @@ class Nova extends Component
 
     public ?float $troca_valor_avaliado = null;
 
+    public ?float $valor_entrada = null;
+
+    public ?float $valor_financiado = null;
+
     /**
      * Preco anunciado do veiculo selecionado - guardado a parte do
      * preco_venda (que aqui vira o valor final efetivamente vendido) pra
@@ -62,6 +66,8 @@ class Nova extends Component
         $this->precoAnunciado = Veiculo::find($valor)?->preco_venda;
         $this->preco_venda = $this->precoAnunciado;
         $this->desconto = 0;
+        $this->valor_entrada = null;
+        $this->valor_financiado = null;
     }
 
     public function updatedPrecoVenda($valor): void
@@ -73,9 +79,27 @@ class Nova extends Component
         $this->desconto = max(0, round($this->precoAnunciado - (float) $valor, 2));
     }
 
+    /**
+     * Separa, pra venda financiada, quanto e pago direto (entrada) de
+     * quanto vai pro banco (financiado, o que gera comissao do banco) -
+     * preenchendo um dos dois calcula o outro a partir do valor total.
+     */
+    public function updatedValorEntrada($valor): void
+    {
+        $total = (float) $this->preco_venda - (float) $this->desconto;
+        $this->valor_financiado = max(0, round($total - (float) $valor, 2));
+    }
+
+    public function updatedValorFinanciado($valor): void
+    {
+        $total = (float) $this->preco_venda - (float) $this->desconto;
+        $this->valor_entrada = max(0, round($total - (float) $valor, 2));
+    }
+
     protected function rules(): array
     {
         $trocaObrigatoria = $this->forma_pagamento === 'troca' ? 'required' : 'nullable';
+        $financiadoObrigatorio = $this->forma_pagamento === 'financiado' ? 'required' : 'nullable';
 
         return [
             'veiculo_id' => 'required|exists:veiculos,id',
@@ -93,6 +117,8 @@ class Nova extends Component
             'troca_placa' => 'nullable|string|max:8',
             'troca_km' => 'nullable|integer|min:0',
             'troca_valor_avaliado' => "{$trocaObrigatoria}|numeric|min:0",
+            'valor_entrada' => "{$financiadoObrigatorio}|numeric|min:0",
+            'valor_financiado' => "{$financiadoObrigatorio}|numeric|min:0",
         ];
     }
 
@@ -111,6 +137,11 @@ class Nova extends Component
             'valor_avaliado' => $dados['troca_valor_avaliado'],
         ];
         unset($dados['troca_marca'], $dados['troca_modelo'], $dados['troca_ano_modelo'], $dados['troca_placa'], $dados['troca_km'], $dados['troca_valor_avaliado']);
+
+        if ($dados['forma_pagamento'] !== 'financiado') {
+            $dados['valor_entrada'] = null;
+            $dados['valor_financiado'] = null;
+        }
 
         $dados['filial_id'] = Veiculo::find($dados['veiculo_id'])?->filial_id;
 

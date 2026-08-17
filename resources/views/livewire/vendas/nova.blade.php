@@ -86,6 +86,25 @@
             </div>
         @endif
 
+        @if ($forma_pagamento === 'financiado')
+            <div class="rounded-control border border-border bg-surface p-4 space-y-3">
+                <p class="text-xs font-medium text-text-primary">Financiamento</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-text-secondary mb-1">Valor de entrada (R$) *</label>
+                        <input type="number" step="0.01" wire:model.live.debounce.500ms="valor_entrada" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                        @error('valor_entrada') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-text-secondary mb-1">Valor financiado (R$) *</label>
+                        <input type="number" step="0.01" wire:model.live.debounce.500ms="valor_financiado" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                        @error('valor_financiado') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+                <p class="text-xs text-text-secondary">Preencha um dos dois — o outro é calculado automaticamente a partir do valor de venda. O valor financiado é o que vai pro banco (gera comissão do banco); pra escolher o banco e simular a parcela, use "Simular proposta de financiamento" na tela da venda depois de salvar.</p>
+            </div>
+        @endif
+
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Valor de venda *</label>

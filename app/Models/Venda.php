@@ -14,7 +14,7 @@ class Venda extends Model
 
     protected $fillable = [
         'empresa_id', 'filial_id', 'veiculo_id', 'cliente_id', 'vendedor_id', 'forma_pagamento',
-        'preco_venda', 'desconto', 'comissao_vendedor', 'status', 'data_venda',
+        'preco_venda', 'desconto', 'valor_entrada', 'valor_financiado', 'comissao_vendedor', 'status', 'data_venda',
         'data_entrega', 'prazo_garantia_dias', 'numero_contrato',
     ];
 
@@ -23,6 +23,8 @@ class Venda extends Model
         return [
             'preco_venda' => 'decimal:2',
             'desconto' => 'decimal:2',
+            'valor_entrada' => 'decimal:2',
+            'valor_financiado' => 'decimal:2',
             'comissao_vendedor' => 'decimal:2',
             'data_venda' => 'date',
             'data_entrega' => 'date',
