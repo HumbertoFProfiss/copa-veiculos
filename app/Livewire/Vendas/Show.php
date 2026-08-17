@@ -127,6 +127,23 @@ class Show extends Component
         $this->mostrarFormFinanciamento = true;
     }
 
+    /**
+     * Separa quanto e pago direto (entrada) de quanto vai pro banco
+     * (financiado, o que gera a comissao do banco) - preenchendo um dos
+     * dois calcula o outro automaticamente a partir do valor total da venda.
+     */
+    public function updatedFinanciamentoValorFinanciado($valor): void
+    {
+        $total = (float) $this->venda->preco_venda - (float) $this->venda->desconto;
+        $this->financiamento_entrada = max(0, round($total - (float) $valor, 2));
+    }
+
+    public function updatedFinanciamentoEntrada($valor): void
+    {
+        $total = (float) $this->venda->preco_venda - (float) $this->venda->desconto;
+        $this->financiamento_valor_financiado = max(0, round($total - (float) $valor, 2));
+    }
+
     public function simularFinanciamento(): void
     {
         $this->authorize('vendas.criar');

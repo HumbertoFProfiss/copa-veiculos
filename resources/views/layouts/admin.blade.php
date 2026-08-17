@@ -198,7 +198,8 @@
 
             <main class="flex-1 p-6 bg-surface">
                 @if (session('sucesso'))
-                    <div class="mb-4 flex items-center gap-2.5 px-4 py-3 rounded-card bg-success/10 text-success text-sm border border-success/20">
+                    <div x-data x-init="window.scrollTo({ top: 0, behavior: 'instant' })"
+                         class="mb-4 flex items-center gap-2.5 px-4 py-3 rounded-card bg-success/10 text-success text-sm border border-success/20">
                         <x-heroicon-o-check-circle class="w-5 h-5 shrink-0" />
                         {{ session('sucesso') }}
                     </div>

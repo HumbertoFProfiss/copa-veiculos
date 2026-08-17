@@ -354,14 +354,19 @@
             </div>
         </div>
 
-        <div class="flex items-center gap-3">
-            <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 rounded-control bg-primary text-white text-sm font-medium hover:bg-primary-light">
-                <x-heroicon-o-check class="w-4 h-4" />
-                Salvar
-            </button>
-            <span wire:loading wire:target="salvar" class="text-sm text-text-secondary">Salvando...</span>
-        </div>
+        {{-- botao invisivel: mantem o Enter-pra-submeter funcionando nos campos do form.
+             O botao de fato visivel fica fixo no rodape da tela, fora do form (ver abaixo),
+             pra nao sumir de vista conforme o usuario preenche fotos/video/opcionais/custos. --}}
+        <button type="submit" class="hidden" aria-hidden="true" tabindex="-1"></button>
     </form>
+
+    <div class="sticky bottom-0 -mx-6 mt-6 px-6 py-3 bg-bg/95 backdrop-blur border-t border-border flex items-center gap-3 z-10">
+        <button type="button" wire:click="salvar" class="inline-flex items-center gap-2 px-4 py-2 rounded-control bg-primary text-white text-sm font-medium hover:bg-primary-light">
+            <x-heroicon-o-check class="w-4 h-4" />
+            Salvar
+        </button>
+        <span wire:loading wire:target="salvar" class="text-sm text-text-secondary">Salvando...</span>
+    </div>
 
     @if ($veiculo)
         <div id="fotos" class="bg-bg border border-border rounded-card p-5 mt-6 scroll-mt-6">

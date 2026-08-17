@@ -181,14 +181,15 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">Valor financiado (R$) *</label>
-                            <input type="number" step="0.01" min="0" wire:model="financiamento_valor_financiado" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                            <input type="number" step="0.01" min="0" wire:model.live.debounce.500ms="financiamento_valor_financiado" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
                             @error('financiamento_valor_financiado') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">Entrada (R$)</label>
-                            <input type="number" step="0.01" min="0" wire:model="financiamento_entrada" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                            <input type="number" step="0.01" min="0" wire:model.live.debounce.500ms="financiamento_entrada" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
                         </div>
                     </div>
+                    <p class="text-xs text-text-secondary -mt-1">Preencha um dos dois — o outro é calculado automaticamente a partir do valor total da venda (o que vai pro financiamento é o que gera comissão do banco).</p>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Número de parcelas *</label>
                         <input type="number" min="1" max="60" wire:model="financiamento_num_parcelas" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">

@@ -31,6 +31,26 @@ class Nova extends Component
     /** "pendente" pra vendas que ainda dependem de aprovação/financiamento; "confirmada" fecha a venda na hora (reserva o veículo, gera repasse etc). */
     public string $status = 'pendente';
 
+    public ?string $troca_marca = null;
+
+    public ?string $troca_modelo = null;
+
+    public ?int $troca_ano_modelo = null;
+
+    public ?string $troca_placa = null;
+
+    public ?int $troca_km = null;
+
+    public ?float $troca_valor_avaliado = null;
+
+    /**
+     * Preco anunciado do veiculo selecionado - guardado a parte do
+     * preco_venda (que aqui vira o valor final efetivamente vendido) pra
+     * poder calcular o desconto automaticamente quando o vendedor digita
+     * um valor de venda menor que o anunciado.
+     */
+    public ?float $precoAnunciado = null;
+
     public function mount(): void
     {
         $this->data_venda = now()->format('Y-m-d');
@@ -39,11 +59,24 @@ class Nova extends Component
 
     public function updatedVeiculoId($valor): void
     {
-        $this->preco_venda = Veiculo::find($valor)?->preco_venda;
+        $this->precoAnunciado = Veiculo::find($valor)?->preco_venda;
+        $this->preco_venda = $this->precoAnunciado;
+        $this->desconto = 0;
+    }
+
+    public function updatedPrecoVenda($valor): void
+    {
+        if ($this->precoAnunciado === null) {
+            return;
+        }
+
+        $this->desconto = max(0, round($this->precoAnunciado - (float) $valor, 2));
     }
 
     protected function rules(): array
     {
+        $trocaObrigatoria = $this->forma_pagamento === 'troca' ? 'required' : 'nullable';
+
         return [
             'veiculo_id' => 'required|exists:veiculos,id',
             'cliente_id' => 'required|exists:clientes,id',
@@ -54,6 +87,12 @@ class Nova extends Component
             'data_venda' => 'required|date',
             'prazo_garantia_dias' => 'required|integer|min:0',
             'status' => 'required|in:pendente,confirmada',
+            'troca_marca' => "{$trocaObrigatoria}|string|max:255",
+            'troca_modelo' => "{$trocaObrigatoria}|string|max:255",
+            'troca_ano_modelo' => 'nullable|integer|min:1950|max:'.(now()->year + 1),
+            'troca_placa' => 'nullable|string|max:8',
+            'troca_km' => 'nullable|integer|min:0',
+            'troca_valor_avaliado' => "{$trocaObrigatoria}|numeric|min:0",
         ];
     }
 
@@ -62,12 +101,27 @@ class Nova extends Component
         $this->authorize('vendas.criar');
 
         $dados = $this->validate();
+
+        $dadosTroca = [
+            'marca' => $dados['troca_marca'],
+            'modelo' => $dados['troca_modelo'],
+            'ano_modelo' => $dados['troca_ano_modelo'],
+            'placa' => $dados['troca_placa'],
+            'km' => $dados['troca_km'],
+            'valor_avaliado' => $dados['troca_valor_avaliado'],
+        ];
+        unset($dados['troca_marca'], $dados['troca_modelo'], $dados['troca_ano_modelo'], $dados['troca_placa'], $dados['troca_km'], $dados['troca_valor_avaliado']);
+
         $dados['filial_id'] = Veiculo::find($dados['veiculo_id'])?->filial_id;
 
         $confirmarAgora = $dados['status'] === 'confirmada';
         $dados['status'] = 'pendente';
 
         $venda = Venda::create($dados);
+
+        if ($venda->forma_pagamento === 'troca') {
+            $venda->carroTroca()->create($dadosTroca);
+        }
 
         $venda->update(['comissao_vendedor' => (new ComissaoCalculator)->calcular($venda)]);
 
