@@ -1,4 +1,4 @@
-<div class="max-w-5xl">
+<div class="max-w-5xl pb-20">
     <div class="flex items-center gap-3 mb-6">
         <a href="{{ route('admin.veiculos.index') }}" class="text-text-secondary hover:text-text-primary">
             <x-heroicon-o-arrow-left class="w-5 h-5" />
@@ -360,7 +360,14 @@
         <button type="submit" class="hidden" aria-hidden="true" tabindex="-1"></button>
     </form>
 
-    <div class="sticky bottom-0 -mx-6 mt-6 px-6 py-3 bg-bg/95 backdrop-blur border-t border-border flex items-center gap-3 z-10">
+    {{-- position:fixed (nao sticky) de proposito: o card fica ANTES de Fotos/Video/
+         Opcionais/Custos/Publicar no HTML, entao "sticky" so gruda enquanto ainda
+         resta espaco dentro do proprio pai - assim que esse conteudo extra aparece
+         (depois do primeiro salvar), sticky solta o botao de vez. Fixed nao tem
+         esse problema: fica sempre visivel, independente de quanto conteudo tem
+         abaixo. z-0 (menor que o z-10 do menu lateral) faz o menu cobrir a barra
+         onde eles se sobrepoem, sem precisar calcular a largura do menu em JS. --}}
+    <div class="fixed bottom-0 left-0 right-0 z-0 px-6 py-3 bg-bg/95 backdrop-blur border-t border-border flex items-center gap-3">
         <button type="button" wire:click="salvar" class="inline-flex items-center gap-2 px-4 py-2 rounded-control bg-primary text-white text-sm font-medium hover:bg-primary-light">
             <x-heroicon-o-check class="w-4 h-4" />
             Salvar
