@@ -47,13 +47,15 @@
             </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Telefone</label>
-                <input type="text" wire:model="telefone" placeholder="(14) 3882-5011"
+                <input type="text" wire:model="telefone" placeholder="(14) 3882-5011" maxlength="15"
+                       x-on:input="$el.value = maskTelefone($el.value)"
                        class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
                 @error('telefone') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">WhatsApp</label>
-                <input type="text" wire:model="whatsapp" placeholder="(14) 99754-2803"
+                <input type="text" wire:model="whatsapp" placeholder="(14) 99754-2803" maxlength="15"
+                       x-on:input="$el.value = maskTelefone($el.value)"
                        class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
                 @error('whatsapp') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
