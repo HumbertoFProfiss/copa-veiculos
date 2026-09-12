@@ -21,11 +21,9 @@
                      @if (! $loop->first) x-cloak @endif
                  @endif>
         @endforeach
-        <div class="absolute inset-0"
-             style="background: linear-gradient(115deg, rgba(11,58,93,0.92) 10%, rgba(18,104,163,0.75) 50%, rgba(79,168,232,0.35) 100%)"></div>
 
         <div class="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 pt-32 pb-16 w-full">
-            <div class="max-w-2xl">
+            <div class="max-w-2xl rounded-2xl bg-black/70 backdrop-blur-sm p-8">
                 <p class="mb-5 text-sm font-medium tracking-widest text-brand-300 uppercase">
                     @if ($empresa?->cidade)
                         {{ $empresa->cidade }}@if($empresa->uf) · {{ $empresa->uf }}@endif —
@@ -51,13 +49,13 @@
                         Simular Financiamento
                     </a>
                 </div>
-            </div>
 
-            <div class="mt-12 flex flex-col gap-6 border-t border-white/20 pt-8 sm:flex-row sm:gap-12">
-                @if ($empresa?->horario_funcionamento)
-                    <p class="text-sm font-medium text-brand-100">{{ $empresa->horario_funcionamento }}</p>
-                @endif
-                <p class="text-sm font-medium text-brand-100">Financiamento facilitado</p>
+                <div class="mt-10 flex flex-col gap-4 border-t border-white/20 pt-6 sm:flex-row sm:gap-10">
+                    @if ($empresa?->horario_funcionamento)
+                        <p class="text-sm font-medium text-brand-100">{{ $empresa->horario_funcionamento }}</p>
+                    @endif
+                    <p class="text-sm font-medium text-brand-100">Financiamento facilitado</p>
+                </div>
             </div>
         </div>
     </section>
@@ -72,7 +70,7 @@
                 <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($destaques as $veiculo)
                         <a href="{{ route('veiculo.show', $veiculo) }}"
-                           class="group block rounded-2xl border border-brand-100 dark:border-duskborder bg-[#A7C7E7] overflow-hidden transition-colors hover:border-brand-500">
+                           class="group block rounded-2xl border border-brand-100 dark:border-duskborder bg-brand-100 overflow-hidden transition-colors hover:border-brand-500">
                             <div class="relative aspect-[4/3] bg-brand-100/50 dark:bg-white/10 overflow-hidden">
                                 @if ($veiculo->fotos->isNotEmpty())
                                     <img src="{{ $veiculo->fotos->first()->url() }}" alt="{{ $veiculo->marca }} {{ $veiculo->modelo }}"
@@ -88,7 +86,7 @@
                                 </div>
                             </div>
                             <div class="p-6">
-                                <h3 class="font-heading font-medium text-brand-900 dark:text-white">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h3>
+                                <h3 class="font-heading font-medium text-brand-900">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h3>
                                 <div class="flex flex-wrap items-center gap-1.5 mt-2">
                                     <span class="px-2.5 py-1 rounded-full bg-brand-700 text-white text-xs font-medium">
                                         {{ $veiculo->ano_fabricacao }}/{{ $veiculo->ano_modelo }} &middot; {{ number_format($veiculo->km, 0, ',', '.') }} km
@@ -124,7 +122,7 @@
                 <div class="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6">
                     @foreach ($ultimasAdicoes as $veiculo)
                         <a href="{{ route('veiculo.show', $veiculo) }}"
-                           class="group block rounded-2xl border border-brand-100 dark:border-duskborder bg-[#A7C7E7] overflow-hidden transition-colors hover:border-brand-500">
+                           class="group block rounded-2xl border border-brand-100 dark:border-duskborder bg-brand-100 overflow-hidden transition-colors hover:border-brand-500">
                             <div class="relative aspect-[4/3] bg-white/40 dark:bg-white/10 overflow-hidden">
                                 @if ($veiculo->fotos->isNotEmpty())
                                     <img src="{{ $veiculo->fotos->first()->url() }}" alt="{{ $veiculo->marca }} {{ $veiculo->modelo }}"
@@ -139,7 +137,7 @@
                                 </div>
                             </div>
                             <div class="p-5">
-                                <h3 class="font-heading font-medium text-brand-900 dark:text-white text-sm">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h3>
+                                <h3 class="font-heading font-medium text-brand-900 text-base">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h3>
                                 <span class="inline-block mt-2 px-2.5 py-1 rounded-full bg-brand-700 text-white text-xs font-medium">
                                     {{ $veiculo->ano_fabricacao }}/{{ $veiculo->ano_modelo }} &middot; {{ number_format($veiculo->km, 0, ',', '.') }} km
                                 </span>
@@ -173,21 +171,21 @@
 
             <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 <div class="group rounded-2xl border border-brand-100 dark:border-duskborder bg-white dark:bg-duskcard p-7 transition-colors hover:bg-brand-100/50 dark:hover:bg-duskborder/40">
-                    <span class="mb-5 flex size-11 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)">
+                    <span class="mb-5 flex size-11 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #B8860B 0%, #D4AF37 55%, #E8C766 100%)">
                         <x-heroicon-o-banknotes class="w-5 h-5" />
                     </span>
                     <h3 class="font-heading font-medium text-lg text-brand-900 dark:text-white">Financiamento</h3>
                     <p class="mt-2 text-base text-muted dark:text-duskmuted">Financie a compra do seu veículo. O carro dos seus sonhos pode ser seu.</p>
                 </div>
                 <div class="group rounded-2xl border border-brand-100 dark:border-duskborder bg-white dark:bg-duskcard p-7 transition-colors hover:bg-brand-100/50 dark:hover:bg-duskborder/40">
-                    <span class="mb-5 flex size-11 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)">
+                    <span class="mb-5 flex size-11 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #B8860B 0%, #D4AF37 55%, #E8C766 100%)">
                         <x-heroicon-o-truck class="w-5 h-5" />
                     </span>
                     <h3 class="font-heading font-medium text-lg text-brand-900 dark:text-white">Venda seu veículo</h3>
                     <p class="mt-2 text-base text-muted dark:text-duskmuted">A maneira mais rápida de vender o seu carro, com segurança na negociação.</p>
                 </div>
                 <div class="group rounded-2xl border border-brand-100 dark:border-duskborder bg-white dark:bg-duskcard p-7 transition-colors hover:bg-brand-100/50 dark:hover:bg-duskborder/40">
-                    <span class="mb-5 flex size-11 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)">
+                    <span class="mb-5 flex size-11 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #B8860B 0%, #D4AF37 55%, #E8C766 100%)">
                         <x-heroicon-o-building-storefront class="w-5 h-5" />
                     </span>
                     <h3 class="font-heading font-medium text-lg text-brand-900 dark:text-white">Empresa</h3>
@@ -201,7 +199,7 @@
                     </p>
                 </div>
                 <div class="group rounded-2xl border border-brand-100 dark:border-duskborder bg-white dark:bg-duskcard p-7 transition-colors hover:bg-brand-100/50 dark:hover:bg-duskborder/40">
-                    <span class="mb-5 flex size-11 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)">
+                    <span class="mb-5 flex size-11 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #B8860B 0%, #D4AF37 55%, #E8C766 100%)">
                         <x-heroicon-o-chat-bubble-left-right class="w-5 h-5" />
                     </span>
                     <h3 class="font-heading font-medium text-lg text-brand-900 dark:text-white">Fale conosco</h3>
@@ -321,34 +319,34 @@
                 </div>
                 <div class="space-y-5">
                     <div class="flex items-start gap-4">
-                        <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)"><x-heroicon-o-map-pin class="w-5 h-5" /></span>
+                        <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #B8860B 0%, #D4AF37 55%, #E8C766 100%)"><x-heroicon-o-map-pin class="w-5 h-5" /></span>
                         <div><strong class="text-brand-900 dark:text-white block text-sm">Endereço</strong><p class="text-muted dark:text-duskmuted text-sm">{{ $empresa?->endereco ?? 'A configurar' }}</p></div>
                     </div>
                     <div class="flex items-start gap-4">
-                        <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)"><x-heroicon-o-phone class="w-5 h-5" /></span>
+                        <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #B8860B 0%, #D4AF37 55%, #E8C766 100%)"><x-heroicon-o-phone class="w-5 h-5" /></span>
                         <div><strong class="text-brand-900 dark:text-white block text-sm">Telefone</strong><p class="text-muted dark:text-duskmuted text-sm">
                             @if ($empresa?->telefone)<a href="tel:{{ $empresa->telefone }}" class="hover:text-brand-700">{{ $empresa->telefone }}</a>@else A configurar @endif
                         </p></div>
                     </div>
                     <div class="flex items-start gap-4">
-                        <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)"><x-heroicon-o-chat-bubble-left-right class="w-5 h-5" /></span>
+                        <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #B8860B 0%, #D4AF37 55%, #E8C766 100%)"><x-heroicon-o-chat-bubble-left-right class="w-5 h-5" /></span>
                         <div><strong class="text-brand-900 dark:text-white block text-sm">WhatsApp</strong><p class="text-muted dark:text-duskmuted text-sm">
                             @if ($empresa?->whatsappUrl())<a href="{{ $empresa->whatsappUrl() }}" target="_blank" rel="noopener" class="hover:text-brand-700">{{ $empresa->whatsapp }}</a>@else A configurar @endif
                         </p></div>
                     </div>
                     <div class="flex items-start gap-4">
-                        <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)"><x-heroicon-o-clock class="w-5 h-5" /></span>
+                        <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #B8860B 0%, #D4AF37 55%, #E8C766 100%)"><x-heroicon-o-clock class="w-5 h-5" /></span>
                         <div><strong class="text-brand-900 dark:text-white block text-sm">Horário</strong><p class="text-muted dark:text-duskmuted text-sm">{{ $empresa?->horario_funcionamento ?? 'A configurar' }}</p></div>
                     </div>
                     <div class="flex items-start gap-4">
-                        <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)"><x-heroicon-o-envelope class="w-5 h-5" /></span>
+                        <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #B8860B 0%, #D4AF37 55%, #E8C766 100%)"><x-heroicon-o-envelope class="w-5 h-5" /></span>
                         <div><strong class="text-brand-900 dark:text-white block text-sm">E-mail</strong><p class="text-muted dark:text-duskmuted text-sm">
                             @if ($empresa?->email_contato)<a href="mailto:{{ $empresa->email_contato }}" class="hover:text-brand-700">{{ $empresa->email_contato }}</a>@else A configurar @endif
                         </p></div>
                     </div>
                     @if ($empresa?->instagram_url || $empresa?->facebook_url)
                         <div class="flex items-start gap-4">
-                            <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)"><x-heroicon-o-share class="w-5 h-5" /></span>
+                            <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-white" style="background-image: linear-gradient(135deg, #B8860B 0%, #D4AF37 55%, #E8C766 100%)"><x-heroicon-o-share class="w-5 h-5" /></span>
                             <div>
                                 <strong class="text-brand-900 dark:text-white block text-sm">Redes sociais</strong>
                                 <p class="text-muted dark:text-duskmuted text-sm space-x-3">

@@ -197,7 +197,7 @@
                                     type: 'bar',
                                     label: 'Vendas (qtd)',
                                     data: series.vendasQtd,
-                                    backgroundColor: '#1D4ED8',
+                                    backgroundColor: '#B8860B',
                                     yAxisID: 'y',
                                 },
                                 {
@@ -234,7 +234,7 @@
                             datasets: [{
                                 label: 'Leads recebidos',
                                 data: series.leadsQtd,
-                                backgroundColor: '#3B82F6',
+                                backgroundColor: '#D4AF37',
                             }],
                         },
                         options: {

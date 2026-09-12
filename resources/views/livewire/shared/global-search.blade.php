@@ -3,7 +3,7 @@
         <x-heroicon-o-magnifying-glass class="w-5 h-5 text-text-secondary shrink-0" />
         <input type="text" wire:model.live.debounce.200ms="termo" x-ref="buscaGlobalInput"
                placeholder="Buscar veículos, clientes, leads, fornecedores, equipe..."
-               class="flex-1 border-0 focus:ring-0 text-sm p-0 placeholder:text-text-secondary/60">
+               class="flex-1 border-0 focus:ring-0 text-sm p-0 bg-transparent text-text-primary placeholder:text-text-secondary/60">
         <kbd class="hidden sm:inline text-[11px] px-1.5 py-0.5 rounded border border-border text-text-secondary">Esc</kbd>
     </div>
 

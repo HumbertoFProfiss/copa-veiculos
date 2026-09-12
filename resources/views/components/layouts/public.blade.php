@@ -32,7 +32,7 @@
     <meta property="og:image" content="{{ $ogImage ?? asset('logo.png') }}">
     <meta name="twitter:card" content="summary_large_image">
 
-    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="icon" type="image/jpeg" href="{{ asset('favicon-reimotors.jpg') }}">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700|fraunces:500,600,700&display=swap" rel="stylesheet" />
@@ -85,7 +85,7 @@
                 },
             }"
          x-init="@if($heroTransparente) scrolled = window.scrollY > 24; window.addEventListener('scroll', () => scrolled = window.scrollY > 24) @endif">
-        <header :class="scrolled ? 'bg-white/90 dark:bg-duskbg/90 shadow-sm backdrop-blur-md' : 'bg-transparent'"
+        <header :class="scrolled ? 'bg-white/90 dark:bg-duskbg/90 shadow-sm backdrop-blur-md' : 'bg-black/40 backdrop-blur-md'"
                 class="fixed inset-x-0 top-0 z-40 transition-colors duration-300">
             <div class="max-w-7xl mx-auto px-6 sm:px-8 h-20 flex items-center justify-between gap-4">
                 <a href="{{ route('home') }}" class="shrink-0">
@@ -135,7 +135,7 @@
     </div>
 
     <footer id="contato-footer" class="relative bg-brand-900 pt-16 pb-10 text-brand-100">
-        <div class="absolute inset-x-0 top-0 h-1.5" style="background-image: linear-gradient(135deg, #1268A3 0%, #4FA8E8 55%, #7FD3F0 100%)"></div>
+        <div class="absolute inset-x-0 top-0 h-1.5" style="background-image: linear-gradient(135deg, #B8860B 0%, #D4AF37 55%, #E8C766 100%)"></div>
 
         <div class="max-w-7xl mx-auto px-6 sm:px-8">
             <div class="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
