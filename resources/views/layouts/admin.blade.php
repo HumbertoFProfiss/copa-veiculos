@@ -45,7 +45,7 @@
                 <a href="{{ route('home') }}" target="_blank" rel="noopener"
                    x-show="!colapsada" x-transition.opacity
                    title="Voltar ao site"
-                   class="shrink-0 inline-flex items-center gap-1.5 px-2 py-1.5 rounded-control text-xs font-medium text-text-secondary hover:bg-surface hover:text-primary transition-colors">
+                   class="shrink-0 inline-flex items-center gap-1.5 px-2 py-1.5 rounded-control text-xs font-medium text-white hover:bg-surface hover:text-primary transition-colors">
                     <x-heroicon-o-arrow-top-right-on-square class="w-4 h-4" />
                     <span>Voltar ao site</span>
                 </a>
