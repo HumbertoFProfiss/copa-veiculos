@@ -73,12 +73,8 @@ class ContratoRenderer
 
     protected function formaPagamentoLabel(string $forma): string
     {
-        return match ($forma) {
-            'avista' => 'à vista',
-            'financiado' => 'financiado',
-            'consorcio' => 'consórcio',
-            'troca' => 'troca com veículo',
-            default => $forma,
-        };
+        $label = \App\Models\Venda::FORMAS_PAGAMENTO_LABELS[$forma] ?? $forma;
+
+        return mb_strtolower($label);
     }
 }

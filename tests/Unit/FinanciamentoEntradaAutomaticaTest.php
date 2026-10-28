@@ -29,7 +29,7 @@ it('calcula a entrada automaticamente quando o valor financiado e preenchido, e 
     $cliente = Cliente::create(['empresa_id' => $empresa->id, 'nome' => 'Cliente Entrada Auto Teste '.Str::random(4)]);
     $venda = Venda::create([
         'empresa_id' => $empresa->id, 'veiculo_id' => $veiculo->id, 'cliente_id' => $cliente->id,
-        'vendedor_id' => $user->id, 'forma_pagamento' => 'financiado', 'preco_venda' => 84500, 'desconto' => 0,
+        'vendedor_id' => $user->id, 'forma_pagamento' => 'financiamento', 'preco_venda' => 84500, 'desconto' => 0,
         'status' => 'confirmada', 'data_venda' => now(), 'prazo_garantia_dias' => 90,
     ]);
 
@@ -62,7 +62,7 @@ it('a soma de entrada e valor financiado calculados bate com o total da venda', 
     $cliente = Cliente::create(['empresa_id' => $empresa->id, 'nome' => 'Cliente Entrada Soma Teste '.Str::random(4)]);
     $venda = Venda::create([
         'empresa_id' => $empresa->id, 'veiculo_id' => $veiculo->id, 'cliente_id' => $cliente->id,
-        'vendedor_id' => $user->id, 'forma_pagamento' => 'financiado', 'preco_venda' => 50000, 'desconto' => 2000,
+        'vendedor_id' => $user->id, 'forma_pagamento' => 'financiamento', 'preco_venda' => 50000, 'desconto' => 2000,
         'status' => 'confirmada', 'data_venda' => now(), 'prazo_garantia_dias' => 90,
     ]);
 

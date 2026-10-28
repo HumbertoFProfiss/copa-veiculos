@@ -12,21 +12,7 @@ uses(Tests\TestCase::class);
 
 beforeEach(fn () => usarMysqlRealDeDev());
 
-it('mostra os campos de entrada e valor financiado so quando a forma de pagamento financiado e selecionada', function () {
-    $empresa = Empresa::first();
-    app()->instance('tenant', $empresa);
-    $user = usuarioProprietario($empresa);
-
-    Livewire::actingAs($user)->test(Nova::class)
-        ->assertDontSee('Valor financiado (R$)')
-        ->set('forma_pagamento', 'financiado')
-        ->assertSee('Valor de entrada (R$)')
-        ->assertSee('Valor financiado (R$)')
-        ->set('forma_pagamento', 'avista')
-        ->assertDontSee('Valor financiado (R$)');
-});
-
-it('calcula entrada e valor financiado automaticamente um a partir do outro', function () {
+it('aceita financiamento como forma de pagamento e salva o registro de pagamento', function () {
     $empresa = Empresa::first();
     app()->instance('tenant', $empresa);
     $user = usuarioProprietario($empresa);
@@ -37,32 +23,6 @@ it('calcula entrada e valor financiado automaticamente um a partir do outro', fu
         'modelo' => 'F',
         'slug' => Str::slug('venda-financiado-teste-'.Str::random(8)),
         'km' => 0, 'portas' => 4, 'tipo_propriedade' => 'proprio',
-        'data_entrada' => now(), 'status' => 'disponivel', 'preco_venda' => 84500,
-    ]);
-
-    $componente = Livewire::actingAs($user)->test(Nova::class)
-        ->set('veiculo_id', $veiculo->id)
-        ->set('forma_pagamento', 'financiado')
-        ->set('valor_financiado', 70000)
-        ->assertSet('valor_entrada', 14500.0);
-
-    $componente->set('valor_entrada', 20000)
-        ->assertSet('valor_financiado', 64500.0);
-
-    $veiculo->delete();
-});
-
-it('exige entrada e valor financiado quando a forma de pagamento e financiado, e salva os valores na venda', function () {
-    $empresa = Empresa::first();
-    app()->instance('tenant', $empresa);
-    $user = usuarioProprietario($empresa);
-
-    $veiculo = Veiculo::create([
-        'empresa_id' => $empresa->id,
-        'marca' => 'VendaFinanciadoOkTeste'.Str::random(6),
-        'modelo' => 'F',
-        'slug' => Str::slug('venda-financiado-ok-teste-'.Str::random(8)),
-        'km' => 0, 'portas' => 4, 'tipo_propriedade' => 'proprio',
         'data_entrada' => now(), 'status' => 'disponivel', 'preco_venda' => 50000,
     ]);
     $cliente = Cliente::create(['empresa_id' => $empresa->id, 'nome' => 'Cliente Venda Financiado Teste '.Str::random(4)]);
@@ -72,59 +32,130 @@ it('exige entrada e valor financiado quando a forma de pagamento e financiado, e
         ->set('cliente_id', $cliente->id)
         ->set('vendedor_id', $user->id)
         ->set('preco_venda', 50000)
-        ->set('forma_pagamento', 'financiado')
-        ->call('salvar')
-        ->assertHasErrors(['valor_entrada', 'valor_financiado']);
-
-    Livewire::actingAs($user)->test(Nova::class)
-        ->set('veiculo_id', $veiculo->id)
-        ->set('cliente_id', $cliente->id)
-        ->set('vendedor_id', $user->id)
-        ->set('preco_venda', 50000)
-        ->set('forma_pagamento', 'financiado')
-        ->set('valor_financiado', 40000)
+        ->set('pagamentos.0.forma', 'financiamento')
+        ->set('pagamentos.0.valor', 50000)
         ->call('salvar')
         ->assertHasNoErrors();
 
     $venda = Venda::where('veiculo_id', $veiculo->id)->first();
     expect($venda)->not->toBeNull()
-        ->and((float) $venda->valor_entrada)->toBe(10000.0)
-        ->and((float) $venda->valor_financiado)->toBe(40000.0);
+        ->and($venda->forma_pagamento)->toBe('financiamento')
+        ->and($venda->pagamentos()->count())->toBe(1)
+        ->and($venda->pagamentos()->first()->forma_pagamento)->toBe('financiamento')
+        ->and((float) $venda->pagamentos()->first()->valor)->toBe(50000.0);
 
+    $venda->pagamentos()->delete();
     $venda->delete();
     $veiculo->delete();
     $cliente->delete();
 });
 
-it('nao salva valor de entrada/financiado quando a forma de pagamento nao e financiado', function () {
+it('permite combinar duas formas de pagamento numa mesma venda e marca a venda como mista', function () {
     $empresa = Empresa::first();
     app()->instance('tenant', $empresa);
     $user = usuarioProprietario($empresa);
 
     $veiculo = Veiculo::create([
         'empresa_id' => $empresa->id,
-        'marca' => 'VendaAvistaTeste'.Str::random(6),
-        'modelo' => 'A',
-        'slug' => Str::slug('venda-avista-teste-'.Str::random(8)),
+        'marca' => 'VendaMistaTeste'.Str::random(6),
+        'modelo' => 'M',
+        'slug' => Str::slug('venda-mista-teste-'.Str::random(8)),
         'km' => 0, 'portas' => 4, 'tipo_propriedade' => 'proprio',
-        'data_entrada' => now(), 'status' => 'disponivel', 'preco_venda' => 30000,
+        'data_entrada' => now(), 'status' => 'disponivel', 'preco_venda' => 50000,
     ]);
-    $cliente = Cliente::create(['empresa_id' => $empresa->id, 'nome' => 'Cliente Venda Avista Teste '.Str::random(4)]);
+    $cliente = Cliente::create(['empresa_id' => $empresa->id, 'nome' => 'Cliente Venda Mista Teste '.Str::random(4)]);
 
     Livewire::actingAs($user)->test(Nova::class)
         ->set('veiculo_id', $veiculo->id)
         ->set('cliente_id', $cliente->id)
         ->set('vendedor_id', $user->id)
-        ->set('preco_venda', 30000)
-        ->set('forma_pagamento', 'avista')
+        ->set('preco_venda', 50000)
+        ->set('pagamentos.0.forma', 'dinheiro')
+        ->set('pagamentos.0.valor', 10000)
+        ->call('adicionarPagamento')
+        ->set('pagamentos.1.forma', 'financiamento')
+        ->set('pagamentos.1.valor', 40000)
         ->call('salvar')
         ->assertHasNoErrors();
 
     $venda = Venda::where('veiculo_id', $veiculo->id)->first();
     expect($venda)->not->toBeNull()
-        ->and($venda->valor_entrada)->toBeNull()
-        ->and($venda->valor_financiado)->toBeNull();
+        ->and($venda->forma_pagamento)->toBe('misto')
+        ->and($venda->pagamentos()->count())->toBe(2)
+        ->and((float) $venda->pagamentos()->sum('valor'))->toBe(50000.0);
 
+    $venda->pagamentos()->delete();
+    $venda->delete();
+    $veiculo->delete();
+    $cliente->delete();
+});
+
+it('erra quando a soma das formas de pagamento nao bate com o valor da venda', function () {
+    $empresa = Empresa::first();
+    app()->instance('tenant', $empresa);
+    $user = usuarioProprietario($empresa);
+
+    $veiculo = Veiculo::create([
+        'empresa_id' => $empresa->id,
+        'marca' => 'VendaSomaErradaTeste'.Str::random(6),
+        'modelo' => 'E',
+        'slug' => Str::slug('venda-soma-errada-teste-'.Str::random(8)),
+        'km' => 0, 'portas' => 4, 'tipo_propriedade' => 'proprio',
+        'data_entrada' => now(), 'status' => 'disponivel', 'preco_venda' => 50000,
+    ]);
+    $cliente = Cliente::create(['empresa_id' => $empresa->id, 'nome' => 'Cliente Venda Soma Errada Teste '.Str::random(4)]);
+
+    Livewire::actingAs($user)->test(Nova::class)
+        ->set('veiculo_id', $veiculo->id)
+        ->set('cliente_id', $cliente->id)
+        ->set('vendedor_id', $user->id)
+        ->set('preco_venda', 50000)
+        ->set('pagamentos.0.forma', 'dinheiro')
+        ->set('pagamentos.0.valor', 30000)
+        ->call('salvar')
+        ->assertHasErrors(['pagamentos']);
+
+    expect(Venda::where('veiculo_id', $veiculo->id)->exists())->toBeFalse();
+
+    $veiculo->delete();
+    $cliente->delete();
+});
+
+it('salva lucro financeiro, instituicao financeira e impostos na venda', function () {
+    $empresa = Empresa::first();
+    app()->instance('tenant', $empresa);
+    $user = usuarioProprietario($empresa);
+
+    $veiculo = Veiculo::create([
+        'empresa_id' => $empresa->id,
+        'marca' => 'VendaLucroFinanceiroTeste'.Str::random(6),
+        'modelo' => 'L',
+        'slug' => Str::slug('venda-lucro-financeiro-teste-'.Str::random(8)),
+        'km' => 0, 'portas' => 4, 'tipo_propriedade' => 'proprio',
+        'data_entrada' => now(), 'status' => 'disponivel', 'preco_venda' => 50000,
+    ]);
+    $cliente = Cliente::create(['empresa_id' => $empresa->id, 'nome' => 'Cliente Venda Lucro Financeiro Teste '.Str::random(4)]);
+
+    Livewire::actingAs($user)->test(Nova::class)
+        ->set('veiculo_id', $veiculo->id)
+        ->set('cliente_id', $cliente->id)
+        ->set('vendedor_id', $user->id)
+        ->set('preco_venda', 50000)
+        ->set('pagamentos.0.forma', 'financiamento')
+        ->set('pagamentos.0.valor', 50000)
+        ->set('lucro_financeiro', 1200)
+        ->set('instituicao_financeira', 'Banco Teste')
+        ->set('impostos', 350)
+        ->call('salvar')
+        ->assertHasNoErrors();
+
+    $venda = Venda::where('veiculo_id', $veiculo->id)->first();
+    expect($venda)->not->toBeNull()
+        ->and((float) $venda->lucro_financeiro)->toBe(1200.0)
+        ->and($venda->instituicao_financeira)->toBe('Banco Teste')
+        ->and((float) $venda->impostos)->toBe(350.0);
+
+    $venda->pagamentos()->delete();
     $venda->delete();
     $veiculo->delete();
     $cliente->delete();

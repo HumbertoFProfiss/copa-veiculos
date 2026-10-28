@@ -42,7 +42,7 @@
         </div>
         <div class="bg-bg border border-border rounded-card p-4">
             <div class="text-xs text-text-secondary uppercase tracking-wide mb-1">Forma de pagamento</div>
-            <div class="text-sm font-medium text-text-primary">{{ ucfirst($venda->forma_pagamento) }}</div>
+            <div class="text-sm font-medium text-text-primary">{{ \App\Models\Venda::FORMAS_PAGAMENTO_LABELS[$venda->forma_pagamento] ?? ucfirst($venda->forma_pagamento) }}</div>
         </div>
         <div class="bg-bg border border-border rounded-card p-4">
             <div class="text-xs text-text-secondary uppercase tracking-wide mb-1">Data da venda</div>
@@ -63,16 +63,6 @@
                     <div class="font-medium text-error tabular-nums">- R$ {{ number_format($venda->desconto, 2, ',', '.') }}</div>
                 </div>
             @endif
-            @if ($venda->forma_pagamento === 'financiado')
-                <div>
-                    <div class="text-text-secondary text-xs mb-0.5">Valor de entrada</div>
-                    <div class="font-medium text-text-primary tabular-nums">R$ {{ number_format($venda->valor_entrada ?? 0, 2, ',', '.') }}</div>
-                </div>
-                <div>
-                    <div class="text-text-secondary text-xs mb-0.5">Valor financiado</div>
-                    <div class="font-medium text-text-primary tabular-nums">R$ {{ number_format($venda->valor_financiado ?? 0, 2, ',', '.') }}</div>
-                </div>
-            @endif
             <div>
                 <div class="text-text-secondary text-xs mb-0.5">Preço de compra</div>
                 <div class="font-medium text-text-primary tabular-nums">R$ {{ number_format($venda->veiculo?->preco_compra ?? 0, 2, ',', '.') }}</div>
@@ -89,7 +79,41 @@
                 <div class="text-text-secondary text-xs mb-0.5">Comissão do vendedor</div>
                 <div class="font-medium text-text-primary tabular-nums">R$ {{ number_format($venda->comissao_vendedor ?? 0, 2, ',', '.') }}</div>
             </div>
+            @if ($venda->lucro_financeiro > 0)
+                <div>
+                    <div class="text-text-secondary text-xs mb-0.5">Lucro financiamento/cartão</div>
+                    <div class="font-medium text-success tabular-nums">+ R$ {{ number_format($venda->lucro_financeiro, 2, ',', '.') }}</div>
+                    @if ($venda->instituicao_financeira)
+                        <div class="text-text-secondary text-xs mt-0.5">{{ $venda->instituicao_financeira }}</div>
+                    @endif
+                </div>
+            @endif
+            @if ($venda->impostos > 0)
+                <div>
+                    <div class="text-text-secondary text-xs mb-0.5">Impostos</div>
+                    <div class="font-medium text-error tabular-nums">- R$ {{ number_format($venda->impostos, 2, ',', '.') }}</div>
+                </div>
+            @endif
         </div>
+
+        @if ($venda->pagamentos->isNotEmpty())
+            <div class="mt-4 pt-4 border-t border-border">
+                <div class="text-xs text-text-secondary uppercase tracking-wide mb-2">Formas de pagamento</div>
+                <div class="space-y-1.5">
+                    @foreach ($venda->pagamentos as $pagamento)
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-text-primary">
+                                {{ \App\Models\Venda::FORMAS_PAGAMENTO_LABELS[$pagamento->forma_pagamento] ?? ucfirst($pagamento->forma_pagamento) }}
+                                @if ($pagamento->observacao)
+                                    <span class="text-text-secondary text-xs">— {{ $pagamento->observacao }}</span>
+                                @endif
+                            </span>
+                            <span class="font-medium text-text-primary tabular-nums">R$ {{ number_format($pagamento->valor, 2, ',', '.') }}</span>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
         @if ($venda->veiculo && $venda->veiculo->margem() !== null)
             <div class="mt-4 pt-4 border-t border-border">
                 <span class="text-sm text-text-secondary">Margem líquida do veículo:</span>

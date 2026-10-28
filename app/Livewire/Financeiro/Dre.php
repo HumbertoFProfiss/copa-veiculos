@@ -39,6 +39,8 @@ class Dre extends Component
         $custoVeiculos = $vendas->sum(fn (Venda $v) => (float) ($v->veiculo->preco_compra ?? 0));
         $custosAgregados = CustoVeiculo::whereIn('veiculo_id', $vendas->pluck('veiculo_id'))->sum('valor');
         $comissoes = $vendas->sum('comissao_vendedor');
+        $lucroFinanceiro = $vendas->sum('lucro_financeiro');
+        $impostos = $vendas->sum('impostos');
 
         // Custos de garantia (chamados aprovados/concluidos) das vendas do
         // periodo - faltava entrar nessa conta, mesmo ja sendo descontado da
@@ -53,7 +55,7 @@ class Dre extends Component
             ->whereBetween('pagamento', [$inicio, $fim])
             ->sum('valor');
 
-        $lucroLiquido = $receitaBruta - $custoVeiculos - $custosAgregados - $custosGarantia - $comissoes - $despesasOperacionais;
+        $lucroLiquido = $receitaBruta + $lucroFinanceiro - $custoVeiculos - $custosAgregados - $custosGarantia - $comissoes - $impostos - $despesasOperacionais;
 
         return [
             'totalVendas' => $vendas->count(),
@@ -62,6 +64,8 @@ class Dre extends Component
             'custosAgregados' => $custosAgregados,
             'custosGarantia' => $custosGarantia,
             'comissoes' => $comissoes,
+            'lucroFinanceiro' => $lucroFinanceiro,
+            'impostos' => $impostos,
             'despesasOperacionais' => $despesasOperacionais,
             'lucroLiquido' => $lucroLiquido,
         ];

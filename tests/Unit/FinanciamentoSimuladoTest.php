@@ -30,7 +30,7 @@ it('simula uma proposta de financiamento com a parcela calculada pela tabela Pri
     $cliente = Cliente::create(['empresa_id' => $empresa->id, 'nome' => 'Cliente Financiamento Teste '.Str::random(4)]);
     $venda = Venda::create([
         'empresa_id' => $empresa->id, 'veiculo_id' => $veiculo->id, 'cliente_id' => $cliente->id,
-        'vendedor_id' => $user->id, 'forma_pagamento' => 'financiado', 'preco_venda' => 50000, 'desconto' => 0,
+        'vendedor_id' => $user->id, 'forma_pagamento' => 'financiamento', 'preco_venda' => 50000, 'desconto' => 0,
         'status' => 'confirmada', 'data_venda' => now(), 'prazo_garantia_dias' => 90,
     ]);
     $banco = Banco::where('slug', 'itau_veiculos')->first();

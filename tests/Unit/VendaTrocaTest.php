@@ -13,21 +13,21 @@ uses(Tests\TestCase::class);
 
 beforeEach(fn () => usarMysqlRealDeDev());
 
-it('mostra os campos de veiculo de troca so quando a forma de pagamento troca e selecionada', function () {
+it('mostra os campos de veiculo de troca so quando uma forma de pagamento troca e selecionada', function () {
     $empresa = Empresa::first();
     app()->instance('tenant', $empresa);
     $user = usuarioProprietario($empresa);
 
     Livewire::actingAs($user)->test(Nova::class)
         ->assertDontSee('Veículo dado como troca')
-        ->set('forma_pagamento', 'troca')
+        ->set('pagamentos.0.forma', 'troca')
         ->assertSee('Veículo dado como troca')
         ->assertSee('Valor de volta (avaliação)')
-        ->set('forma_pagamento', 'avista')
+        ->set('pagamentos.0.forma', 'dinheiro')
         ->assertDontSee('Veículo dado como troca');
 });
 
-it('exige marca, modelo e valor avaliado do carro de troca quando a forma de pagamento e troca', function () {
+it('exige marca, modelo e valor avaliado do carro de troca quando uma forma de pagamento e troca', function () {
     $empresa = Empresa::first();
     app()->instance('tenant', $empresa);
     $user = usuarioProprietario($empresa);
@@ -47,7 +47,8 @@ it('exige marca, modelo e valor avaliado do carro de troca quando a forma de pag
         ->set('cliente_id', $cliente->id)
         ->set('vendedor_id', $user->id)
         ->set('preco_venda', 45000)
-        ->set('forma_pagamento', 'troca')
+        ->set('pagamentos.0.forma', 'troca')
+        ->set('pagamentos.0.valor', 45000)
         ->call('salvar')
         ->assertHasErrors(['troca_marca', 'troca_modelo', 'troca_valor_avaliado']);
 
@@ -55,7 +56,7 @@ it('exige marca, modelo e valor avaliado do carro de troca quando a forma de pag
     $cliente->delete();
 });
 
-it('cria o registro do carro de troca ao salvar uma venda com forma de pagamento troca', function () {
+it('cria o registro do carro de troca ao salvar uma venda com uma forma de pagamento troca', function () {
     $empresa = Empresa::first();
     app()->instance('tenant', $empresa);
     $user = usuarioProprietario($empresa);
@@ -75,7 +76,8 @@ it('cria o registro do carro de troca ao salvar uma venda com forma de pagamento
         ->set('cliente_id', $cliente->id)
         ->set('vendedor_id', $user->id)
         ->set('preco_venda', 45000)
-        ->set('forma_pagamento', 'troca')
+        ->set('pagamentos.0.forma', 'troca')
+        ->set('pagamentos.0.valor', 45000)
         ->set('troca_marca', 'Fiat')
         ->set('troca_modelo', 'Uno')
         ->set('troca_ano_modelo', 2015)
@@ -86,7 +88,8 @@ it('cria o registro do carro de troca ao salvar uma venda com forma de pagamento
         ->assertHasNoErrors();
 
     $venda = Venda::where('veiculo_id', $veiculo->id)->first();
-    expect($venda)->not->toBeNull();
+    expect($venda)->not->toBeNull()
+        ->and($venda->forma_pagamento)->toBe('troca');
 
     $troca = CarroTroca::where('venda_id', $venda->id)->first();
     expect($troca)->not->toBeNull()
@@ -95,13 +98,17 @@ it('cria o registro do carro de troca ao salvar uma venda com forma de pagamento
         ->and((int) $troca->ano_modelo)->toBe(2015)
         ->and((float) $troca->valor_avaliado)->toBe(18000.0);
 
+    expect($venda->pagamentos()->count())->toBe(1)
+        ->and((float) $venda->pagamentos()->first()->valor)->toBe(45000.0);
+
     $troca->delete();
+    $venda->pagamentos()->delete();
     $venda->delete();
     $veiculo->delete();
     $cliente->delete();
 });
 
-it('nao cria carro de troca quando a forma de pagamento nao e troca', function () {
+it('nao cria carro de troca quando nenhuma forma de pagamento e troca', function () {
     $empresa = Empresa::first();
     app()->instance('tenant', $empresa);
     $user = usuarioProprietario($empresa);
@@ -121,7 +128,8 @@ it('nao cria carro de troca quando a forma de pagamento nao e troca', function (
         ->set('cliente_id', $cliente->id)
         ->set('vendedor_id', $user->id)
         ->set('preco_venda', 30000)
-        ->set('forma_pagamento', 'avista')
+        ->set('pagamentos.0.forma', 'dinheiro')
+        ->set('pagamentos.0.valor', 30000)
         ->call('salvar')
         ->assertHasNoErrors();
 
@@ -129,6 +137,7 @@ it('nao cria carro de troca quando a forma de pagamento nao e troca', function (
     expect($venda)->not->toBeNull()
         ->and(CarroTroca::where('venda_id', $venda->id)->count())->toBe(0);
 
+    $venda->pagamentos()->delete();
     $venda->delete();
     $veiculo->delete();
     $cliente->delete();

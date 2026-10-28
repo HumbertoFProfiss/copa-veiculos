@@ -18,8 +18,6 @@ class Nova extends Component
 
     public ?int $vendedor_id = null;
 
-    public string $forma_pagamento = 'avista';
-
     public ?float $preco_venda = null;
 
     public float $desconto = 0;
@@ -30,6 +28,16 @@ class Nova extends Component
 
     /** "pendente" pra vendas que ainda dependem de aprovação/financiamento; "confirmada" fecha a venda na hora (reserva o veículo, gera repasse etc). */
     public string $status = 'pendente';
+
+    /**
+     * Formas de pagamento da venda - uma venda pode ser paga combinando
+     * varias (parte dinheiro, parte financiado, carro na troca...). Cada
+     * linha vira um registro em venda_pagamentos; a soma precisa bater com
+     * o valor liquido da venda (preco_venda - desconto).
+     */
+    public array $pagamentos = [
+        ['forma' => 'dinheiro', 'valor' => null, 'observacao' => null],
+    ];
 
     public ?string $troca_marca = null;
 
@@ -43,9 +51,12 @@ class Nova extends Component
 
     public ?float $troca_valor_avaliado = null;
 
-    public ?float $valor_entrada = null;
+    /** Lucro que a loja ganha com a comissao do banco/financeira ou da operadora de cartao nessa venda. */
+    public float $lucro_financeiro = 0;
 
-    public ?float $valor_financiado = null;
+    public ?string $instituicao_financeira = null;
+
+    public float $impostos = 0;
 
     /**
      * Preco anunciado do veiculo selecionado - guardado a parte do
@@ -54,6 +65,17 @@ class Nova extends Component
      * um valor de venda menor que o anunciado.
      */
     public ?float $precoAnunciado = null;
+
+    public array $formasPagamentoDisponiveis = [
+        'dinheiro' => 'Dinheiro',
+        'pix' => 'Pix',
+        'transferencia' => 'Transferência',
+        'cartao_debito' => 'Cartão de débito',
+        'cartao_credito' => 'Cartão de crédito',
+        'financiamento' => 'Financiamento',
+        'consorcio' => 'Consórcio',
+        'troca' => 'Veículo na troca',
+    ];
 
     public function mount(): void
     {
@@ -66,59 +88,93 @@ class Nova extends Component
         $this->precoAnunciado = Veiculo::find($valor)?->preco_venda;
         $this->preco_venda = $this->precoAnunciado;
         $this->desconto = 0;
-        $this->valor_entrada = null;
-        $this->valor_financiado = null;
+        $this->sincronizarPagamentoUnico();
     }
 
     public function updatedPrecoVenda($valor): void
     {
-        if ($this->precoAnunciado === null) {
-            return;
+        if ($this->precoAnunciado !== null) {
+            $this->desconto = max(0, round($this->precoAnunciado - (float) $valor, 2));
         }
 
-        $this->desconto = max(0, round($this->precoAnunciado - (float) $valor, 2));
+        $this->sincronizarPagamentoUnico();
+    }
+
+    public function updatedDesconto(): void
+    {
+        $this->sincronizarPagamentoUnico();
     }
 
     /**
-     * Separa, pra venda financiada, quanto e pago direto (entrada) de
-     * quanto vai pro banco (financiado, o que gera comissao do banco) -
-     * preenchendo um dos dois calcula o outro a partir do valor total.
+     * Caso comum: a venda inteira e paga numa unica forma de pagamento -
+     * preenche o valor dessa linha sozinho a partir do valor da venda, pra
+     * nao obrigar o vendedor a digitar o mesmo numero duas vezes. So entra
+     * em acao enquanto houver exatamente uma linha (ver adicionarPagamento).
      */
-    public function updatedValorEntrada($valor): void
+    protected function sincronizarPagamentoUnico(): void
     {
-        $total = (float) $this->preco_venda - (float) $this->desconto;
-        $this->valor_financiado = max(0, round($total - (float) $valor, 2));
+        if (count($this->pagamentos) === 1) {
+            $this->pagamentos[0]['valor'] = $this->totalVenda();
+        }
     }
 
-    public function updatedValorFinanciado($valor): void
+    public function adicionarPagamento(): void
     {
-        $total = (float) $this->preco_venda - (float) $this->desconto;
-        $this->valor_entrada = max(0, round($total - (float) $valor, 2));
+        $this->pagamentos[] = ['forma' => 'dinheiro', 'valor' => null, 'observacao' => null];
+    }
+
+    public function removerPagamento(int $indice): void
+    {
+        if (count($this->pagamentos) <= 1) {
+            return;
+        }
+
+        unset($this->pagamentos[$indice]);
+        $this->pagamentos = array_values($this->pagamentos);
+        $this->sincronizarPagamentoUnico();
+    }
+
+    public function totalPagamentos(): float
+    {
+        return round(collect($this->pagamentos)->sum(fn ($p) => (float) ($p['valor'] ?? 0)), 2);
+    }
+
+    public function totalVenda(): float
+    {
+        return round((float) $this->preco_venda - (float) $this->desconto, 2);
+    }
+
+    public function temPagamentoTroca(): bool
+    {
+        return collect($this->pagamentos)->contains(fn ($p) => ($p['forma'] ?? null) === 'troca');
     }
 
     protected function rules(): array
     {
-        $trocaObrigatoria = $this->forma_pagamento === 'troca' ? 'required' : 'nullable';
-        $financiadoObrigatorio = $this->forma_pagamento === 'financiado' ? 'required' : 'nullable';
+        $trocaObrigatoria = $this->temPagamentoTroca() ? 'required' : 'nullable';
 
         return [
             'veiculo_id' => 'required|exists:veiculos,id',
             'cliente_id' => 'required|exists:clientes,id',
             'vendedor_id' => 'required|exists:users,id',
-            'forma_pagamento' => 'required|in:avista,financiado,consorcio,troca',
             'preco_venda' => 'required|numeric|min:0',
             'desconto' => 'nullable|numeric|min:0',
             'data_venda' => 'required|date',
             'prazo_garantia_dias' => 'required|integer|min:0',
             'status' => 'required|in:pendente,confirmada',
+            'pagamentos' => 'required|array|min:1',
+            'pagamentos.*.forma' => 'required|in:'.implode(',', array_keys($this->formasPagamentoDisponiveis)),
+            'pagamentos.*.valor' => 'required|numeric|min:0.01',
+            'pagamentos.*.observacao' => 'nullable|string|max:255',
             'troca_marca' => "{$trocaObrigatoria}|string|max:255",
             'troca_modelo' => "{$trocaObrigatoria}|string|max:255",
             'troca_ano_modelo' => 'nullable|integer|min:1950|max:'.(now()->year + 1),
             'troca_placa' => 'nullable|string|max:8',
             'troca_km' => 'nullable|integer|min:0',
             'troca_valor_avaliado' => "{$trocaObrigatoria}|numeric|min:0",
-            'valor_entrada' => "{$financiadoObrigatorio}|numeric|min:0",
-            'valor_financiado' => "{$financiadoObrigatorio}|numeric|min:0",
+            'lucro_financeiro' => 'nullable|numeric|min:0',
+            'instituicao_financeira' => 'nullable|string|max:100',
+            'impostos' => 'nullable|numeric|min:0',
         ];
     }
 
@@ -128,20 +184,32 @@ class Nova extends Component
 
         $dados = $this->validate();
 
+        if (abs($this->totalPagamentos() - $this->totalVenda()) > 0.01) {
+            $this->addError('pagamentos', sprintf(
+                'A soma das formas de pagamento (R$ %s) precisa bater com o valor da venda (R$ %s).',
+                number_format($this->totalPagamentos(), 2, ',', '.'),
+                number_format($this->totalVenda(), 2, ',', '.'),
+            ));
+
+            return;
+        }
+
         $dadosTroca = [
-            'marca' => $dados['troca_marca'],
-            'modelo' => $dados['troca_modelo'],
-            'ano_modelo' => $dados['troca_ano_modelo'],
-            'placa' => $dados['troca_placa'],
-            'km' => $dados['troca_km'],
-            'valor_avaliado' => $dados['troca_valor_avaliado'],
+            'marca' => $dados['troca_marca'] ?? null,
+            'modelo' => $dados['troca_modelo'] ?? null,
+            'ano_modelo' => $dados['troca_ano_modelo'] ?? null,
+            'placa' => $dados['troca_placa'] ?? null,
+            'km' => $dados['troca_km'] ?? null,
+            'valor_avaliado' => $dados['troca_valor_avaliado'] ?? null,
         ];
         unset($dados['troca_marca'], $dados['troca_modelo'], $dados['troca_ano_modelo'], $dados['troca_placa'], $dados['troca_km'], $dados['troca_valor_avaliado']);
 
-        if ($dados['forma_pagamento'] !== 'financiado') {
-            $dados['valor_entrada'] = null;
-            $dados['valor_financiado'] = null;
-        }
+        $pagamentos = $dados['pagamentos'];
+        unset($dados['pagamentos']);
+
+        $dados['forma_pagamento'] = count($pagamentos) > 1
+            ? 'misto'
+            : $pagamentos[0]['forma'];
 
         $dados['filial_id'] = Veiculo::find($dados['veiculo_id'])?->filial_id;
 
@@ -150,7 +218,15 @@ class Nova extends Component
 
         $venda = Venda::create($dados);
 
-        if ($venda->forma_pagamento === 'troca') {
+        foreach ($pagamentos as $pagamento) {
+            $venda->pagamentos()->create([
+                'forma_pagamento' => $pagamento['forma'],
+                'valor' => $pagamento['valor'],
+                'observacao' => $pagamento['observacao'] ?? null,
+            ]);
+        }
+
+        if ($this->temPagamentoTroca()) {
             $venda->carroTroca()->create($dadosTroca);
         }
 

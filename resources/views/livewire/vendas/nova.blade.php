@@ -35,21 +35,63 @@
 
         <div class="grid grid-cols-2 gap-4">
             <div>
-                <label class="block text-xs font-medium text-text-secondary mb-1">Forma de pagamento</label>
-                <select wire:model.live="forma_pagamento" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
-                    <option value="avista">À vista</option>
-                    <option value="financiado">Financiado</option>
-                    <option value="consorcio">Consórcio</option>
-                    <option value="troca">Troca</option>
-                </select>
+                <label class="block text-xs font-medium text-text-secondary mb-1">Valor de venda *</label>
+                <input type="number" step="0.01" wire:model.live.debounce.500ms="preco_venda" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                @error('preco_venda') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
-                <label class="block text-xs font-medium text-text-secondary mb-1">Data da venda</label>
-                <input type="date" wire:model="data_venda" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                <label class="block text-xs font-medium text-text-secondary mb-1">Desconto</label>
+                <input type="number" step="0.01" wire:model="desconto" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                @if ($precoAnunciado)
+                    <p class="text-xs text-text-secondary mt-1">Calculado automaticamente (anunciado R$ {{ number_format($precoAnunciado, 2, ',', '.') }} − valor de venda) — pode ajustar se precisar.</p>
+                @endif
             </div>
         </div>
 
-        @if ($forma_pagamento === 'troca')
+        <div>
+            <label class="block text-xs font-medium text-text-secondary mb-1">Data da venda</label>
+            <input type="date" wire:model="data_venda" class="w-full max-w-[220px] rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+        </div>
+
+        {{-- Formas de pagamento: uma venda pode combinar varias (parte dinheiro, parte financiado, carro na troca...) --}}
+        <div class="rounded-control border border-border bg-surface p-4 space-y-3">
+            <div class="flex items-center justify-between">
+                <p class="text-xs font-medium text-text-primary">Formas de pagamento *</p>
+                <button type="button" wire:click="adicionarPagamento" class="text-xs font-medium text-primary hover:text-primary-light">+ Adicionar forma</button>
+            </div>
+
+            @foreach ($pagamentos as $indice => $pagamento)
+                <div class="flex items-start gap-2">
+                    <div class="flex-1">
+                        <select wire:model="pagamentos.{{ $indice }}.forma" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                            @foreach ($formasPagamentoDisponiveis as $valor => $label)
+                                <option value="{{ $valor }}">{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        @error("pagamentos.{$indice}.forma") <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    <div class="w-36">
+                        <input type="number" step="0.01" placeholder="Valor (R$)" wire:model="pagamentos.{{ $indice }}.valor" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                        @error("pagamentos.{$indice}.valor") <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    <div class="flex-1">
+                        <input type="text" placeholder="Observação (opcional)" wire:model="pagamentos.{{ $indice }}.observacao" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                    </div>
+                    @if (count($pagamentos) > 1)
+                        <button type="button" wire:click="removerPagamento({{ $indice }})" class="shrink-0 w-9 h-9 flex items-center justify-center rounded-control text-error hover:bg-error/5" title="Remover">
+                            <x-heroicon-o-trash class="w-4 h-4" />
+                        </button>
+                    @endif
+                </div>
+            @endforeach
+
+            <p class="text-xs {{ abs($this->totalPagamentos() - $this->totalVenda()) > 0.01 ? 'text-error' : 'text-text-secondary' }}">
+                Soma das formas: R$ {{ number_format($this->totalPagamentos(), 2, ',', '.') }} — valor da venda: R$ {{ number_format($this->totalVenda(), 2, ',', '.') }}
+            </p>
+            @error('pagamentos') <p class="text-xs text-error">{{ $message }}</p> @enderror
+        </div>
+
+        @if ($this->temPagamentoTroca())
             <div class="rounded-control border border-border bg-surface p-4 space-y-3">
                 <p class="text-xs font-medium text-text-primary">Veículo dado como troca</p>
                 <div class="grid grid-cols-2 gap-4">
@@ -86,37 +128,24 @@
             </div>
         @endif
 
-        @if ($forma_pagamento === 'financiado')
-            <div class="rounded-control border border-border bg-surface p-4 space-y-3">
-                <p class="text-xs font-medium text-text-primary">Financiamento</p>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-medium text-text-secondary mb-1">Valor de entrada (R$) *</label>
-                        <input type="number" step="0.01" wire:model.live.debounce.500ms="valor_entrada" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
-                        @error('valor_entrada') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-text-secondary mb-1">Valor financiado (R$) *</label>
-                        <input type="number" step="0.01" wire:model.live.debounce.500ms="valor_financiado" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
-                        @error('valor_financiado') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
-                    </div>
+        {{-- Lucro de financiamento/cartão e impostos - entram no DRE como linhas proprias --}}
+        <div class="rounded-control border border-border bg-surface p-4 space-y-3">
+            <p class="text-xs font-medium text-text-primary">Financeiro da venda</p>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-medium text-text-secondary mb-1">Lucro financiamento / cartão (R$)</label>
+                    <input type="number" step="0.01" wire:model="lucro_financeiro" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                    @error('lucro_financeiro') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                 </div>
-                <p class="text-xs text-text-secondary">Preencha um dos dois — o outro é calculado automaticamente a partir do valor de venda. O valor financiado é o que vai pro banco (gera comissão do banco); pra escolher o banco e simular a parcela, use "Simular proposta de financiamento" na tela da venda depois de salvar.</p>
-            </div>
-        @endif
-
-        <div class="grid grid-cols-2 gap-4">
-            <div>
-                <label class="block text-xs font-medium text-text-secondary mb-1">Valor de venda *</label>
-                <input type="number" step="0.01" wire:model.live.debounce.500ms="preco_venda" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
-                @error('preco_venda') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
+                <div>
+                    <label class="block text-xs font-medium text-text-secondary mb-1">Banco / financeira / operadora</label>
+                    <input type="text" wire:model="instituicao_financeira" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                </div>
             </div>
             <div>
-                <label class="block text-xs font-medium text-text-secondary mb-1">Desconto</label>
-                <input type="number" step="0.01" wire:model="desconto" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
-                @if ($precoAnunciado)
-                    <p class="text-xs text-text-secondary mt-1">Calculado automaticamente (anunciado R$ {{ number_format($precoAnunciado, 2, ',', '.') }} − valor de venda) — pode ajustar se precisar.</p>
-                @endif
+                <label class="block text-xs font-medium text-text-secondary mb-1">Impostos (R$)</label>
+                <input type="number" step="0.01" wire:model="impostos" class="w-full max-w-[220px] rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                @error('impostos') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
         </div>
 

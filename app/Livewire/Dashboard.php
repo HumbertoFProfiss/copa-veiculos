@@ -127,8 +127,10 @@ class Dashboard extends Component
             $custosVeiculo = (float) ($v->veiculo?->custos->sum('valor') ?? 0);
             $custosGarantia = $v->veiculo?->custosGarantiaConfirmados() ?? 0;
             $comissao = (float) ($v->comissao_vendedor ?? 0);
+            $lucroFinanceiro = (float) ($v->lucro_financeiro ?? 0);
+            $impostos = (float) ($v->impostos ?? 0);
 
-            return $liquido - $custoCompra - $custosVeiculo - $custosGarantia - $comissao;
+            return $liquido + $lucroFinanceiro - $custoCompra - $custosVeiculo - $custosGarantia - $comissao - $impostos;
         });
 
         $custosPosVendaMes = (float) \App\Models\GarantiaChamado::whereIn('status', ['aprovado', 'concluido'])

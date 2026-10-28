@@ -273,7 +273,7 @@ class Show extends Component
 
     public function render()
     {
-        $this->venda->load(['veiculo', 'cliente', 'vendedor', 'filial', 'parcelas', 'carroTroca', 'garantiasChamados', 'propostasFinanciamento.banco', 'notasFiscais', 'renaveTransferencias']);
+        $this->venda->load(['veiculo', 'cliente', 'vendedor', 'filial', 'parcelas', 'pagamentos', 'carroTroca', 'garantiasChamados', 'propostasFinanciamento.banco', 'notasFiscais', 'renaveTransferencias']);
 
         return view('livewire.vendas.show', [
             'statusLabels' => GarantiaChamado::STATUS_LABELS,
