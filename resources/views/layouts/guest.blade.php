@@ -20,7 +20,7 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-surface">
             <div>
                 <a href="/">
-                    <img src="{{ asset('logo.png') }}" alt="{{ config('app.name') }}" class="h-14 w-auto">
+                    <img src="{{ asset('logo-dark.png') }}" alt="{{ config('app.name') }}" class="h-14 w-auto">
                 </a>
             </div>
 
