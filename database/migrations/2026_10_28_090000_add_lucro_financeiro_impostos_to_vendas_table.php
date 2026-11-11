@@ -9,18 +9,27 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('vendas', function (Blueprint $table) {
-            $table->decimal('lucro_financeiro', 12, 2)->default(0)->after('comissao_vendedor');
-            $table->string('instituicao_financeira', 100)->nullable()->after('lucro_financeiro');
-            $table->decimal('impostos', 12, 2)->default(0)->after('instituicao_financeira');
-        });
+        if (! Schema::hasColumn('vendas', 'lucro_financeiro')) {
+            Schema::table('vendas', function (Blueprint $table) {
+                $table->decimal('lucro_financeiro', 12, 2)->default(0)->after('comissao_vendedor');
+                $table->string('instituicao_financeira', 100)->nullable()->after('lucro_financeiro');
+                $table->decimal('impostos', 12, 2)->default(0)->after('instituicao_financeira');
+            });
+        }
 
         // Renomeia 'financiado' -> 'financiamento' (alinhado ao nome usado nas
         // formas de pagamento por linha, ver venda_pagamentos) e abre espaco pros
         // metodos mais granulares (dinheiro, pix, cartao...) e 'misto' quando a
         // venda tiver mais de uma forma de pagamento.
-        DB::statement("ALTER TABLE vendas MODIFY COLUMN forma_pagamento ENUM('avista','dinheiro','pix','transferencia','cartao_debito','cartao_credito','financiamento','consorcio','troca','misto') NOT NULL DEFAULT 'avista'");
+        //
+        // Primeiro o enum precisa aceitar AMBOS 'financiado' (valor antigo,
+        // pode ja existir em vendas reais) e os valores novos - senao o
+        // proprio MODIFY COLUMN trunca qualquer linha que ainda esteja com
+        // 'financiado' antes de dar tempo de renomear.
+        DB::statement("ALTER TABLE vendas MODIFY COLUMN forma_pagamento ENUM('avista','financiado','dinheiro','pix','transferencia','cartao_debito','cartao_credito','financiamento','consorcio','troca','misto') NOT NULL DEFAULT 'avista'");
         DB::statement("UPDATE vendas SET forma_pagamento = 'financiamento' WHERE forma_pagamento = 'financiado'");
+        // Agora que nenhuma linha usa mais 'financiado', tira do enum.
+        DB::statement("ALTER TABLE vendas MODIFY COLUMN forma_pagamento ENUM('avista','dinheiro','pix','transferencia','cartao_debito','cartao_credito','financiamento','consorcio','troca','misto') NOT NULL DEFAULT 'avista'");
     }
 
     public function down(): void
