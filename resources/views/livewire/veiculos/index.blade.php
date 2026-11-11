@@ -15,10 +15,10 @@
             <x-heroicon-o-magnifying-glass class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
             <input type="text" wire:model.live.debounce.300ms="busca"
                    placeholder="Buscar por marca, modelo, placa, chassi..."
-                   class="w-full pl-9 pr-3 py-2 rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                   class="w-full pl-9 pr-3 py-2 rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
         </div>
 
-        <select wire:model.live="filtroStatus" class="rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+        <select wire:model.live="filtroStatus" class="rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
             <option value="">Todos os status</option>
             @foreach ($statusOptions as $valor => $label)
                 <option value="{{ $valor }}">{{ $label }}</option>
@@ -26,7 +26,7 @@
         </select>
 
         @if ($filiais->count() > 1)
-            <select wire:model.live="filtroFilial" class="rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+            <select wire:model.live="filtroFilial" class="rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 <option value="">Todas as filiais</option>
                 @foreach ($filiais as $filial)
                     <option value="{{ $filial->id }}">{{ $filial->nome }}</option>

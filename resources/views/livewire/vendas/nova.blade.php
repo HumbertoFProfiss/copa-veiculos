@@ -4,7 +4,7 @@
     <form wire:submit="salvar" class="bg-bg border border-border rounded-card p-6 space-y-4">
         <div>
             <label class="block text-xs font-medium text-text-secondary mb-1">Veículo *</label>
-            <select wire:model.live="veiculo_id" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+            <select wire:model.live="veiculo_id" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 <option value="">Selecione...</option>
                 @foreach ($veiculos as $veiculo)
                     <option value="{{ $veiculo->id }}">{{ $veiculo->marca }} {{ $veiculo->modelo }} - {{ $veiculo->placa }}</option>
@@ -15,7 +15,7 @@
 
         <div>
             <label class="block text-xs font-medium text-text-secondary mb-1">Cliente *</label>
-            <select wire:model="cliente_id" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+            <select wire:model="cliente_id" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 <option value="">Selecione...</option>
                 @foreach ($clientes as $cliente)
                     <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
@@ -26,7 +26,7 @@
 
         <div>
             <label class="block text-xs font-medium text-text-secondary mb-1">Vendedor *</label>
-            <select wire:model="vendedor_id" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+            <select wire:model="vendedor_id" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 @foreach ($vendedores as $vendedor)
                     <option value="{{ $vendedor->id }}">{{ $vendedor->name }}</option>
                 @endforeach
@@ -36,12 +36,12 @@
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Valor de venda *</label>
-                <input type="number" step="0.01" wire:model.live.debounce.500ms="preco_venda" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                <input type="number" step="0.01" wire:model.live.debounce.500ms="preco_venda" class="w-full rounded-control border-border bg-white text-ink text-sm tabular-nums focus:border-primary focus:ring-primary">
                 @error('preco_venda') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Desconto</label>
-                <input type="number" step="0.01" wire:model="desconto" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                <input type="number" step="0.01" wire:model="desconto" class="w-full rounded-control border-border bg-white text-ink text-sm tabular-nums focus:border-primary focus:ring-primary">
                 @if ($precoAnunciado)
                     <p class="text-xs text-text-secondary mt-1">Calculado automaticamente (anunciado R$ {{ number_format($precoAnunciado, 2, ',', '.') }} − valor de venda) — pode ajustar se precisar.</p>
                 @endif
@@ -50,7 +50,7 @@
 
         <div>
             <label class="block text-xs font-medium text-text-secondary mb-1">Data da venda</label>
-            <input type="date" wire:model="data_venda" class="w-full max-w-[220px] rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+            <input type="date" wire:model="data_venda" class="w-full max-w-[220px] rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
         </div>
 
         {{-- Formas de pagamento: uma venda pode combinar varias (parte dinheiro, parte financiado, carro na troca...) --}}
@@ -63,7 +63,7 @@
             @foreach ($pagamentos as $indice => $pagamento)
                 <div class="flex items-start gap-2">
                     <div class="flex-1">
-                        <select wire:model="pagamentos.{{ $indice }}.forma" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <select wire:model="pagamentos.{{ $indice }}.forma" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                             @foreach ($formasPagamentoDisponiveis as $valor => $label)
                                 <option value="{{ $valor }}">{{ $label }}</option>
                             @endforeach
@@ -71,11 +71,11 @@
                         @error("pagamentos.{$indice}.forma") <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div class="w-36">
-                        <input type="number" step="0.01" placeholder="Valor (R$)" wire:model="pagamentos.{{ $indice }}.valor" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                        <input type="number" step="0.01" placeholder="Valor (R$)" wire:model="pagamentos.{{ $indice }}.valor" class="w-full rounded-control border-border bg-white text-ink text-sm tabular-nums focus:border-primary focus:ring-primary">
                         @error("pagamentos.{$indice}.valor") <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div class="flex-1">
-                        <input type="text" placeholder="Observação (opcional)" wire:model="pagamentos.{{ $indice }}.observacao" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <input type="text" placeholder="Observação (opcional)" wire:model="pagamentos.{{ $indice }}.observacao" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                     </div>
                     @if (count($pagamentos) > 1)
                         <button type="button" wire:click="removerPagamento({{ $indice }})" class="shrink-0 w-9 h-9 flex items-center justify-center rounded-control text-error hover:bg-error/5" title="Remover">
@@ -97,32 +97,32 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Marca *</label>
-                        <input type="text" wire:model="troca_marca" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <input type="text" wire:model="troca_marca" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         @error('troca_marca') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Modelo *</label>
-                        <input type="text" wire:model="troca_modelo" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <input type="text" wire:model="troca_modelo" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         @error('troca_modelo') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
                 <div class="grid grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Ano modelo</label>
-                        <input type="number" wire:model="troca_ano_modelo" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                        <input type="number" wire:model="troca_ano_modelo" class="w-full rounded-control border-border bg-white text-ink text-sm tabular-nums focus:border-primary focus:ring-primary">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Placa</label>
-                        <input type="text" wire:model="troca_placa" maxlength="8" class="w-full rounded-control border-border text-sm uppercase focus:border-primary focus:ring-primary">
+                        <input type="text" wire:model="troca_placa" maxlength="8" class="w-full rounded-control border-border bg-white text-ink text-sm uppercase focus:border-primary focus:ring-primary">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">KM</label>
-                        <input type="number" wire:model="troca_km" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                        <input type="number" wire:model="troca_km" class="w-full rounded-control border-border bg-white text-ink text-sm tabular-nums focus:border-primary focus:ring-primary">
                     </div>
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-text-secondary mb-1">Valor de volta (avaliação) *</label>
-                    <input type="number" step="0.01" wire:model="troca_valor_avaliado" class="w-full max-w-[220px] rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                    <input type="number" step="0.01" wire:model="troca_valor_avaliado" class="w-full max-w-[220px] rounded-control border-border bg-white text-ink text-sm tabular-nums focus:border-primary focus:ring-primary">
                     @error('troca_valor_avaliado') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                 </div>
             </div>
@@ -134,29 +134,29 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-medium text-text-secondary mb-1">Lucro financiamento / cartão (R$)</label>
-                    <input type="number" step="0.01" wire:model="lucro_financeiro" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                    <input type="number" step="0.01" wire:model="lucro_financeiro" class="w-full rounded-control border-border bg-white text-ink text-sm tabular-nums focus:border-primary focus:ring-primary">
                     @error('lucro_financeiro') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-text-secondary mb-1">Banco / financeira / operadora</label>
-                    <input type="text" wire:model="instituicao_financeira" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                    <input type="text" wire:model="instituicao_financeira" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 </div>
             </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Impostos (R$)</label>
-                <input type="number" step="0.01" wire:model="impostos" class="w-full max-w-[220px] rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                <input type="number" step="0.01" wire:model="impostos" class="w-full max-w-[220px] rounded-control border-border bg-white text-ink text-sm tabular-nums focus:border-primary focus:ring-primary">
                 @error('impostos') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
         </div>
 
         <div>
             <label class="block text-xs font-medium text-text-secondary mb-1">Garantia (dias)</label>
-            <input type="number" wire:model="prazo_garantia_dias" class="w-full max-w-[150px] rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+            <input type="number" wire:model="prazo_garantia_dias" class="w-full max-w-[150px] rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
         </div>
 
         <div>
             <label class="block text-xs font-medium text-text-secondary mb-1">Status inicial</label>
-            <select wire:model="status" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+            <select wire:model="status" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 <option value="pendente">Pendente — ainda depende de aprovação/financiamento</option>
                 <option value="confirmada">Confirmada — fecha a venda agora (reserva o veículo)</option>
             </select>

@@ -3,7 +3,7 @@
 
     <div class="flex items-center justify-between mb-6">
         <h1 class="text-xl font-semibold text-text-primary">DRE - Demonstrativo de Resultado</h1>
-        <input type="month" wire:model.live="mes" class="rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+        <input type="month" wire:model.live="mes" class="rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
     </div>
 
     <div class="bg-bg border border-border rounded-card divide-y divide-border">

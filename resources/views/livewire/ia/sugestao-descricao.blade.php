@@ -15,10 +15,10 @@
 
     @if ($sugestaoAtual)
         <div class="bg-primary-soft border border-primary/20 rounded-control p-3">
-            <p class="text-sm text-text-primary whitespace-pre-line">{{ $sugestaoAtual->conteudo_sugerido }}</p>
+            <p class="text-sm text-ink whitespace-pre-line">{{ $sugestaoAtual->conteudo_sugerido }}</p>
             <div class="flex items-center gap-3 mt-3">
                 <button wire:click="usar" type="button" class="text-xs font-medium text-success hover:underline">Usar essa descrição</button>
-                <button wire:click="descartar" type="button" class="text-xs text-text-secondary hover:underline">Descartar</button>
+                <button wire:click="descartar" type="button" class="text-xs text-muted hover:underline">Descartar</button>
             </div>
         </div>
     @endif

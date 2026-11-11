@@ -5,7 +5,7 @@
         <div class="bg-bg border border-border rounded-card p-6">
             <div class="mb-4">
                 <label class="block text-xs font-medium text-text-secondary mb-1">Origem do arquivo</label>
-                <select wire:model="origem" class="w-full max-w-xs rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                <select wire:model="origem" class="w-full max-w-xs rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                     <option value="csv_generico">CSV genérico</option>
                     <option value="boom">Export do Boom Sistemas</option>
                 </select>
@@ -45,7 +45,7 @@
                         <span class="w-48 text-sm text-text-primary font-medium truncate">{{ $coluna }}</span>
                         <x-heroicon-o-arrow-right class="w-4 h-4 text-text-secondary shrink-0" />
                         <select wire:change="atualizarMapeamento('{{ $coluna }}', $event.target.value)"
-                                class="flex-1 rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                                class="flex-1 rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                             <option value="">— Ignorar coluna —</option>
                             @foreach ($camposDestino as $campo => $label)
                                 <option value="{{ $campo }}" @selected(($mapeamento[$coluna] ?? null) === $campo)>{{ $label }}</option>

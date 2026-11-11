@@ -21,7 +21,7 @@
     <div class="relative mb-4 max-w-sm">
         <x-heroicon-o-magnifying-glass class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
         <input type="text" wire:model.live.debounce.300ms="busca" placeholder="Buscar por nome..."
-               class="w-full pl-9 pr-3 py-2 rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+               class="w-full pl-9 pr-3 py-2 rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
     </div>
 
     <x-admin.data-table>
@@ -84,26 +84,26 @@
                 <form wire:submit="salvar" class="space-y-3">
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Nome *</label>
-                        <input type="text" wire:model="nome" placeholder="Ex: Filial Zona Sul" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <input type="text" wire:model="nome" placeholder="Ex: Filial Zona Sul" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         @error('nome') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Endereço</label>
-                        <input type="text" wire:model="endereco" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <input type="text" wire:model="endereco" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                     </div>
                     <div class="grid grid-cols-3 gap-3">
                         <div class="col-span-2">
                             <label class="block text-xs font-medium text-text-secondary mb-1">Cidade</label>
-                            <input type="text" wire:model="cidade" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                            <input type="text" wire:model="cidade" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">UF</label>
-                            <input type="text" wire:model="uf" maxlength="2" class="w-full rounded-control border-border text-sm uppercase focus:border-primary focus:ring-primary">
+                            <input type="text" wire:model="uf" maxlength="2" class="w-full rounded-control border-border bg-white text-ink text-sm uppercase focus:border-primary focus:ring-primary">
                         </div>
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Telefone</label>
-                        <input type="text" wire:model="telefone" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <input type="text" wire:model="telefone" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                     </div>
                     <label class="inline-flex items-center gap-2 text-sm text-text-secondary">
                         <input type="checkbox" wire:model="ativa" class="rounded-control border-border text-primary focus:ring-primary"> Ativa

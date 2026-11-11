@@ -57,23 +57,23 @@
                 <form wire:submit="salvar" class="space-y-3">
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Descrição *</label>
-                        <input type="text" wire:model="descricao" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <input type="text" wire:model="descricao" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         @error('descricao') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">Valor *</label>
-                            <input type="number" step="0.01" wire:model="valor" class="w-full rounded-control border-border text-sm tabular-nums focus:border-primary focus:ring-primary">
+                            <input type="number" step="0.01" wire:model="valor" class="w-full rounded-control border-border bg-white text-ink text-sm tabular-nums focus:border-primary focus:ring-primary">
                             @error('valor') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">Vencimento *</label>
-                            <input type="date" wire:model="vencimento" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                            <input type="date" wire:model="vencimento" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         </div>
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Categoria</label>
-                        <select wire:model="categoria_id" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <select wire:model="categoria_id" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                             <option value="">—</option>
                             @foreach ($categorias as $categoria)
                                 <option value="{{ $categoria->id }}">{{ $categoria->nomeCompleto() }}</option>
@@ -82,7 +82,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Recorrência</label>
-                        <select wire:model="recorrencia" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <select wire:model="recorrencia" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                             <option value="nenhuma">Nenhuma</option>
                             <option value="semanal">Semanal</option>
                             <option value="mensal">Mensal</option>

@@ -32,7 +32,7 @@
 
         <form wire:submit="desativar" class="mt-4 max-w-sm">
             <label class="block text-xs font-medium text-text-secondary mb-1">Confirme sua senha pra desativar</label>
-            <input type="password" wire:model="senhaParaDesativar" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+            <input type="password" wire:model="senhaParaDesativar" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
             @error('senhaParaDesativar') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             <button type="submit" class="mt-2 px-4 py-2 rounded-control border border-error/30 text-error text-sm font-medium hover:bg-error/5">
                 Desativar 2FA
@@ -47,7 +47,7 @@
             <form wire:submit="confirmar" class="mt-4">
                 <label class="block text-xs font-medium text-text-secondary mb-1">Código de 6 dígitos</label>
                 <input type="text" inputmode="numeric" wire:model="codigoConfirmacao" autocomplete="one-time-code"
-                       class="w-full rounded-control border-border text-sm tracking-widest focus:border-primary focus:ring-primary">
+                       class="w-full rounded-control border-border bg-white text-ink text-sm tracking-widest focus:border-primary focus:ring-primary">
                 @error('codigoConfirmacao') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                 <div class="flex items-center gap-2 mt-3">
                     <button type="submit" class="px-4 py-2 rounded-control bg-primary text-white text-sm font-medium hover:bg-primary-light">

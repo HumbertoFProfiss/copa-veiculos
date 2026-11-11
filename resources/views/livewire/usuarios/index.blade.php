@@ -21,7 +21,7 @@
     <div class="relative mb-4 max-w-sm">
         <x-heroicon-o-magnifying-glass class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
         <input type="text" wire:model.live.debounce.300ms="busca" placeholder="Buscar por nome ou e-mail..."
-               class="w-full pl-9 pr-3 py-2 rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+               class="w-full pl-9 pr-3 py-2 rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
     </div>
 
     <x-admin.data-table>
@@ -84,21 +84,21 @@
                 <form wire:submit="salvar" class="space-y-3">
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Nome *</label>
-                        <input type="text" wire:model="name" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <input type="text" wire:model="name" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         @error('name') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">E-mail *</label>
-                        <input type="email" wire:model="email" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <input type="email" wire:model="email" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         @error('email') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Telefone</label>
-                        <input type="text" wire:model="telefone" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <input type="text" wire:model="telefone" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Papel *</label>
-                        <select wire:model="papel" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <select wire:model="papel" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                             @foreach ($papeis as $nomePapel)
                                 <option value="{{ $nomePapel }}">{{ $nomePapel }}</option>
                             @endforeach
@@ -108,7 +108,7 @@
                     @if ($filiais->count() > 1)
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">Filial</label>
-                            <select wire:model="filial_id" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                            <select wire:model="filial_id" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                                 <option value="">—</option>
                                 @foreach ($filiais as $filial)
                                     <option value="{{ $filial->id }}">{{ $filial->nome }}</option>
@@ -120,7 +120,7 @@
                         <label class="block text-xs font-medium text-text-secondary mb-1">
                             {{ $editandoId ? 'Nova senha (deixe em branco pra manter)' : 'Senha *' }}
                         </label>
-                        <input type="password" wire:model="password" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <input type="password" wire:model="password" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         @error('password') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                     </div>
                     @if ($editandoId)

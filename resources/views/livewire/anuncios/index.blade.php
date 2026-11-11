@@ -2,7 +2,7 @@
     <h1 class="text-xl font-semibold text-text-primary mb-6">Anúncios</h1>
 
     <div class="mb-4">
-        <select wire:model.live="filtroStatus" class="rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+        <select wire:model.live="filtroStatus" class="rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
             <option value="">Todos os status</option>
             <option value="publicado">Publicado</option>
             <option value="pendente">Pendente</option>

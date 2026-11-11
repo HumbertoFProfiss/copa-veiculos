@@ -204,7 +204,7 @@
                 <form wire:submit="simularFinanciamento" class="space-y-3">
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Banco *</label>
-                        <select wire:model="financiamento_banco_id" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <select wire:model="financiamento_banco_id" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                             <option value="">Selecione...</option>
                             @foreach ($bancos as $banco)
                                 <option value="{{ $banco->id }}">{{ $banco->nome }} ({{ number_format($banco->taxa_juros_am_padrao, 2, ',', '.') }}% a.m.)</option>
@@ -215,18 +215,18 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">Valor financiado (R$) *</label>
-                            <input type="number" step="0.01" min="0" wire:model.live.debounce.500ms="financiamento_valor_financiado" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                            <input type="number" step="0.01" min="0" wire:model.live.debounce.500ms="financiamento_valor_financiado" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary tabular-nums">
                             @error('financiamento_valor_financiado') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">Entrada (R$)</label>
-                            <input type="number" step="0.01" min="0" wire:model.live.debounce.500ms="financiamento_entrada" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                            <input type="number" step="0.01" min="0" wire:model.live.debounce.500ms="financiamento_entrada" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary tabular-nums">
                         </div>
                     </div>
                     <p class="text-xs text-text-secondary -mt-1">Preencha um dos dois — o outro é calculado automaticamente a partir do valor total da venda (o que vai pro financiamento é o que gera comissão do banco).</p>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Número de parcelas *</label>
-                        <input type="number" min="1" max="60" wire:model="financiamento_num_parcelas" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                        <input type="number" min="1" max="60" wire:model="financiamento_num_parcelas" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary tabular-nums">
                         @error('financiamento_num_parcelas') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div class="flex items-center gap-3 pt-2">
@@ -370,12 +370,12 @@
                 <form wire:submit="salvarGarantia" class="space-y-3">
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Descrição do problema *</label>
-                        <input type="text" wire:model="descricao_problema" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <input type="text" wire:model="descricao_problema" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         @error('descricao_problema') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Status *</label>
-                        <select wire:model="status" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <select wire:model="status" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                             @foreach ($statusLabels as $valor => $label)
                                 <option value="{{ $valor }}">{{ $label }}</option>
                             @endforeach
@@ -384,11 +384,11 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">Custo da peça (R$)</label>
-                            <input type="number" step="0.01" min="0" wire:model="custo_peca" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                            <input type="number" step="0.01" min="0" wire:model="custo_peca" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary tabular-nums">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">Custo do serviço (R$)</label>
-                            <input type="number" step="0.01" min="0" wire:model="custo_servico" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                            <input type="number" step="0.01" min="0" wire:model="custo_servico" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary tabular-nums">
                         </div>
                     </div>
                     <div class="flex items-center gap-3 pt-2">

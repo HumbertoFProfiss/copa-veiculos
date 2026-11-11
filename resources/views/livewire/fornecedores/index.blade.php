@@ -13,7 +13,7 @@
     <div class="relative mb-4 max-w-sm">
         <x-heroicon-o-magnifying-glass class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
         <input type="text" wire:model.live.debounce.300ms="busca" placeholder="Buscar por nome..."
-               class="w-full pl-9 pr-3 py-2 rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+               class="w-full pl-9 pr-3 py-2 rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
     </div>
 
     <x-admin.data-table>
@@ -70,12 +70,12 @@
                 <form wire:submit="salvar" class="space-y-3">
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Nome *</label>
-                        <input type="text" wire:model="nome" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <input type="text" wire:model="nome" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         @error('nome') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Tipo *</label>
-                        <select wire:model="tipo" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <select wire:model="tipo" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                             @foreach ($tipos as $valor => $label)
                                 <option value="{{ $valor }}">{{ $label }}</option>
                             @endforeach
@@ -84,16 +84,16 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">CPF/CNPJ</label>
-                            <input type="text" wire:model="cpf_cnpj" maxlength="18" x-on:input="$el.value = maskCpfCnpj($el.value)" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                            <input type="text" wire:model="cpf_cnpj" maxlength="18" x-on:input="$el.value = maskCpfCnpj($el.value)" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">Telefone</label>
-                            <input type="text" wire:model="telefone" maxlength="15" x-on:input="$el.value = maskTelefone($el.value)" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                            <input type="text" wire:model="telefone" maxlength="15" x-on:input="$el.value = maskTelefone($el.value)" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         </div>
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">E-mail</label>
-                        <input type="email" wire:model="email" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <input type="email" wire:model="email" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         @error('email') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                     </div>
                     <label class="inline-flex items-center gap-2 text-sm text-text-secondary">

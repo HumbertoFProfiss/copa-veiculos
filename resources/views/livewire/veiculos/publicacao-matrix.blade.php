@@ -18,7 +18,7 @@
                            @checked($publicacao?->status === 'publicado')
                            wire:loading.attr="disabled" wire:target="togglar({{ $canal->id }}),selecionarTodas,nenhuma"
                            class="rounded-control border-border text-primary focus:ring-primary">
-                    <span class="text-sm text-text-primary">{{ $canal->nome }}</span>
+                    <span class="text-sm {{ $publicacao?->status === 'publicado' ? 'text-ink' : 'text-text-primary' }}">{{ $canal->nome }}</span>
                 </label>
 
                 <div class="flex items-center gap-2">

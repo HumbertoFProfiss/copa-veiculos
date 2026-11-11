@@ -66,9 +66,9 @@
 
                         <form wire:submit="salvarCredencial" class="flex gap-2 mt-3">
                             <input type="text" wire:model="novaCredencialChave" placeholder="Ex: api_key, client_secret"
-                                   class="w-40 rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                                   class="w-40 rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                             <input type="text" wire:model="novaCredencialValor" placeholder="Valor"
-                                   class="flex-1 rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                                   class="flex-1 rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                             <button type="submit" class="px-4 py-2 rounded-control bg-primary text-white text-sm font-medium hover:bg-primary-light whitespace-nowrap">
                                 Salvar
                             </button>
@@ -84,7 +84,7 @@
     <div class="bg-bg border border-border rounded-card p-5 shadow-soft">
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-sm font-semibold text-text-primary">Histórico de publicações</h2>
-            <select wire:model.live="filtroCanalLog" class="rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+            <select wire:model.live="filtroCanalLog" class="rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 <option value="">Todos os canais</option>
                 @foreach ($todosCanais as $canal)
                     <option value="{{ $canal->id }}">{{ $canal->nome }}</option>

@@ -17,7 +17,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-4">
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Fonte de dados</label>
-                <select wire:model.live="fonte" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                <select wire:model.live="fonte" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                     @foreach ($fontes as $chave => $def)
                         <option value="{{ $chave }}">{{ $def['label'] }}</option>
                     @endforeach
@@ -25,16 +25,16 @@
             </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Período - de</label>
-                <input type="date" wire:model.live="dataInicio" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                <input type="date" wire:model.live="dataInicio" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
             </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Período - até</label>
-                <input type="date" wire:model.live="dataFim" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                <input type="date" wire:model.live="dataFim" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
             </div>
             @if (! empty($definicao['campos_agrupaveis']))
                 <div>
                     <label class="block text-xs font-medium text-text-secondary mb-1">Agrupar por</label>
-                    <select wire:model.live="agruparPor" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                    <select wire:model.live="agruparPor" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         <option value="">Não agrupar (listar linhas)</option>
                         @foreach ($definicao['campos_agrupaveis'] as $campo)
                             <option value="{{ $campo }}">{{ $definicao['campos'][$campo] }}</option>

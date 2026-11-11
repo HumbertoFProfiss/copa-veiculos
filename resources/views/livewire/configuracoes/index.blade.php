@@ -41,7 +41,7 @@
             <div class="sm:col-span-2">
                 <label class="block text-xs font-medium text-text-secondary mb-1">Domínio próprio (opcional)</label>
                 <input type="text" wire:model="dominio_customizado" placeholder="worldcred.com.br"
-                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                       class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 <p class="text-xs text-text-secondary mt-1">Se preenchido, esse domínio (apontado via DNS pra este servidor) mostra essa revenda direto, sem precisar de subdomínio.</p>
                 @error('dominio_customizado') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
@@ -49,83 +49,83 @@
                 <label class="block text-xs font-medium text-text-secondary mb-1">Telefone</label>
                 <input type="text" wire:model="telefone" placeholder="(14) 3882-5011" maxlength="15"
                        x-on:input="$el.value = maskTelefone($el.value)"
-                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                       class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 @error('telefone') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">WhatsApp</label>
                 <input type="text" wire:model="whatsapp" placeholder="(14) 99754-2803" maxlength="15"
                        x-on:input="$el.value = maskTelefone($el.value)"
-                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                       class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 @error('whatsapp') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">E-mail de contato</label>
                 <input type="email" wire:model="email_contato" placeholder="contato@suaempresa.com.br"
-                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                       class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 @error('email_contato') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Horário de funcionamento</label>
                 <input type="text" wire:model="horario_funcionamento" placeholder="Seg-Sex: 08h às 18h30"
-                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                       class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 @error('horario_funcionamento') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Limite de veículos em destaque</label>
                 <input type="number" min="1" max="50" wire:model="limite_destaques"
-                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                       class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary tabular-nums">
                 <p class="text-xs text-text-secondary mt-1">Quantos veículos marcados com estrela aparecem na home do site.</p>
                 @error('limite_destaques') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Curva ABC — corte da Classe A (%)</label>
                 <input type="number" min="1" max="99" wire:model="abc_limite_a"
-                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                       class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary tabular-nums">
                 <p class="text-xs text-text-secondary mt-1">Veículos que somam até esse % do valor em estoque viram Classe A.</p>
                 @error('abc_limite_a') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Curva ABC — corte da Classe B (%)</label>
                 <input type="number" min="2" max="100" wire:model="abc_limite_b"
-                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                       class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary tabular-nums">
                 <p class="text-xs text-text-secondary mt-1">Da Classe A até esse %, os veículos viram Classe B. O resto é Classe C.</p>
                 @error('abc_limite_b') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
             <div class="sm:col-span-2">
                 <label class="block text-xs font-medium text-text-secondary mb-1">Endereço</label>
                 <input type="text" wire:model="endereco" placeholder="Av. Exemplo, 1000 - Bairro"
-                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                       class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 @error('endereco') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Cidade</label>
                 <input type="text" wire:model="cidade" placeholder="Botucatu"
-                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                       class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 @error('cidade') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">UF</label>
                 <input type="text" wire:model="uf" placeholder="SP" maxlength="2"
-                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary uppercase">
+                       class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary uppercase">
                 @error('uf') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Instagram (URL)</label>
                 <input type="text" wire:model="instagram_url" placeholder="https://instagram.com/suaempresa"
-                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                       class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 @error('instagram_url') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Facebook (URL)</label>
                 <input type="text" wire:model="facebook_url" placeholder="https://facebook.com/suaempresa"
-                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                       class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 @error('facebook_url') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
             <div class="sm:col-span-2">
                 <label class="block text-xs font-medium text-text-secondary mb-1">Texto "Sobre" (aparece na home)</label>
                 <textarea wire:model="sobre_texto" rows="3" placeholder="Conte brevemente sobre a empresa..."
-                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary"></textarea>
+                       class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary"></textarea>
                 @error('sobre_texto') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
 
@@ -136,19 +136,19 @@
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Google Analytics 4 (Measurement ID)</label>
                 <input type="text" wire:model="analytics_ga4_id" placeholder="G-XXXXXXXXXX"
-                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                       class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 @error('analytics_ga4_id') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Google Tag Manager (Container ID)</label>
                 <input type="text" wire:model="analytics_gtm_id" placeholder="GTM-XXXXXXX"
-                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                       class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 @error('analytics_gtm_id') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-xs font-medium text-text-secondary mb-1">Meta Pixel (ID)</label>
                 <input type="text" wire:model="analytics_meta_pixel_id" placeholder="123456789012345"
-                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                       class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 @error('analytics_meta_pixel_id') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
             </div>
 

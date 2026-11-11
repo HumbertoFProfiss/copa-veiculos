@@ -25,7 +25,7 @@
                 para <strong class="text-text-primary">{{ $venda->cliente->nome }}</strong>
             </p>
             <label class="block text-xs font-medium text-text-secondary mb-1">Modelo de contrato</label>
-            <select wire:model.live="modeloId" class="w-full max-w-sm rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+            <select wire:model.live="modeloId" class="w-full max-w-sm rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                 @foreach ($modelos as $modelo)
                     <option value="{{ $modelo->id }}">{{ $modelo->nome }}</option>
                 @endforeach

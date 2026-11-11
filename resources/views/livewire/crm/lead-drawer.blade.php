@@ -38,7 +38,7 @@
         <label class="block text-xs font-medium text-text-secondary uppercase tracking-wide mb-2">Registrar contato</label>
         <form wire:submit="registrarContato" class="flex gap-2">
             <input type="text" wire:model="novaAnotacao" placeholder="O que foi conversado?"
-                   class="flex-1 rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                   class="flex-1 rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
             <button type="submit" class="px-3 py-2 rounded-control bg-surface border border-border text-sm hover:bg-primary-soft">
                 <x-heroicon-o-plus class="w-4 h-4" />
             </button>
@@ -49,9 +49,9 @@
         <label class="block text-xs font-medium text-text-secondary uppercase tracking-wide mb-2">Tarefas</label>
         <form wire:submit="adicionarTarefa" class="flex gap-2 mb-3">
             <input type="text" wire:model="novaTarefaTitulo" placeholder="Nova tarefa"
-                   class="flex-1 rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                   class="flex-1 rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
             <input type="datetime-local" wire:model="novaTarefaVencimento"
-                   class="rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                   class="rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
             <button type="submit" class="px-3 py-2 rounded-control bg-surface border border-border text-sm hover:bg-primary-soft">
                 <x-heroicon-o-plus class="w-4 h-4" />
             </button>

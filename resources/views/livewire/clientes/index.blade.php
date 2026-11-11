@@ -13,7 +13,7 @@
     <div class="relative mb-4 max-w-sm">
         <x-heroicon-o-magnifying-glass class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
         <input type="text" wire:model.live.debounce.300ms="busca" placeholder="Buscar por nome, CPF, e-mail..."
-               class="w-full pl-9 pr-3 py-2 rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+               class="w-full pl-9 pr-3 py-2 rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
     </div>
 
     <x-admin.data-table>
@@ -66,28 +66,28 @@
                 <form wire:submit="salvar" class="space-y-3">
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Nome *</label>
-                        <input type="text" wire:model="nome" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <input type="text" wire:model="nome" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         @error('nome') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">CPF</label>
-                            <input type="text" wire:model="cpf" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                            <input type="text" wire:model="cpf" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">E-mail</label>
-                            <input type="email" wire:model="email" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                            <input type="email" wire:model="email" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                             @error('email') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">Telefone</label>
-                            <input type="text" wire:model="telefone" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                            <input type="text" wire:model="telefone" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">WhatsApp</label>
-                            <input type="text" wire:model="whatsapp" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                            <input type="text" wire:model="whatsapp" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         </div>
                     </div>
 
@@ -98,9 +98,9 @@
                                 <label class="block text-xs font-medium text-text-secondary mb-1">CEP</label>
                                 <div class="flex gap-2">
                                     <input type="text" wire:model="cep" placeholder="00000-000" maxlength="9"
-                                           class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                                           class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                                     <button type="button" wire:click="buscarCep" wire:loading.attr="disabled" wire:target="buscarCep"
-                                            class="shrink-0 px-3 py-2 rounded-control bg-surface border border-border text-sm font-medium text-text-primary hover:bg-primary-soft disabled:opacity-60">
+                                            class="shrink-0 px-3 py-2 rounded-control bg-surface border border-border text-sm font-medium text-text-primary hover:bg-primary-soft hover:text-ink disabled:opacity-60">
                                         <span wire:loading.remove wire:target="buscarCep">Buscar</span>
                                         <span wire:loading wire:target="buscarCep">...</span>
                                     </button>
@@ -111,18 +111,18 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-text-secondary mb-1">UF</label>
-                                <input type="text" wire:model="uf" maxlength="2" class="w-full rounded-control border-border text-sm uppercase focus:border-primary focus:ring-primary">
+                                <input type="text" wire:model="uf" maxlength="2" class="w-full rounded-control border-border bg-white text-ink text-sm uppercase focus:border-primary focus:ring-primary">
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-3 mt-3">
                             <div>
                                 <label class="block text-xs font-medium text-text-secondary mb-1">Endereço</label>
                                 <input type="text" wire:model="endereco" placeholder="Rua, número, bairro"
-                                       class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                                       class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-text-secondary mb-1">Cidade</label>
-                                <input type="text" wire:model="cidade" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                                <input type="text" wire:model="cidade" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                             </div>
                         </div>
                     </div>

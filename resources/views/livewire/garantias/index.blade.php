@@ -20,9 +20,9 @@
             <x-heroicon-o-magnifying-glass class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
             <input type="text" wire:model.live.debounce.300ms="busca"
                    placeholder="Buscar por carro, cliente ou descrição do problema..."
-                   class="w-full pl-9 pr-3 py-2 rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                   class="w-full pl-9 pr-3 py-2 rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
         </div>
-        <select wire:model.live="filtroStatus" class="rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+        <select wire:model.live="filtroStatus" class="rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
             <option value="">Todos os status</option>
             @foreach ($statusLabels as $valor => $label)
                 <option value="{{ $valor }}">{{ $label }}</option>
@@ -78,7 +78,7 @@
                 <form wire:submit="salvarGarantia" class="space-y-3">
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Venda *</label>
-                        <select wire:model="venda_id" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <select wire:model="venda_id" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                             <option value="">Selecione a venda...</option>
                             @foreach ($vendas as $venda)
                                 <option value="{{ $venda->id }}">
@@ -90,12 +90,12 @@
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Descrição do problema *</label>
-                        <input type="text" wire:model="descricao_problema" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <input type="text" wire:model="descricao_problema" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         @error('descricao_problema') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Status *</label>
-                        <select wire:model="novoStatus" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <select wire:model="novoStatus" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                             @foreach ($statusLabels as $valor => $label)
                                 <option value="{{ $valor }}">{{ $label }}</option>
                             @endforeach
@@ -104,11 +104,11 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">Custo da peça (R$)</label>
-                            <input type="number" step="0.01" min="0" wire:model="custo_peca" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                            <input type="number" step="0.01" min="0" wire:model="custo_peca" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary tabular-nums">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-text-secondary mb-1">Custo do serviço (R$)</label>
-                            <input type="number" step="0.01" min="0" wire:model="custo_servico" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary tabular-nums">
+                            <input type="number" step="0.01" min="0" wire:model="custo_servico" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary tabular-nums">
                         </div>
                     </div>
                     <div class="flex items-center gap-3 pt-2">

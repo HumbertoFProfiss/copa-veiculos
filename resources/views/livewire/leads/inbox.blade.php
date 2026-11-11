@@ -17,9 +17,9 @@
         <div class="relative flex-1 min-w-[200px]">
             <x-heroicon-o-magnifying-glass class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
             <input type="text" wire:model.live.debounce.300ms="busca" placeholder="Buscar por nome ou telefone..."
-                   class="w-full pl-9 pr-3 py-2 rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                   class="w-full pl-9 pr-3 py-2 rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
         </div>
-        <select wire:model.live="filtroPortal" class="rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+        <select wire:model.live="filtroPortal" class="rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
             <option value="">Todos os portais</option>
             @foreach (['webmotors','icarros','chavesnamao','mobautos','napista','carrossp','mercadolivre','facebook','site_proprio'] as $portal)
                 <option value="{{ $portal }}">{{ $portal }}</option>

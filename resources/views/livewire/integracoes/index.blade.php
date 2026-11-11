@@ -28,7 +28,7 @@
 
         <form wire:submit="criarToken" class="flex gap-2 mb-4">
             <input type="text" wire:model="novoTokenNome" placeholder="Nome do token (ex: ERP interno)"
-                   class="flex-1 rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                   class="flex-1 rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
             <button type="submit" class="px-4 py-2 rounded-control bg-primary text-white text-sm font-medium hover:bg-primary-light whitespace-nowrap">
                 Gerar token
             </button>
@@ -64,7 +64,7 @@
         <form wire:submit="salvarWebhook" class="mb-5 p-4 rounded-control bg-surface">
             <label class="block text-xs font-medium text-text-secondary mb-1">URL de destino</label>
             <input type="text" wire:model="webhookUrl" placeholder="https://seusistema.com/webhooks/copa"
-                   class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary mb-3">
+                   class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary mb-3">
             @error('webhookUrl') <p class="text-xs text-error -mt-2 mb-3">{{ $message }}</p> @enderror
 
             <label class="block text-xs font-medium text-text-secondary mb-1">Eventos</label>

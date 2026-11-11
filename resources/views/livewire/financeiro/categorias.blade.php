@@ -68,19 +68,19 @@
                 <form wire:submit="salvar" class="space-y-3">
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Nome *</label>
-                        <input type="text" wire:model="nome" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <input type="text" wire:model="nome" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                         @error('nome') <p class="text-xs text-error mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Tipo *</label>
-                        <select wire:model="tipo" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <select wire:model="tipo" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                             <option value="despesa">Despesa</option>
                             <option value="receita">Receita</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Categoria pai (opcional)</label>
-                        <select wire:model="categoria_pai_id" class="w-full rounded-control border-border text-sm focus:border-primary focus:ring-primary">
+                        <select wire:model="categoria_pai_id" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                             <option value="">Nenhuma (categoria principal)</option>
                             @foreach ($todasCategorias->where('tipo', $tipo)->where('id', '!=', $editandoId) as $pai)
                                 <option value="{{ $pai->id }}">{{ $pai->nome }}</option>
