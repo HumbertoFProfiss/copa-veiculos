@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600" x-data="{ recuperacao: false }">
+    <div class="mb-4 text-sm text-text-secondary" x-data="{ recuperacao: false }">
         <p x-show="!recuperacao">Informe o código de 6 dígitos do seu aplicativo autenticador.</p>
         <p x-show="recuperacao" x-cloak>Informe um dos seus códigos de recuperação.</p>
 
@@ -24,7 +24,7 @@
 
             <div class="flex items-center justify-between mt-4">
                 <button type="button" @click="recuperacao = !recuperacao"
-                        class="underline text-sm text-gray-600 hover:text-gray-900">
+                        class="underline text-sm text-text-secondary hover:text-text-primary">
                     <span x-show="!recuperacao">Usar código de recuperação</span>
                     <span x-show="recuperacao" x-cloak>Usar código do aplicativo</span>
                 </button>
