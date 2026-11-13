@@ -26,7 +26,7 @@ it('esconde o valor de compra quando o veiculo e consignado, mas mostra quando e
         ->assertSee('não tem "Valor de compra"', false);
 });
 
-it('sincroniza automaticamente comissao em R$ e em % nos dois sentidos', function () {
+it('sincroniza automaticamente valor minimo do dono e comissao em % nos dois sentidos', function () {
     $empresa = Empresa::first();
     app()->instance('tenant', $empresa);
     $user = usuarioProprietario($empresa);
@@ -35,11 +35,12 @@ it('sincroniza automaticamente comissao em R$ e em % nos dois sentidos', functio
         ->set('tipo_propriedade', 'consignado')
         ->set('preco_venda', 50000)
         ->set('consignado_comissao_pct', 10)
-        ->assertSet('consignado_comissao_rs', 5000.0)
+        ->assertSet('consignado_valor_minimo', 45000.0)
         ->assertSet('consignado_comissao_tipo', 'percentual');
 
-    $component->set('consignado_comissao_rs', 2500)
+    $component->set('consignado_valor_minimo', 47500)
         ->assertSet('consignado_comissao_pct', 5.0)
+        ->assertSet('consignado_comissao_valor', 2500.0)
         ->assertSet('consignado_comissao_tipo', 'fixa');
 });
 

@@ -213,17 +213,18 @@
                         <input type="text" wire:model="consignado_telefone" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-text-secondary mb-1">Comissão da revenda (R$)</label>
-                        <input type="number" step="0.01" min="0" wire:model.live="consignado_comissao_rs" placeholder="Ex: 2000"
+                        <label class="block text-xs font-medium text-text-secondary mb-1">Valor mínimo do proprietário (R$)</label>
+                        <input type="number" step="0.01" min="0" wire:model.live="consignado_valor_minimo" placeholder="Ex: 18000"
                                class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary tabular-nums">
+                        <p class="text-xs text-text-secondary mt-1">Quanto o dono do veículo quer receber no mínimo.</p>
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-text-secondary mb-1">Comissão da revenda (%)</label>
+                        <label class="block text-xs font-medium text-text-secondary mb-1">Comissão da loja (%)</label>
                         <input type="number" step="0.01" min="0" max="100" wire:model.live="consignado_comissao_pct" placeholder="Ex: 10"
                                class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary tabular-nums">
                     </div>
                     <p class="sm:col-span-2 lg:col-span-3 text-xs text-text-secondary -mt-2">
-                        Preencha um dos dois — o outro é calculado sozinho a partir do Valor de venda (na aba "Preços" abaixo).
+                        Preencha um dos dois — normalmente só o valor mínimo; a comissão é calculada sozinha a partir do Valor de venda (na aba "Preços" abaixo).
                     </p>
                     @if ($preco_venda && $consignado_comissao_valor)
                         @php
@@ -234,8 +235,8 @@
                         @endphp
                         <div class="sm:col-span-2 lg:col-span-3 flex items-center gap-2 text-sm text-text-secondary">
                             <x-heroicon-o-banknotes class="w-4 h-4 shrink-0 text-primary" />
-                            <span>Comissão da revenda: <strong class="text-text-primary tabular-nums">R$ {{ number_format($comissaoPreview, 2, ',', '.') }}</strong></span>
-                            <span>— Repasse ao consignante: <strong class="text-text-primary tabular-nums">R$ {{ number_format($repassePreview, 2, ',', '.') }}</strong></span>
+                            <span>Proprietário recebe: <strong class="text-text-primary tabular-nums">R$ {{ number_format($repassePreview, 2, ',', '.') }}</strong></span>
+                            <span>— Comissão da loja: <strong class="text-text-primary tabular-nums">R$ {{ number_format($comissaoPreview, 2, ',', '.') }}</strong> ({{ number_format($consignado_comissao_pct, 2, ',', '.') }}%)</span>
                         </div>
                     @endif
                 @endif

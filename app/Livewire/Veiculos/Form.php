@@ -73,8 +73,8 @@ class Form extends Component
 
     public ?float $consignado_comissao_valor = null;
 
-    /** Campos só de exibição - espelham consignado_comissao_valor/tipo nas duas unidades (R$ e %), sempre sincronizados um a partir do outro. */
-    public ?float $consignado_comissao_rs = null;
+    /** Campos só de exibição - espelham consignado_comissao_valor/tipo, sempre sincronizados a partir do valor mínimo combinado com o dono (ou do percentual). */
+    public ?float $consignado_valor_minimo = null;
 
     public ?float $consignado_comissao_pct = null;
 
@@ -150,7 +150,7 @@ class Form extends Component
         }
     }
 
-    /** Deriva os dois campos de exibição (R$ e %) a partir de consignado_comissao_tipo/valor - chamado ao carregar o veículo e sempre que preço de venda ou comissão mudam. */
+    /** Deriva os dois campos de exibição (valor mínimo e %) a partir de consignado_comissao_tipo/valor - chamado ao carregar o veículo e sempre que preço de venda ou comissão mudam. */
     protected function sincronizarComissaoConsignado(): void
     {
         if (blank($this->consignado_comissao_tipo) || blank($this->consignado_comissao_valor)) {
@@ -159,32 +159,39 @@ class Form extends Component
 
         if ($this->consignado_comissao_tipo === 'percentual') {
             $this->consignado_comissao_pct = $this->consignado_comissao_valor;
-            $this->consignado_comissao_rs = $this->preco_venda
-                ? round($this->preco_venda * ($this->consignado_comissao_valor / 100), 2)
+            $this->consignado_valor_minimo = $this->preco_venda
+                ? round($this->preco_venda * (1 - $this->consignado_comissao_valor / 100), 2)
                 : null;
         } else {
-            $this->consignado_comissao_rs = $this->consignado_comissao_valor;
+            $this->consignado_valor_minimo = $this->preco_venda
+                ? round($this->preco_venda - $this->consignado_comissao_valor, 2)
+                : null;
             $this->consignado_comissao_pct = $this->preco_venda
                 ? round(($this->consignado_comissao_valor / $this->preco_venda) * 100, 2)
                 : null;
         }
     }
 
-    public function updatedConsignadoComissaoRs(?float $valor): void
+    /** Valor mínimo que o dono do veículo quer receber - a comissão da loja (R$) é o que sobra do preço de venda depois de descontar esse valor. */
+    public function updatedConsignadoValorMinimo(?float $valor): void
     {
         $this->consignado_comissao_tipo = 'fixa';
-        $this->consignado_comissao_valor = $valor;
-        $this->consignado_comissao_pct = ($valor !== null && $this->preco_venda)
-            ? round(($valor / $this->preco_venda) * 100, 2)
-            : null;
+
+        if ($valor !== null && $this->preco_venda) {
+            $this->consignado_comissao_valor = round($this->preco_venda - $valor, 2);
+            $this->consignado_comissao_pct = round(($this->consignado_comissao_valor / $this->preco_venda) * 100, 2);
+        } else {
+            $this->consignado_comissao_valor = null;
+            $this->consignado_comissao_pct = null;
+        }
     }
 
     public function updatedConsignadoComissaoPct(?float $valor): void
     {
         $this->consignado_comissao_tipo = 'percentual';
         $this->consignado_comissao_valor = $valor;
-        $this->consignado_comissao_rs = ($valor !== null && $this->preco_venda)
-            ? round($this->preco_venda * ($valor / 100), 2)
+        $this->consignado_valor_minimo = ($valor !== null && $this->preco_venda)
+            ? round($this->preco_venda * (1 - $valor / 100), 2)
             : null;
     }
 
