@@ -90,6 +90,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::get('/', Financeiro\ContasPagar::class)->name('index');
             Route::get('/receber', Financeiro\ContasReceber::class)->name('receber');
             Route::get('/dre', Financeiro\Dre::class)->name('dre');
+            Route::get('/lucro-veiculos', Financeiro\LucroVeiculos::class)->name('lucro-veiculos');
             Route::get('/conciliacao', Financeiro\Conciliacao::class)->name('conciliacao');
             Route::get('/categorias', Financeiro\Categorias::class)->name('categorias');
         });

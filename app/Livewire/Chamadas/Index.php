@@ -38,6 +38,10 @@ class Index extends Component
 
     public string $observacoes = '';
 
+    public string $data_nascimento = '';
+
+    public string $meio_divulgacao = '';
+
     protected function rules(): array
     {
         return [
@@ -48,13 +52,15 @@ class Index extends Component
             'intencao' => 'required|in:comprar,vender,consignar,outros',
             'resultado' => 'required|in:sem_resposta,em_negociacao,fechado,perdido',
             'observacoes' => 'nullable|string|max:2000',
+            'data_nascimento' => 'nullable|date',
+            'meio_divulgacao' => 'nullable|in:'.implode(',', array_keys(\App\Models\Cliente::MEIO_DIVULGACAO_LABELS)),
         ];
     }
 
     public function novo(): void
     {
         $this->authorize('leads.editar');
-        $this->reset(['editandoId', 'cliente_id', 'veiculo_id', 'veiculo_procurado', 'observacoes']);
+        $this->reset(['editandoId', 'cliente_id', 'veiculo_id', 'veiculo_procurado', 'observacoes', 'data_nascimento', 'meio_divulgacao']);
         $this->tipo = 'whatsapp';
         $this->intencao = 'comprar';
         $this->resultado = 'sem_resposta';
@@ -67,8 +73,9 @@ class Index extends Component
         $chamada = ChamadaProposta::findOrFail($id);
         $this->editandoId = $chamada->id;
         $this->fill($chamada->only([
-            'cliente_id', 'veiculo_id', 'veiculo_procurado', 'tipo', 'intencao', 'resultado', 'observacoes',
+            'cliente_id', 'veiculo_id', 'veiculo_procurado', 'tipo', 'intencao', 'resultado', 'observacoes', 'meio_divulgacao',
         ]));
+        $this->data_nascimento = $chamada->data_nascimento?->format('Y-m-d') ?? '';
         $this->mostrarForm = true;
     }
 
@@ -77,6 +84,8 @@ class Index extends Component
         $this->authorize('leads.editar');
 
         $dados = $this->validate();
+        $dados['data_nascimento'] = $dados['data_nascimento'] ?: null;
+        $dados['meio_divulgacao'] = $dados['meio_divulgacao'] ?: null;
 
         if ($this->editandoId) {
             ChamadaProposta::findOrFail($this->editandoId)->update($dados);

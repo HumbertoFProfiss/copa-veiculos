@@ -151,6 +151,22 @@
                         </div>
                     @endif
 
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-text-secondary mb-1">Data de nascimento</label>
+                            <input type="date" wire:model="data_nascimento" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-text-secondary mb-1">Como conheceu a loja</label>
+                            <select wire:model="meio_divulgacao" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">
+                                <option value="">—</option>
+                                @foreach (\App\Models\Cliente::MEIO_DIVULGACAO_LABELS as $valor => $label)
+                                    <option value="{{ $valor }}">{{ $label }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
                     <div>
                         <label class="block text-xs font-medium text-text-secondary mb-1">Resultado *</label>
                         <select wire:model="resultado" class="w-full rounded-control border-border bg-white text-ink text-sm focus:border-primary focus:ring-primary">

@@ -57,10 +57,13 @@ class ContasPagar extends Component
         session()->flash('sucesso', 'Conta a pagar lançada.');
     }
 
-    public function marcarPago(int $id): void
+    public function marcarPago(int $id, ?string $dataPagamento = null): void
     {
         $this->authorize('financeiro.aprovar');
-        ContaPagar::where('id', $id)->update(['status' => 'pago', 'pagamento' => now()]);
+
+        $data = $dataPagamento ? \Illuminate\Support\Carbon::parse($dataPagamento) : now();
+
+        ContaPagar::where('id', $id)->update(['status' => 'pago', 'pagamento' => $data]);
     }
 
     protected function query(): Builder

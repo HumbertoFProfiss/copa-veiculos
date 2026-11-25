@@ -24,6 +24,7 @@ class Veiculo extends Model
         'vendido' => 'Vendido',
         'entregue' => 'Entregue',
         'devolvido' => 'Devolvido',
+        'inativo' => 'Inativo',
     ];
 
     protected $fillable = [

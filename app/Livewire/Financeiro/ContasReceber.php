@@ -12,10 +12,13 @@ class ContasReceber extends Component
 {
     use WithDataTable;
 
-    public function marcarRecebido(int $id): void
+    public function marcarRecebido(int $id, ?string $dataPagamento = null): void
     {
         $this->authorize('financeiro.aprovar');
-        ContaReceber::where('id', $id)->update(['status' => 'recebido', 'pagamento' => now()]);
+
+        $data = $dataPagamento ? \Illuminate\Support\Carbon::parse($dataPagamento) : now();
+
+        ContaReceber::where('id', $id)->update(['status' => 'recebido', 'pagamento' => $data]);
     }
 
     protected function query(): Builder

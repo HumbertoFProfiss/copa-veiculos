@@ -5,6 +5,7 @@
         'index' => 'Contas a Pagar',
         'receber' => 'Contas a Receber',
         'dre' => 'DRE',
+        'lucro-veiculos' => 'Lucro por Veículo',
         'conciliacao' => 'Conciliação',
         'categorias' => 'Categorias',
     ] as $rota => $label)

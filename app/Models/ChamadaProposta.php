@@ -36,7 +36,20 @@ class ChamadaProposta extends Model
     protected $fillable = [
         'cliente_id', 'veiculo_id', 'veiculo_procurado', 'user_id',
         'tipo', 'intencao', 'resultado', 'observacoes',
+        'data_nascimento', 'meio_divulgacao',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'data_nascimento' => 'date',
+        ];
+    }
+
+    public function meioDivulgacaoLabel(): ?string
+    {
+        return Cliente::MEIO_DIVULGACAO_LABELS[$this->meio_divulgacao] ?? $this->meio_divulgacao;
+    }
 
     public function cliente(): BelongsTo
     {

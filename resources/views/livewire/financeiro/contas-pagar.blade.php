@@ -34,7 +34,12 @@
                 <td class="px-4 py-3 text-right">
                     @can('financeiro.aprovar')
                         @if ($conta->status === 'pendente')
-                            <button wire:click="marcarPago({{ $conta->id }})" type="button" class="text-xs text-primary hover:underline">Marcar pago</button>
+                            <div x-data="{ data: '{{ now()->format('Y-m-d') }}' }" class="flex items-center justify-end gap-1.5">
+                                <input type="date" x-model="data" class="rounded-control border-border bg-white text-ink text-xs py-1 px-1.5 focus:border-primary focus:ring-primary">
+                                <button type="button" @click="$wire.marcarPago({{ $conta->id }}, data)" class="text-xs text-primary hover:underline whitespace-nowrap">Marcar pago</button>
+                            </div>
+                        @else
+                            <span class="text-xs text-text-secondary">{{ $conta->pagamento?->format('d/m/Y') }}</span>
                         @endif
                     @endcan
                 </td>

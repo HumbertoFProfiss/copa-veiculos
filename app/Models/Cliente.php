@@ -14,9 +14,21 @@ class Cliente extends Model implements AuthenticatableContract
 {
     use Authenticatable, BelongsToEmpresa, HasFactory, TracksCriadoPor;
 
+    public const MEIO_DIVULGACAO_LABELS = [
+        'indicacao' => 'Indicação',
+        'instagram' => 'Instagram',
+        'facebook' => 'Facebook',
+        'google' => 'Google',
+        'site' => 'Site',
+        'passou_na_loja' => 'Passou na loja',
+        'cliente_antigo' => 'Já foi cliente',
+        'outros' => 'Outros',
+    ];
+
     protected $fillable = [
         'empresa_id', 'criado_por', 'nome', 'cpf', 'rg', 'email', 'telefone', 'whatsapp',
         'endereco', 'cidade', 'uf', 'cep', 'profissao', 'renda_estimada', 'password',
+        'data_nascimento', 'meio_divulgacao',
     ];
 
     protected $hidden = ['password'];
@@ -26,7 +38,13 @@ class Cliente extends Model implements AuthenticatableContract
         return [
             'renda_estimada' => 'decimal:2',
             'password' => 'hashed',
+            'data_nascimento' => 'date',
         ];
+    }
+
+    public function meioDivulgacaoLabel(): ?string
+    {
+        return self::MEIO_DIVULGACAO_LABELS[$this->meio_divulgacao] ?? $this->meio_divulgacao;
     }
 
     public function vendas(): HasMany

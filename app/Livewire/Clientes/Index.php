@@ -37,6 +37,10 @@ class Index extends Component
 
     public ?string $consultaCepErro = null;
 
+    public string $data_nascimento = '';
+
+    public string $meio_divulgacao = '';
+
     protected function rules(): array
     {
         return [
@@ -49,13 +53,15 @@ class Index extends Component
             'endereco' => 'nullable|string|max:255',
             'cidade' => 'nullable|string|max:100',
             'uf' => 'nullable|string|max:2',
+            'data_nascimento' => 'nullable|date',
+            'meio_divulgacao' => 'nullable|in:'.implode(',', array_keys(Cliente::MEIO_DIVULGACAO_LABELS)),
         ];
     }
 
     public function novo(): void
     {
         $this->authorize('clientes.criar');
-        $this->reset(['editandoId', 'nome', 'cpf', 'email', 'telefone', 'whatsapp', 'cep', 'endereco', 'cidade', 'uf', 'consultaCepErro']);
+        $this->reset(['editandoId', 'nome', 'cpf', 'email', 'telefone', 'whatsapp', 'cep', 'endereco', 'cidade', 'uf', 'consultaCepErro', 'data_nascimento', 'meio_divulgacao']);
         $this->mostrarForm = true;
     }
 
@@ -65,7 +71,8 @@ class Index extends Component
         $cliente = Cliente::findOrFail($id);
         $this->editandoId = $cliente->id;
         $this->consultaCepErro = null;
-        $this->fill($cliente->only(['nome', 'cpf', 'email', 'telefone', 'whatsapp', 'cep', 'endereco', 'cidade', 'uf']));
+        $this->fill($cliente->only(['nome', 'cpf', 'email', 'telefone', 'whatsapp', 'cep', 'endereco', 'cidade', 'uf', 'meio_divulgacao']));
+        $this->data_nascimento = $cliente->data_nascimento?->format('Y-m-d') ?? '';
         $this->mostrarForm = true;
     }
 
@@ -91,6 +98,8 @@ class Index extends Component
         $this->authorize($this->editandoId ? 'clientes.editar' : 'clientes.criar');
 
         $dados = $this->validate();
+        $dados['data_nascimento'] = $dados['data_nascimento'] ?: null;
+        $dados['meio_divulgacao'] = $dados['meio_divulgacao'] ?: null;
 
         if ($this->editandoId) {
             Cliente::findOrFail($this->editandoId)->update($dados);

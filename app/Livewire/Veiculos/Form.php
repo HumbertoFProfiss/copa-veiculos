@@ -235,7 +235,7 @@ class Form extends Component
             'estado_conservacao' => 'nullable|string|max:150',
             'debitos' => 'nullable|numeric|min:0',
             'local_patio' => 'nullable|string|max:100',
-            'status' => 'required|in:em_preparacao,disponivel,reservado,vendido,entregue,devolvido',
+            'status' => 'required|in:em_preparacao,disponivel,reservado,vendido,entregue,devolvido,inativo',
         ];
     }
 
